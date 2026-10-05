@@ -1,0 +1,38 @@
+================================================================================
+# 02 DOCS ACUAN AI AGENT — BLOKUMA CODEBASE SPECIFICATION
+================================================================================
+
+1. CODEBASE ARCHITECTURE & TECH STACK
+--------------------------------------------------------------------------------
+Framework      : Next.js 15 (App Router, TypeScript Strict Mode)
+Styling        : Tailwind CSS, Framer Motion, Lucide React
+State          : Zustand
+Backend / DB   : Supabase (Auth, PostgreSQL, Row Level Security)
+Deployment     : Vercel (vercel.json)
+Testing        : Vitest
+
+2. STRICT FOLDER STRUCTURE
+--------------------------------------------------------------------------------
+app/           : App Router pages grouped by route groups: (public), (student), (parent), (teacher), (admin), api/
+components/    : Reusable UI, Layout, Navigation, Playground, Stage, Badges, Charts
+engine/        : Core Visual Coding AST Parser, Validator, Runtime, Rule Engine, Code Generators (JS/Python)
+domain/        : Typed Entity definitions (Users, Students, Projects, Lessons, Skills)
+services/      : Supabase Data Access Services
+store/         : Zustand State Stores (Auth, Playground, Grade, Learning)
+supabase/      : Migrations, Seed SQL, Config
+tests/         : Unit and Integration Test Suites
+
+3. NAMING & CODING CONVENTIONS
+--------------------------------------------------------------------------------
+Files          : kebab-case.ts / kebab-case.tsx
+Components     : PascalCase (e.g., ProjectCard)
+Functions      : camelCase (e.g., validateBlockAST)
+Constants      : UPPER_SNAKE_CASE (e.g., MAX_BLOCKS)
+Strict Types   : No 'any' types allowed. Explicit interface definitions required.
+
+4. CURRENT IMPLEMENTATION STATE
+--------------------------------------------------------------------------------
+Status         : Fully configured Next.js + Vercel + Supabase architecture.
+AST Engine     : Block AST, Rule Engine (Guided Debugger), Stage Execution, JS/Python Generators implemented in engine/.
+Grade Adaptive : Grade 1-2 (Phase A: Dunia Ikon & Suara), Grade 3-4 (Phase B: Dunia Blok & Logika), Grade 5-6 (Phase C: Dunia Algoritma & Game).
+Routes         : (public), (student), (parent), (teacher), (admin) all routed and interconnected.

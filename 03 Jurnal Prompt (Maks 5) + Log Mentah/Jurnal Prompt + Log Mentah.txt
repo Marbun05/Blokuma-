@@ -1,0 +1,41 @@
+================================================================================
+# 03 JURNAL PROMPT (MAKS 5) + LOG MENTAH DEVELOPMENT BLOKUMA PLATFORM
+================================================================================
+
+JURNAL PROMPT (SISTEM CATATAN INTERAKSI AI AGENT)
+--------------------------------------------------------------------------------
+
+PROMPT #1
+Tanggal: 2026-10-05T13:14:07+07:00
+Scope: Git Remote & Environment Setup
+Prompt: Connect project to https://github.com/Marbun05/Blokuma-.git with PAT token and add .env file.
+Status: Success
+
+PROMPT #2
+Tanggal: 2026-10-05T13:15:49+07:00
+Scope: Git Local User Configuration
+Prompt: Set local git user config user.name "Marbun05" and user.email "119002067+Marbun05@users.noreply.github.com".
+Status: Success
+
+PROMPT #3
+Tanggal: 2026-10-05T13:35:51+07:00
+Scope: End-to-End Blokuma Master Build Specification
+Prompt: Build full Next.js + Vercel + Supabase architecture with 02 Docs and 03 Journal prompt files, clean code rules, visual block AST engine, adaptive grade system, student/parent/teacher dashboards, auto commit & push.
+Status: Success
+
+--------------------------------------------------------------------------------
+LOG MENTAH
+--------------------------------------------------------------------------------
+[2026-10-05 13:45]
+Scope: Base Architecture Setup
+Files Created/Updated:
+- app/ layout, page, routes
+- engine/ blocks AST, rule engine, guided debugger, JS/Python generators
+- domain/ student, project, lesson schemas
+- services/ Supabase integration
+- 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
+- 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
+Validation:
+- TypeScript: PASS
+- Tests: PASS
+- Build: PASS
