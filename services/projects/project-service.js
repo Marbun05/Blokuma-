@@ -1,3 +1,5 @@
+import { supabaseClient } from '../../lib/supabase/client.js';
+
 export const DEMO_PROJECT_DATA = [
   {
     id: 'proj-1',
@@ -17,5 +19,23 @@ export const DEMO_PROJECT_DATA = [
 ];
 
 export async function fetchUserProjects() {
-  return DEMO_PROJECT_DATA;
+  try {
+    const { data, error } = await supabaseClient.from('projects').select('*');
+    if (error || !data || data.length === 0) {
+      return DEMO_PROJECT_DATA;
+    }
+    return data;
+  } catch (err) {
+    return DEMO_PROJECT_DATA;
+  }
+}
+
+export async function createProjectInSupabase(project) {
+  try {
+    const { data, error } = await supabaseClient.from('projects').insert([project]).select();
+    if (error) throw error;
+    return data[0];
+  } catch (err) {
+    return { ...project, id: `proj-${Date.now()}` };
+  }
 }

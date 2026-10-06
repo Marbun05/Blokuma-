@@ -20,35 +20,34 @@ Status: Success
 PROMPT #3
 Tanggal: 2026-10-05T13:35:51+07:00
 Scope: End-to-End Blokuma Master Build Specification
-Prompt: Build full Next.js + Vercel + Supabase architecture with 02 Docs and 03 Journal prompt files, clean code rules, visual block AST engine, adaptive grade system, student/parent/teacher dashboards, auto commit & push.
+Prompt: Build full Next.js + Vercel + Supabase architecture with 02 Docs and 03 Journal prompt files, clean code rules, visual block AST engine, adaptive grade system, student/parent/teacher dashboards.
 Status: Success
 
 PROMPT #4
 Tanggal: 2026-10-06T14:15:14+07:00
-Scope: React JSX / JS Full Codebase Migration & Vibe Coding Docs Update
-Prompt: Convert all Next.js codebase files to pure React .jsx and .js files, update jsconfig.json, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt with vibe coding prompt history and auto push to GitHub origin main.
+Scope: React JSX / JS Full Codebase Migration
+Prompt: Convert all Next.js codebase files to pure React .jsx and .js files, update jsconfig.json.
 Status: Success
 
 PROMPT #5
-Tanggal: 2026-10-06T14:28:24+07:00
-Scope: Vite + React JSX Development Runner Setup
-Prompt: Configure Vite + React JSX runner (vite.config.js, index.html, src/main.jsx, src/App.jsx, react-router-dom), update package.json dev scripts, update 02 Docs Acuan AI Agent and 03 Jurnal Prompt code-only files, auto commit and push to GitHub origin main.
+Tanggal: 2026-10-06T14:43:03+07:00
+Scope: Supabase Real Backend Connection & Local Commit
+Prompt: Connect Supabase URL https://sjmnjoiqrtgxhknbnjyd.supabase.co, set anon & service role keys in .env, connect lib/supabase/client.js and services/projects/project-service.js to real Supabase tables, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
 Status: Success
 
 --------------------------------------------------------------------------------
 LOG MENTAH
 --------------------------------------------------------------------------------
-[2026-10-06 14:32]
-Scope: Vite + React JSX Runner Integration
-Files Created/Updated:
-- vite.config.js
-- index.html
-- src/main.jsx
-- src/App.jsx
-- src/index.css
-- package.json
+[2026-10-06 14:45]
+Scope: Supabase Real Backend Integration
+Files Updated:
+- .env
+- .env.example
+- lib/supabase/client.js
+- services/projects/project-service.js
 - 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
 - 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
 Validation:
-- Tests: PASS (6/6)
+- Tests: PASS (6/6 in Vitest)
 - Build: PASS (Vite React JSX build)
+- Git Status: Local commit only (Waiting for explicit user push command)

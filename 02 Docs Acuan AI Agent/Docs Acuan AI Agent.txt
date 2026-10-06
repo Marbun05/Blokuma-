@@ -1,40 +1,31 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA CODEBASE SPECIFICATION (VITE + REACT JSX RUNNER)
+# 02 DOCS ACUAN AI AGENT — BLOKUMA SUPABASE INTEGRATION BLUEPRINT
 ================================================================================
 
-1. CODEBASE ARCHITECTURE & TECH STACK
+1. SUPABASE REAL BACKEND CONNECTIVITY
 --------------------------------------------------------------------------------
-Framework      : React 19 + Vite Runner (`vite.config.js` / `@vitejs/plugin-react`)
-Routing        : React Router DOM (`react-router-dom` Client SPA Routing)
-Styling        : Tailwind CSS, Framer Motion, Lucide React
-State          : Zustand
-Backend / DB   : Supabase (Auth, PostgreSQL, Row Level Security)
-Deployment     : Vercel / Static Web Host
-Testing        : Vitest
+Supabase Target URL : https://sjmnjoiqrtgxhknbnjyd.supabase.co
+Anon Public Key     : Configured in .env (VITE_SUPABASE_ANON_KEY & NEXT_PUBLIC_SUPABASE_ANON_KEY)
+Service Role Key    : Configured in .env (SUPABASE_SERVICE_ROLE_KEY)
+Client Instance     : lib/supabase/client.js initialized via @supabase/supabase-js
 
-2. STRICT FOLDER STRUCTURE & EXTENSIONS
+2. DATABASE TABLES & DATA INTEGRATION
 --------------------------------------------------------------------------------
-src/           : Application root (`main.jsx`, `App.jsx`, `index.css`)
-src/components : Reusable React JSX components (.jsx)
-app/           : Route page components (.jsx / .js) grouped by features
-engine/        : Core Visual Coding AST Parser, Validator, Runtime, Rule Engine, Code Generators (.js)
-domain/        : Entity schema constants and domain logic (.js)
-services/      : Supabase Data Access Services (.js)
-store/         : Zustand State Stores (.js)
-supabase/      : Migrations SQL, Seed SQL, Config
-tests/         : Unit Test Suites (.test.js / .test.jsx)
+profiles            : User roles (student, parent, teacher, admin), nickname, grade level.
+student_progress    : XP, level, streak_days, skills (algorithm, logic, sequence, problemSolving).
+projects            : Real project block AST data, likes_count, category, visibility.
+classrooms          : Teacher classrooms & join_code (e.g. BLOKUMA4A).
+classroom_students  : Student enrollments mapping.
 
-3. NAMING & VIBE CODING CONVENTIONS
+3. VIBE CODING ARCHITECTURE
 --------------------------------------------------------------------------------
-Files          : kebab-case.js / kebab-case.jsx
-Components     : PascalCase (e.g., StudentSidebar, ProjectCard)
-Functions      : camelCase (e.g., generateGuidedFeedback, parseBlockList)
-Constants      : UPPER_SNAKE_CASE (e.g., PALETTE_BLOCKS, USER_ROLES)
-Runner         : `npm run dev` launches Vite + React JSX runner server.
+Framework           : React 19 + Vite 6 Runner (`vite.config.js`)
+Client Routing      : React Router DOM (`react-router-dom`, `src/App.jsx`)
+Data Layer          : Async Supabase fetchers with graceful fallback in `services/`.
+State Stores        : Zustand (`store/auth/`, `store/learning/`, `store/playground/`)
 
-4. CURRENT IMPLEMENTATION STATE
+4. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------
-Status         : Fully configured with Vite + React JSX Runner & React Router DOM.
-AST Engine     : Block AST, Rule Engine (Guided Debugger), Stage Execution, JS/Python Generators in engine/.
-Grade Adaptive : Grade 1-2 (Phase A: Dunia Ikon & Suara), Grade 3-4 (Phase B: Dunia Blok & Logika), Grade 5-6 (Phase C: Dunia Algoritma & Game).
-Routes         : Full Client SPA Routing configured in `src/App.jsx`.
+- Dev Runner        : `npm run dev` (Vite 6 React JSX runner on http://localhost:3000)
+- Unit Tests        : Vitest PASS (6/6 tests passing)
+- Build Output      : `npm run build` -> dist/ bundle compiled cleanly
