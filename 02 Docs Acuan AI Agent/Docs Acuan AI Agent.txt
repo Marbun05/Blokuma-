@@ -1,25 +1,24 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA WHITE ANIMATED REGISTER HERO BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA INTERACTIVE ANIMATED HERO STAGES BLUEPRINT
 ================================================================================
 
-1. WHITE BACKGROUND ANIMATED REGISTER HERO STAGE
+1. INTERACTIVE PLAYABLE ANIMATED HERO STAGES
 --------------------------------------------------------------------------------
-Component       : components/ui/AnimatedRegisterHero.jsx & src/components/ui/AnimatedRegisterHero.jsx
-Page Integration: app/(public)/register/page.jsx (Left-Side Panel for Elementary School Students)
-Background Theme: Clean White & Pastel Soft Gradient (`bg-gradient-to-br from-white via-teal-50/60 to-amber-50/40`)
-Key Visuals     :
-  - Bouncing Robot Kiko character in white glow circle (`w-44 h-44 rounded-full bg-white border-4 border-teal-400`)
-  - Pastel Floating Code Blocks (`🡆 MAJU 10 LANGKAH`, `🔁 ULANGI 3 KALI`, `🎵 MAINkan SUARA`, `⚡ JIKA NABRAK`)
-  - Soft Pastel Glow Spheres (`bg-teal-200/50`, `bg-amber-200/50`, `bg-sky-200/40`)
-  - Clean Dark Typography (`text-slate-900`, `text-slate-700`) for high-contrast legibility.
+- Register Page (/register): `AnimatedRegisterHero.jsx` (Interactive Workshop Stage)
+  * Clickable Block Pills (`MAJU`, `ULANGI`, `SUARA`, `LOMPAT`, `Reset`) drive live character movement & speech actions.
+  * Theme: Clean White & Soft Teal/Amber Pastel Glows.
+- Login Page (/login)      : `AnimatedLoginHero.jsx` (Interactive Portal Stage)
+  * Clickable Portal Keys (`BUKA PORTAL`, `ISI ENERGI XP`, `MELUNCUR`, `Reset`) drive portal glows and XP counters.
+  * Theme: Clean White & Amber/Teal Portal Aura.
 
-2. MOBILE & ANDROID RESPONSIVENESS
+2. ZERO-SCROLL & ANDROID RESPONSIVENESS
 --------------------------------------------------------------------------------
-- Viewport Config : `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
-- Touch Height    : Input fields and buttons maintain `py-3.5 px-4` touch-friendly targets.
+- Container Layout  : `h-screen max-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-hidden`
+- Viewport Config   : `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
+- Touch Height      : Input fields and buttons maintain `py-2.5` to `py-3.5` touch-friendly targets.
 
 3. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------
-- Dev Runner      : `npm run dev` (Vite React JSX runner on http://localhost:3000)
-- Unit Tests      : Vitest PASS (6/6 tests passing)
-- Build Output    : `npm run build` -> dist/ bundle compiled cleanly
+- Dev Runner        : `npm run dev` (Vite React JSX runner on http://localhost:3000)
+- Unit Tests        : Vitest PASS (6/6 tests passing)
+- Build Output      : `npm run build` -> dist/ bundle compiled cleanly

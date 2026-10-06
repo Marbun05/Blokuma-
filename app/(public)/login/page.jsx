@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
+import { AnimatedLoginHero } from '../../../components/ui/AnimatedLoginHero.jsx';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -27,16 +28,12 @@ export default function LoginPage() {
 
   return (
     <div className="h-screen max-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
-      {/* Left Side: 100% Pure Photo Only (No Scroll, Full Height) */}
-      <div className="relative w-full h-full max-h-screen hidden lg:block overflow-hidden bg-slate-950">
-        <img
-          src="/Anak.jpg"
-          alt="Anak Belajar Coding Blokuma"
-          className="w-full h-full object-cover object-center"
-        />
+      {/* Left Side: Interactive Animated Portal Stage for Login */}
+      <div className="hidden lg:block w-full h-full max-h-screen overflow-hidden">
+        <AnimatedLoginHero />
       </div>
 
-      {/* Right Side: Compact Form Panel (Fits 100% in Single Viewport without Scroll) */}
+      {/* Right Side: Compact Form Panel */}
       <div className="w-full h-full max-h-screen bg-white p-5 sm:p-8 lg:p-10 flex flex-col justify-between overflow-y-auto lg:overflow-hidden">
         {/* Mobile Header Logo */}
         <div className="flex items-center justify-between lg:hidden mb-2 pt-1">
