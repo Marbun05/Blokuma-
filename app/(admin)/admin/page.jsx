@@ -1,6 +1,5 @@
-'use client';
-
-import Link from 'next/link';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function AdminDashboardPage() {
   return (
@@ -10,7 +9,7 @@ export default function AdminDashboardPage() {
           <span className="text-2xl">🛡️</span>
           <span className="font-heading text-2xl font-bold text-teal-400">Blokuma Admin Panel</span>
         </div>
-        <Link href="/" className="text-xs font-bold text-slate-400 hover:text-white">Keluar</Link>
+        <Link to="/" className="text-xs font-bold text-slate-400 hover:text-white">Keluar</Link>
       </header>
 
       <main className="max-w-6xl mx-auto space-y-6">

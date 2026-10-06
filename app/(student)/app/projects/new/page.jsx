@@ -1,7 +1,6 @@
-'use client';
-
-import Link from 'next/link';
-import { StudentSidebar } from '../../../../../components/navigation/StudentSidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { StudentSidebar } from '../../../../../components/navigation/StudentSidebar.jsx';
 
 export default function NewProjectPage() {
   return (
@@ -13,19 +12,19 @@ export default function NewProjectPage() {
         <p className="text-slate-600 text-sm mb-8">Pilih jenis karya digital yang ingin kamu rancang hari ini.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link href="/app/playground" className="bg-white p-6 rounded-3xl border border-slate-200 hover:border-teal-500 transition">
+          <Link to="/app/playground" className="bg-white p-6 rounded-3xl border border-slate-200 hover:border-teal-500 transition">
             <span className="text-4xl block mb-2">🎮</span>
             <h3 className="font-heading font-bold text-slate-900">Mini Game</h3>
             <p className="text-xs text-slate-500 mt-1">Buat game seru dengan skor dan rintangan.</p>
           </Link>
 
-          <Link href="/app/playground" className="bg-white p-6 rounded-3xl border border-slate-200 hover:border-teal-500 transition">
+          <Link to="/app/playground" className="bg-white p-6 rounded-3xl border border-slate-200 hover:border-teal-500 transition">
             <span className="text-4xl block mb-2">🎨</span>
             <h3 className="font-heading font-bold text-slate-900">Animasi</h3>
             <p className="text-xs text-slate-500 mt-1">Hidupkan karakter dengan tarian dan percakapan.</p>
           </Link>
 
-          <Link href="/app/playground" className="bg-white p-6 rounded-3xl border border-slate-200 hover:border-teal-500 transition">
+          <Link to="/app/playground" className="bg-white p-6 rounded-3xl border border-slate-200 hover:border-teal-500 transition">
             <span className="text-4xl block mb-2">🎵</span>
             <h3 className="font-heading font-bold text-slate-900">Musik</h3>
             <p className="text-xs text-slate-500 mt-1">Rangkai melodi instrumen interaktif.</p>

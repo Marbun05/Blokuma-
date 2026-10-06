@@ -1,7 +1,6 @@
-'use client';
-
-import Link from 'next/link';
-import { StudentSidebar } from '../../../../../components/navigation/StudentSidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { StudentSidebar } from '../../../../../components/navigation/StudentSidebar.jsx';
 
 export default function LessonDetailPage() {
   return (
@@ -26,7 +25,7 @@ export default function LessonDetailPage() {
 
           <div className="flex gap-4">
             <Link
-              href="/app/playground"
+              to="/app/playground"
               className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white font-bold text-sm rounded-xl shadow transition"
             >
               🚀 Buka Playground Misi

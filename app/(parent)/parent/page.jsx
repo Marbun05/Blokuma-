@@ -1,6 +1,5 @@
-'use client';
-
-import Link from 'next/link';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ParentDashboardPage() {
   return (
@@ -10,7 +9,7 @@ export default function ParentDashboardPage() {
           <span className="text-2xl">👨‍👩‍👧</span>
           <span className="font-heading text-2xl font-bold text-slate-800">Blokuma Parent Area</span>
         </div>
-        <Link href="/" className="text-xs font-bold text-teal-600">Keluar ke Beranda</Link>
+        <Link to="/" className="text-xs font-bold text-teal-600">Keluar ke Beranda</Link>
       </header>
 
       <main className="max-w-6xl mx-auto space-y-8">

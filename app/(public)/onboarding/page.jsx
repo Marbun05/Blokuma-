@@ -1,18 +1,16 @@
-'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useLearningStore } from '../../../store/learning/use-learning-store';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLearningStore } from '../../../store/learning/use-learning-store.js';
 
 export default function OnboardingPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { setGrade } = useLearningStore();
   const [step, setStep] = useState(1);
   const [selectedGrade, setSelectedGrade] = useState(4);
 
   const handleFinish = () => {
     setGrade(selectedGrade);
-    router.push('/app/dashboard');
+    navigate('/app/dashboard');
   };
 
   return (

@@ -1,10 +1,8 @@
-'use client';
-
-import { useState } from 'react';
-import { StudentSidebar } from '../../../../components/navigation/StudentSidebar';
-import { usePlaygroundStore } from '../../../../store/playground/use-playground-store';
-import { PALETTE_BLOCKS } from '../../../../engine/blocks/definitions';
-import { generateGuidedFeedback } from '../../../../engine/debugger/guided-debugger';
+import React, { useState } from 'react';
+import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
+import { usePlaygroundStore } from '../../../../store/playground/use-playground-store.js';
+import { PALETTE_BLOCKS } from '../../../../engine/blocks/definitions/index.js';
+import { generateGuidedFeedback } from '../../../../engine/debugger/guided-debugger.js';
 
 export default function PlaygroundPage() {
   const { nodes, previewMode, addBlock, clearAll, setPreviewMode, getCodeText } = usePlaygroundStore();

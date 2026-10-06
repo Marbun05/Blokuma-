@@ -1,6 +1,5 @@
-'use client';
-
-import Link from 'next/link';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function TeacherDashboardPage() {
   return (
@@ -10,7 +9,7 @@ export default function TeacherDashboardPage() {
           <span className="text-2xl">👩‍🏫</span>
           <span className="font-heading text-2xl font-bold text-slate-800">Blokuma Teacher Hub</span>
         </div>
-        <Link href="/" className="text-xs font-bold text-teal-600">Keluar ke Beranda</Link>
+        <Link to="/" className="text-xs font-bold text-teal-600">Keluar ke Beranda</Link>
       </header>
 
       <main className="max-w-6xl mx-auto space-y-8">
@@ -42,7 +41,7 @@ export default function TeacherDashboardPage() {
                 <h4 className="font-bold text-slate-800 text-sm">Coding SD Nusa Bangsa 4A</h4>
                 <p className="text-xs text-slate-500">24 Siswa • Kode: BLOKUMA4A</p>
               </div>
-              <Link href="/teacher/classes" className="text-xs font-bold text-teal-600 hover:underline">Detail →</Link>
+              <Link to="/teacher/classes" className="text-xs font-bold text-teal-600 hover:underline">Detail →</Link>
             </div>
           </div>
         </div>

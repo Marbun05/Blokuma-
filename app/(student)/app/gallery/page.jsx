@@ -1,6 +1,5 @@
-'use client';
-
-import { StudentSidebar } from '../../../../components/navigation/StudentSidebar';
+import React from 'react';
+import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 
 export default function GalleryPage() {
   return (

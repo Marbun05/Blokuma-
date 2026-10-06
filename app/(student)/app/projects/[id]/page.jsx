@@ -1,7 +1,6 @@
-'use client';
-
-import Link from 'next/link';
-import { StudentSidebar } from '../../../../../components/navigation/StudentSidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { StudentSidebar } from '../../../../../components/navigation/StudentSidebar.jsx';
 
 export default function ProjectDetailPage() {
   return (
@@ -19,7 +18,7 @@ export default function ProjectDetailPage() {
           </div>
 
           <div className="flex gap-3">
-            <Link href="/app/playground" className="px-5 py-2.5 bg-teal-500 text-white font-bold text-xs rounded-xl shadow">
+            <Link to="/app/playground" className="px-5 py-2.5 bg-teal-500 text-white font-bold text-xs rounded-xl shadow">
               Buka & Edit Kode
             </Link>
           </div>

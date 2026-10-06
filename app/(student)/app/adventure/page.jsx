@@ -1,7 +1,6 @@
-'use client';
-
-import Link from 'next/link';
-import { StudentSidebar } from '../../../../components/navigation/StudentSidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 
 const worlds = [
   { id: 1, title: 'World 1: Desa Urutan', icon: '🏡', unlocked: true, desc: 'Instruksi dasar sequence' },
@@ -36,7 +35,7 @@ export default function AdventurePage() {
               <p className="text-xs text-slate-500 mb-4">{w.desc}</p>
               {w.unlocked ? (
                 <Link
-                  href="/app/learn"
+                  to="/app/learn"
                   className="inline-block px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs rounded-xl shadow transition"
                 >
                   Masuk Dunia

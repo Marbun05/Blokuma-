@@ -1,7 +1,6 @@
-'use client';
-
-import Link from 'next/link';
-import { StudentSidebar } from '../../../../components/navigation/StudentSidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 
 export default function ProjectsPage() {
   return (
@@ -15,7 +14,7 @@ export default function ProjectsPage() {
             <p className="text-slate-600 text-sm">Kelola dan kembangkan seluruh karya koding buatanmu.</p>
           </div>
           <Link
-            href="/app/projects/new"
+            to="/app/projects/new"
             className="px-5 py-2.5 bg-teal-500 text-white font-bold text-sm rounded-xl shadow"
           >
             + Buat Project Baru
@@ -27,7 +26,7 @@ export default function ProjectsPage() {
             <div className="text-3xl mb-2">🚀</div>
             <h3 className="font-heading font-bold text-lg text-slate-900 mb-1">Space Runner Kiko</h3>
             <p className="text-xs text-slate-500 mb-4">Game menghindari rintangan di luar angkasa.</p>
-            <Link href="/app/playground" className="text-teal-600 font-bold text-xs hover:underline">
+            <Link to="/app/playground" className="text-teal-600 font-bold text-xs hover:underline">
               Buka di Playground →
             </Link>
           </div>

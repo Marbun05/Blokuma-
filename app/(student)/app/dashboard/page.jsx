@@ -1,7 +1,6 @@
-'use client';
-
-import Link from 'next/link';
-import { StudentSidebar } from '../../../../components/navigation/StudentSidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 
 export default function StudentDashboardPage() {
   return (
@@ -43,7 +42,7 @@ export default function StudentDashboardPage() {
               </div>
             </div>
             <Link
-              href="/app/learn/l2"
+              to="/app/learn/l2"
               className="px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-bold text-sm rounded-xl transition"
             >
               Lanjutkan
@@ -52,19 +51,19 @@ export default function StudentDashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <Link href="/app/playground" className="bg-amber-50 border border-amber-200 p-5 rounded-2xl text-slate-900 hover:shadow-md transition">
+          <Link to="/app/playground" className="bg-amber-50 border border-amber-200 p-5 rounded-2xl text-slate-900 hover:shadow-md transition">
             <span className="text-3xl block mb-2">🧩</span>
             <h3 className="font-heading font-bold">Buat Project</h3>
             <p className="text-xs text-slate-600">Buka visual coding playground.</p>
           </Link>
 
-          <Link href="/app/adventure" className="bg-teal-50 border border-teal-200 p-5 rounded-2xl text-slate-900 hover:shadow-md transition">
+          <Link to="/app/adventure" className="bg-teal-50 border border-teal-200 p-5 rounded-2xl text-slate-900 hover:shadow-md transition">
             <span className="text-3xl block mb-2">🗺️</span>
             <h3 className="font-heading font-bold">Peta Petualangan</h3>
             <p className="text-xs text-slate-600">Jelajahi 6 dunia koding.</p>
           </Link>
 
-          <Link href="/app/gallery" className="bg-purple-50 border border-purple-200 p-5 rounded-2xl text-slate-900 hover:shadow-md transition">
+          <Link to="/app/gallery" className="bg-purple-50 border border-purple-200 p-5 rounded-2xl text-slate-900 hover:shadow-md transition">
             <span className="text-3xl block mb-2">🖼️</span>
             <h3 className="font-heading font-bold">Galeri Karya</h3>
             <p className="text-xs text-slate-600">Lihat game buatan teman-teman.</p>

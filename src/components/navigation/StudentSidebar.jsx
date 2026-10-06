@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useLearningStore } from '../../store/learning/use-learning-store.js';
+import { useLearningStore } from '../../store/learning/use-learning-store';
 
 const menuItems = [
   { name: 'Beranda', href: '/app/dashboard', icon: '🏠' },

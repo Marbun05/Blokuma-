@@ -1,6 +1,5 @@
-'use client';
-
-import Link from 'next/link';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ParentChildrenPage() {
   return (
@@ -16,7 +15,7 @@ export default function ParentChildrenPage() {
             <p className="text-xs text-slate-500">Kelas 4 SD • Level 6 (1,240 XP)</p>
           </div>
         </div>
-        <Link href="/parent/children/kiko" className="px-4 py-2 bg-teal-500 text-white font-bold text-xs rounded-xl">
+        <Link to="/parent/children/kiko" className="px-4 py-2 bg-teal-500 text-white font-bold text-xs rounded-xl">
           Lihat Detail
         </Link>
       </div>

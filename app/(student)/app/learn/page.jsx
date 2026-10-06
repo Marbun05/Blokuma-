@@ -1,7 +1,6 @@
-'use client';
-
-import Link from 'next/link';
-import { StudentSidebar } from '../../../../components/navigation/StudentSidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 
 export default function LearnPage() {
   return (
@@ -17,7 +16,7 @@ export default function LearnPage() {
             <span className="text-3xl mb-2 block">🡆</span>
             <h3 className="font-heading text-xl font-bold text-slate-900 mb-2">Sequence (Urutan Langkah)</h3>
             <p className="text-xs text-slate-500 mb-4">Menyusun perintah komputer satu per satu agar bekerja dengan tepat.</p>
-            <Link href="/app/learn/l1" className="inline-block px-4 py-2 bg-teal-500 text-white font-bold text-xs rounded-xl">
+            <Link to="/app/learn/l1" className="inline-block px-4 py-2 bg-teal-500 text-white font-bold text-xs rounded-xl">
               Mulai Misi
             </Link>
           </div>
@@ -26,7 +25,7 @@ export default function LearnPage() {
             <span className="text-3xl mb-2 block">🔁</span>
             <h3 className="font-heading text-xl font-bold text-slate-900 mb-2">Loops (Perulangan)</h3>
             <p className="text-xs text-slate-500 mb-4">Mengulang perintah yang sama tanpa mengetik ulang berkali-kali.</p>
-            <Link href="/app/learn/l2" className="inline-block px-4 py-2 bg-teal-500 text-white font-bold text-xs rounded-xl">
+            <Link to="/app/learn/l2" className="inline-block px-4 py-2 bg-teal-500 text-white font-bold text-xs rounded-xl">
               Mulai Misi
             </Link>
           </div>

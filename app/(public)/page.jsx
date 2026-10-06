@@ -1,15 +1,13 @@
-'use client';
-
-import Link from 'next/link';
-import { Navbar } from '../../components/navigation/Navbar';
-import { Footer } from '../../components/navigation/Footer';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Navbar } from '../../components/navigation/Navbar.jsx';
+import { Footer } from '../../components/navigation/Footer.jsx';
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Navbar />
 
-      {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-teal-50/60 to-slate-50 pt-16 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
@@ -24,17 +22,17 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Link
-                href="/register"
+                to="/register"
                 className="px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-teal-200 transition transform active:scale-95 flex items-center gap-2"
               >
                 <span>🚀</span> Mulai Petualangan
               </Link>
-              <Link
+              <a
                 href="#demo"
                 className="px-6 py-4 bg-white hover:bg-slate-100 text-slate-700 font-bold text-lg rounded-2xl border border-slate-200 transition"
               >
                 Lihat Cara Kerja
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -57,7 +55,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Interactive Demo */}
       <section id="demo" className="py-16 bg-white border-y border-slate-200 px-4">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="font-heading text-3xl font-bold text-slate-900 mb-4">Coba Blok Coding Interaktif (Tanpa Login)</h2>
@@ -91,7 +88,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Adaptive Learning */}
       <section id="adaptive" className="py-16 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="font-heading text-3xl font-bold text-slate-900 mb-3">Sistem Pembelajaran Adaptif Sesuai Usia Anak</h2>
@@ -122,13 +118,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Final CTA */}
       <section className="py-20 bg-teal-600 text-white text-center px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-heading text-4xl font-bold mb-4">Siap Menjadi Arsitek Kode?</h2>
           <p className="text-teal-100 text-lg mb-8">Bergabunglah dengan ribuan anak lain yang telah merancang karya digital pertamanya di Blokuma!</p>
           <Link
-            href="/register"
+            to="/register"
             className="px-10 py-5 bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold text-xl rounded-2xl shadow-2xl transition transform active:scale-95 inline-block"
           >
             Mulai Petualangan Blokuma
