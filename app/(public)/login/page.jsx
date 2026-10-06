@@ -3,12 +3,31 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
 import { AnimatedLoginHero } from '../../../components/ui/AnimatedLoginHero.jsx';
 
+const DEMO_ACCOUNTS = [
+  { label: '👦 Siswa (Kiko Pratama - Kelas 4 SD)', email: 'kiko@blokuma.id', password: 'Password123!' },
+  { label: '👨‍👩‍👧 Orang Tua (Ayah Budi)', email: 'parent@blokuma.id', password: 'Password123!' },
+  { label: '👩‍🏫 Guru (Bu Maya Pertiwi)', email: 'guru@blokuma.id', password: 'Password123!' },
+  { label: '🛡️ Admin (Admin Blokuma)', email: 'admin@blokuma.id', password: 'Password123!' },
+];
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const { loginWithSupabase, loading } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const handleSelectDemoAccount = (e) => {
+    const selectedEmail = e.target.value;
+    if (!selectedEmail) return;
+
+    const acc = DEMO_ACCOUNTS.find((a) => a.email === selectedEmail);
+    if (acc) {
+      setEmail(acc.email);
+      setPassword(acc.password);
+      setErrorMessage(null);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,8 +66,8 @@ export default function LoginPage() {
 
         <div className="max-w-sm w-full mx-auto my-auto py-2">
           {/* Desktop Logo & Title Header */}
-          <div className="text-left mb-5">
-            <Link to="/" className="hidden lg:flex items-center gap-2.5 mb-4">
+          <div className="text-left mb-4">
+            <Link to="/" className="hidden lg:flex items-center gap-2.5 mb-3">
               <div className="w-9 h-9 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-lg shadow-md">
                 🚀
               </div>
@@ -65,13 +84,33 @@ export default function LoginPage() {
             </p>
           </div>
 
+          {/* Quick Demo Dropdown Selector */}
+          <div className="mb-4 bg-teal-50 border border-teal-200 p-3 rounded-2xl">
+            <label className="block text-xs font-bold text-teal-800 mb-1 flex items-center gap-1">
+              <span>⚡</span>
+              <span>Pilih Akun Demo Instan (Supabase Live DB):</span>
+            </label>
+            <select
+              onChange={handleSelectDemoAccount}
+              defaultValue=""
+              className="w-full px-3 py-2 rounded-xl border border-teal-300 text-xs font-bold bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            >
+              <option value="" disabled>-- Pilih Peran Akun Demo --</option>
+              {DEMO_ACCOUNTS.map((acc) => (
+                <option key={acc.email} value={acc.email}>
+                  {acc.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {errorMessage && (
-            <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-2xl text-center shadow-sm">
+            <div className="mb-3 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-xl text-center shadow-sm">
               {errorMessage}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-3.5">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
                 Email Pengguna
@@ -113,7 +152,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-5 pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
+          <div className="mt-4 pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
             Belum punya akun?{' '}
             <Link to="/register" className="text-teal-600 font-bold hover:underline">
               Daftar Akun Baru

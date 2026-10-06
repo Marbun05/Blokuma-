@@ -25,9 +25,9 @@ Status  : Success
 
 4. Finishing (Prompt saat merapikan hasil akhir):
 --------------------------------------------------------------------------------
-Tanggal : 2026-10-06T16:29:10+07:00
-Scope   : Child-Friendly Indonesian Language Phrasing Optimization Across All Pages
-Prompt  : Replace jargon 'Lanjut ke Onboarding' and adult technical terms across all pages with friendly, encouraging, child-first Indonesian copy suitable for primary school students, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
+Tanggal : 2026-10-06T16:34:15+07:00
+Scope   : Instant Demo Account Dropdown & Automated Supabase Database Seeding
+Prompt  : Seed 4 real demo accounts (student, parent, teacher, admin) to Supabase Auth & public.profiles DB, add instant demo account dropdown selector on /login page, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
 Status  : Success
 
 5. Bebas (Satu prompt pilihan peserta sendiri):
@@ -40,10 +40,15 @@ Status  : Success
 --------------------------------------------------------------------------------
 LOG MENTAH
 --------------------------------------------------------------------------------
-[2026-10-06 16:32]
-Scope: Child-Friendly Language & Phrasing Refinement
+[2026-10-06 16:36]
+Scope: Automated Supabase Demo Seeding & Login Dropdown
+Seeded Users:
+- kiko@blokuma.id (Student)
+- parent@blokuma.id (Parent)
+- guru@blokuma.id (Teacher)
+- admin@blokuma.id (Admin)
 Files Updated:
-- app/(public)/register/page.jsx ("Siapkan Karaktermu! 🚀")
+- app/(public)/login/page.jsx
 - 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
 - 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
 Validation:
