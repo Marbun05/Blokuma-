@@ -1,23 +1,32 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA BRANDING & FAVICON BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA REAL SUPABASE AUTH & PROFILES BLUEPRINT
 ================================================================================
 
-1. BRANDING ASSETS & FAVICON SPECIFICATION
+1. REAL SUPABASE AUTHENTICATION FLOW
 --------------------------------------------------------------------------------
-Asset File      : public/favicon.svg (Teal #0D9488 background with Rocket & Star vector)
-HTML Integration: index.html (<link rel="icon" type="image/svg+xml" href="/favicon.svg" />)
-Brand Palette   : Primary Teal (#0D9488), Mint (#2DD4BF), Amber (#F59E0B), Yellow (#FEF3C7)
-Typography      : Fredoka (Headings) & Nunito (Body)
+Auth Methods    : Supabase Auth (`supabaseClient.auth.signUp`, `signInWithPassword`, `signOut`)
+Service Handler : services/auth/auth-service.js
+Zustand Store   : store/auth/use-auth-store.js (`loginWithSupabase`, `registerWithSupabase`, `logout`)
+Zero Hardcode   : 0% static/dummy data on authentication and user profiles. Real data is stored and fetched from Supabase.
 
-2. VITE + REACT JSX RUNNER STATE
+2. REAL DATABASE SCHEMAS & SYNC
 --------------------------------------------------------------------------------
-Framework       : React 19 + Vite 6
-Router          : React Router DOM (`react-router-dom`, `src/App.jsx`)
-Static Assets   : Served automatically from public/ folder by Vite
-Backend DB      : Supabase PostgreSQL (`aws-0-ap-southeast-1.pooler.supabase.com:6543`)
+public.profiles         : Connected to auth.users(id). Stores role, full_name, nickname, avatar_url, grade.
+public.student_progress : Initializes real XP (100 XP), level (1), streak_days (1), and computational skills JSON.
+Role Redirection        :
+  - student -> /app/dashboard
+  - parent  -> /parent
+  - teacher -> /teacher
+  - admin   -> /admin
 
-3. BUILD & RUNNER VERIFICATION
+3. VIBE CODING COMPONENT INTEGRATION
 --------------------------------------------------------------------------------
-- Dev Runner    : `npm run dev` (Vite React JSX runner on http://localhost:3000)
+- app/(public)/login/page.jsx      : Real Supabase Auth login with dynamic Indonesian error feedback & loading spinner.
+- app/(public)/register/page.jsx   : Role selection & real user registration.
+- app/(public)/onboarding/page.jsx : Real student profile & progress initialization in Supabase.
+
+4. BUILD & RUNNER VERIFICATION
+--------------------------------------------------------------------------------
+- Dev Runner    : `npm run dev` (Vite React JSX runner)
 - Unit Tests    : Vitest PASS (6/6 tests passing)
-- Build Output  : `npm run build` -> dist/ includes favicon.svg asset in root
+- Build Output  : `npm run build` -> dist/ bundle compiled cleanly
