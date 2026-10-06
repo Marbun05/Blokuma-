@@ -27,45 +27,13 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-x-hidden">
-      {/* Left Side: Edge-to-Edge Stable Clear Photo Panel */}
-      <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:flex flex-col justify-between p-8 xl:p-12 overflow-hidden bg-slate-950">
-        {/* Stable Crystal Clear Original Photo (No Hover Zoom) */}
+      {/* Left Side: 100% Pure Photo Only (No Text, No Badges) */}
+      <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:block overflow-hidden bg-slate-950">
         <img
           src="/Anak.jpg"
           alt="Anak Belajar Coding Blokuma"
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-center"
         />
-
-        {/* Subtle Bottom Gradient Overlay for Text Legibility */}
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent pointer-events-none" />
-
-        {/* Top Brand Logo with Glassmorphism */}
-        <div className="relative z-10">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-3 bg-slate-900/60 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 shadow-xl"
-          >
-            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-lg">
-              🚀
-            </div>
-            <span className="font-heading text-2xl font-bold tracking-tight text-white">
-              Blokuma
-            </span>
-          </Link>
-        </div>
-
-        {/* Bottom Headline & Tagline inside Glassmorphism Card */}
-        <div className="relative z-10 max-w-xl bg-slate-900/50 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl">
-          <span className="inline-block px-3.5 py-1 bg-teal-500 text-white rounded-full text-xs font-bold uppercase tracking-wider mb-3 shadow-md">
-            ✨ Creative Digital Workshop
-          </span>
-          <h2 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 leading-tight">
-            "Rancang, Buat, dan Hidupkan Karyamu dengan Kode!"
-          </h2>
-          <p className="text-xs lg:text-sm text-slate-200 leading-relaxed font-medium">
-            Platform koding visual adaptif anak SD kelas 1–6. Selamat datang kembali di panggung kreasi digitalmu!
-          </p>
-        </div>
       </div>
 
       {/* Right Side: Full-Screen Form Panel */}
@@ -81,7 +49,17 @@ export default function LoginPage() {
         </div>
 
         <div className="max-w-md w-full mx-auto my-auto">
+          {/* Desktop Logo & Title Header */}
           <div className="text-left mb-8">
+            <Link to="/" className="hidden lg:flex items-center gap-2.5 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-md">
+                🚀
+              </div>
+              <span className="font-heading text-2xl font-bold tracking-tight text-slate-900">
+                Blokuma
+              </span>
+            </Link>
+
             <span className="text-3xl mb-2 block lg:hidden">👋</span>
             <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 leading-snug">
               Masuk ke Blokuma
