@@ -1,24 +1,24 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA SPLIT-SCREEN AUTH UI BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA REGISTER MEDIA ASSET & RESPONSIVE BLUEPRINT
 ================================================================================
 
-1. AUTH UI SPLIT-SCREEN DESIGN
+1. AUTH PAGE MEDIA ASSETS ASSIGNMENT
 --------------------------------------------------------------------------------
-Pages           : app/(public)/login/page.jsx & app/(public)/register/page.jsx
-Layout          : Responsive 2-Column Split Grid (`grid-cols-1 md:grid-cols-2`)
-Left Side       : Hero Image Panel (`/Anak.jpg` from public/ with gradient overlays and brand tagline)
-Right Side      : Form Panel with role switcher (Siswa, Orang Tua, Guru), inputs, and Supabase Auth integration
+- Login Page (/login)       : Uses `public/Anak.jpg` on Left-Side Hero Panel
+- Register Page (/register) : Uses `public/Register.jpeg` on Left-Side Hero Panel
+- Layout Style              : Full-Screen Edge-to-Edge Split Grid (`min-h-screen w-full grid grid-cols-1 lg:grid-cols-2`)
+- Responsiveness            : 100% full-screen edge-to-edge on Android devices and all screen sizes.
 
-2. BRAND ASSETS & MEDIA INTEGRATION
+2. MOBILE & ANDROID UX SPECIFICATION
 --------------------------------------------------------------------------------
-Media Image     : public/Anak.jpg (88.7KB)
-Brand Slogan    : "Rancang, Buat, dan Hidupkan Karyamu dengan Kode!"
-Favicon Asset   : public/favicon.svg (Teal rocket icon)
+- Viewport Config           : `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
+- Touch Input Heights       : Large, touch-friendly inputs (`py-3.5 px-4 text-base sm:text-sm`) prevent keyboard distortion on Android.
+- Mobile Bottom Nav Bar     : Fixed bottom navigation in `StudentSidebar.jsx` (`md:hidden fixed bottom-0 left-0 right-0 z-50`).
 
-3. VIBE CODING COMPONENT STATE
+3. VIBE CODING STACK & RUNNER
 --------------------------------------------------------------------------------
-Framework       : React 19 + Vite 6
-Routing         : React Router DOM (`react-router-dom`, `src/App.jsx`)
+Framework       : React 19 + Vite 6 Runner (`vite.config.js`)
+Router          : React Router DOM (`react-router-dom`, `src/App.jsx`)
 Supabase Auth   : services/auth/auth-service.js (`loginWithSupabase`, `registerWithSupabase`)
 
 4. BUILD & RUNNER VERIFICATION
