@@ -6,6 +6,7 @@
 /.next/
 /out/
 /dist/
+supabase/.temp/
 
 # Environment files
 .env

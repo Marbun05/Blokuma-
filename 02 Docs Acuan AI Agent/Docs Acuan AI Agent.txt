@@ -1,31 +1,30 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA SUPABASE INTEGRATION BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA SUPABASE AUTOMATED MIGRATION BLUEPRINT
 ================================================================================
 
-1. SUPABASE REAL BACKEND CONNECTIVITY
+1. AUTOMATED TERMINAL SUPABASE POSTGRES MIGRATION
 --------------------------------------------------------------------------------
-Supabase Target URL : https://sjmnjoiqrtgxhknbnjyd.supabase.co
-Anon Public Key     : Configured in .env (VITE_SUPABASE_ANON_KEY & NEXT_PUBLIC_SUPABASE_ANON_KEY)
-Service Role Key    : Configured in .env (SUPABASE_SERVICE_ROLE_KEY)
-Client Instance     : lib/supabase/client.js initialized via @supabase/supabase-js
+Database Host     : aws-0-ap-southeast-1.pooler.supabase.com:6543
+Database Name     : postgres
+User              : postgres.sjmnjoiqrtgxhknbnjyd
+Migration Script  : supabase/migrations/20261005000000_initial_schema.sql
+Execution Status  : AUTOMATED TERMINAL EXECUTION SUCCESSFUL (100% Verified)
 
-2. DATABASE TABLES & DATA INTEGRATION
+2. CREATED TABLES & POLICIES IN SUPABASE
 --------------------------------------------------------------------------------
-profiles            : User roles (student, parent, teacher, admin), nickname, grade level.
-student_progress    : XP, level, streak_days, skills (algorithm, logic, sequence, problemSolving).
-projects            : Real project block AST data, likes_count, category, visibility.
-classrooms          : Teacher classrooms & join_code (e.g. BLOKUMA4A).
-classroom_students  : Student enrollments mapping.
+- user_role       : ENUM ('student', 'parent', 'teacher', 'admin')
+- profiles        : Primary user profile table linked to auth.users(id)
+- student_progress: XP, level, streak_days, skills JSONB
+- projects        : Project AST data, title, description, category, visibility
+- classrooms      : Classrooms with join_code constraint
+- classroom_students: Enrollment relationship table
+- Security        : Row Level Security (RLS) enabled across all 5 tables
 
-3. VIBE CODING ARCHITECTURE
+3. LIVE CLIENT VERIFICATION
 --------------------------------------------------------------------------------
-Framework           : React 19 + Vite 6 Runner (`vite.config.js`)
-Client Routing      : React Router DOM (`react-router-dom`, `src/App.jsx`)
-Data Layer          : Async Supabase fetchers with graceful fallback in `services/`.
-State Stores        : Zustand (`store/auth/`, `store/learning/`, `store/playground/`)
+Supabase Client   : lib/supabase/client.js connected via @supabase/supabase-js
+QueryResult       : Querying public.projects table returned HTTP 200 OK -> [] (Table exists and accepts real live queries)
 
-4. BUILD & RUNNER VERIFICATION
+4. LOCAL GIT STATUS
 --------------------------------------------------------------------------------
-- Dev Runner        : `npm run dev` (Vite 6 React JSX runner on http://localhost:3000)
-- Unit Tests        : Vitest PASS (6/6 tests passing)
-- Build Output      : `npm run build` -> dist/ bundle compiled cleanly
+Git Branch        : main (Local commit ready, auto push disabled until user command)
