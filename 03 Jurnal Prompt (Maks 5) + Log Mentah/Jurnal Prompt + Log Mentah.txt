@@ -30,22 +30,19 @@ Prompt: Run automated PostgreSQL schema DDL migration from terminal using PASSWO
 Status: Success
 
 PROMPT #5
-Tanggal: 2026-10-06T14:56:54+07:00
-Scope: Real Supabase Auth & Profile Integration (Zero Dummy/Hardcode)
-Prompt: Remove all hardcoded dummy login/register flows, integrate real Supabase Auth (signUp, signInWithPassword) & public.profiles & public.student_progress database insertion, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
+Tanggal: 2026-10-06T15:04:59+07:00
+Scope: Split-Screen Auth UI Redesign with public/Anak.jpg Media Asset
+Prompt: Redesign login (/login) and register (/register) pages to use a responsive 2-side split layout with public/Anak.jpg hero image, brand overlay, role selector, and Supabase Auth integration, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
 Status: Success
 
 --------------------------------------------------------------------------------
 LOG MENTAH
 --------------------------------------------------------------------------------
-[2026-10-06 14:58]
-Scope: Real Supabase Authentication & Profile Database Integration
-Files Created/Updated:
-- services/auth/auth-service.js
-- store/auth/use-auth-store.js
+[2026-10-06 15:08]
+Scope: Split-Screen Auth UI & Image Integration
+Files Updated:
 - app/(public)/login/page.jsx
 - app/(public)/register/page.jsx
-- app/(public)/onboarding/page.jsx
 - 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
 - 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
 Validation:

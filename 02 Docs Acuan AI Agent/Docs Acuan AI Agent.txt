@@ -1,32 +1,28 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA REAL SUPABASE AUTH & PROFILES BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA SPLIT-SCREEN AUTH UI BLUEPRINT
 ================================================================================
 
-1. REAL SUPABASE AUTHENTICATION FLOW
+1. AUTH UI SPLIT-SCREEN DESIGN
 --------------------------------------------------------------------------------
-Auth Methods    : Supabase Auth (`supabaseClient.auth.signUp`, `signInWithPassword`, `signOut`)
-Service Handler : services/auth/auth-service.js
-Zustand Store   : store/auth/use-auth-store.js (`loginWithSupabase`, `registerWithSupabase`, `logout`)
-Zero Hardcode   : 0% static/dummy data on authentication and user profiles. Real data is stored and fetched from Supabase.
+Pages           : app/(public)/login/page.jsx & app/(public)/register/page.jsx
+Layout          : Responsive 2-Column Split Grid (`grid-cols-1 md:grid-cols-2`)
+Left Side       : Hero Image Panel (`/Anak.jpg` from public/ with gradient overlays and brand tagline)
+Right Side      : Form Panel with role switcher (Siswa, Orang Tua, Guru), inputs, and Supabase Auth integration
 
-2. REAL DATABASE SCHEMAS & SYNC
+2. BRAND ASSETS & MEDIA INTEGRATION
 --------------------------------------------------------------------------------
-public.profiles         : Connected to auth.users(id). Stores role, full_name, nickname, avatar_url, grade.
-public.student_progress : Initializes real XP (100 XP), level (1), streak_days (1), and computational skills JSON.
-Role Redirection        :
-  - student -> /app/dashboard
-  - parent  -> /parent
-  - teacher -> /teacher
-  - admin   -> /admin
+Media Image     : public/Anak.jpg (88.7KB)
+Brand Slogan    : "Rancang, Buat, dan Hidupkan Karyamu dengan Kode!"
+Favicon Asset   : public/favicon.svg (Teal rocket icon)
 
-3. VIBE CODING COMPONENT INTEGRATION
+3. VIBE CODING COMPONENT STATE
 --------------------------------------------------------------------------------
-- app/(public)/login/page.jsx      : Real Supabase Auth login with dynamic Indonesian error feedback & loading spinner.
-- app/(public)/register/page.jsx   : Role selection & real user registration.
-- app/(public)/onboarding/page.jsx : Real student profile & progress initialization in Supabase.
+Framework       : React 19 + Vite 6
+Routing         : React Router DOM (`react-router-dom`, `src/App.jsx`)
+Supabase Auth   : services/auth/auth-service.js (`loginWithSupabase`, `registerWithSupabase`)
 
 4. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------
-- Dev Runner    : `npm run dev` (Vite React JSX runner)
+- Dev Runner    : `npm run dev` (Vite React JSX runner on http://localhost:3000)
 - Unit Tests    : Vitest PASS (6/6 tests passing)
 - Build Output  : `npm run build` -> dist/ bundle compiled cleanly
