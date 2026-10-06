@@ -1,30 +1,23 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA SUPABASE AUTOMATED MIGRATION BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA BRANDING & FAVICON BLUEPRINT
 ================================================================================
 
-1. AUTOMATED TERMINAL SUPABASE POSTGRES MIGRATION
+1. BRANDING ASSETS & FAVICON SPECIFICATION
 --------------------------------------------------------------------------------
-Database Host     : aws-0-ap-southeast-1.pooler.supabase.com:6543
-Database Name     : postgres
-User              : postgres.sjmnjoiqrtgxhknbnjyd
-Migration Script  : supabase/migrations/20261005000000_initial_schema.sql
-Execution Status  : AUTOMATED TERMINAL EXECUTION SUCCESSFUL (100% Verified)
+Asset File      : public/favicon.svg (Teal #0D9488 background with Rocket & Star vector)
+HTML Integration: index.html (<link rel="icon" type="image/svg+xml" href="/favicon.svg" />)
+Brand Palette   : Primary Teal (#0D9488), Mint (#2DD4BF), Amber (#F59E0B), Yellow (#FEF3C7)
+Typography      : Fredoka (Headings) & Nunito (Body)
 
-2. CREATED TABLES & POLICIES IN SUPABASE
+2. VITE + REACT JSX RUNNER STATE
 --------------------------------------------------------------------------------
-- user_role       : ENUM ('student', 'parent', 'teacher', 'admin')
-- profiles        : Primary user profile table linked to auth.users(id)
-- student_progress: XP, level, streak_days, skills JSONB
-- projects        : Project AST data, title, description, category, visibility
-- classrooms      : Classrooms with join_code constraint
-- classroom_students: Enrollment relationship table
-- Security        : Row Level Security (RLS) enabled across all 5 tables
+Framework       : React 19 + Vite 6
+Router          : React Router DOM (`react-router-dom`, `src/App.jsx`)
+Static Assets   : Served automatically from public/ folder by Vite
+Backend DB      : Supabase PostgreSQL (`aws-0-ap-southeast-1.pooler.supabase.com:6543`)
 
-3. LIVE CLIENT VERIFICATION
+3. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------
-Supabase Client   : lib/supabase/client.js connected via @supabase/supabase-js
-QueryResult       : Querying public.projects table returned HTTP 200 OK -> [] (Table exists and accepts real live queries)
-
-4. LOCAL GIT STATUS
---------------------------------------------------------------------------------
-Git Branch        : main (Local commit ready, auto push disabled until user command)
+- Dev Runner    : `npm run dev` (Vite React JSX runner on http://localhost:3000)
+- Unit Tests    : Vitest PASS (6/6 tests passing)
+- Build Output  : `npm run build` -> dist/ includes favicon.svg asset in root
