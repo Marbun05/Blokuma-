@@ -1,24 +1,26 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA INTERACTIVE ANIMATED HERO STAGES BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA CHILD-FRIENDLY LANGUAGE BLUEPRINT
 ================================================================================
 
-1. INTERACTIVE PLAYABLE ANIMATED HERO STAGES
+1. CHILD-FIRST LANGUAGE & UI PHRASING SPECIFICATION
 --------------------------------------------------------------------------------
-- Register Page (/register): `AnimatedRegisterHero.jsx` (Interactive Workshop Stage)
-  * Clickable Block Pills (`MAJU`, `ULANGI`, `SUARA`, `LOMPAT`, `Reset`) drive live character movement & speech actions.
-  * Theme: Clean White & Soft Teal/Amber Pastel Glows.
-- Login Page (/login)      : `AnimatedLoginHero.jsx` (Interactive Portal Stage)
-  * Clickable Portal Keys (`BUKA PORTAL`, `ISI ENERGI XP`, `MELUNCUR`, `Reset`) drive portal glows and XP counters.
-  * Theme: Clean White & Amber/Teal Portal Aura.
+Audience Focus  : Primary School Students (Elementary Grades 1–6, Ages 6–12)
+Phrasing Rules  :
+  - Replaced technical jargon (e.g., "Lanjut ke Onboarding") with encouraging child-first copy: "Siapkan Karaktermu! 🚀"
+  - Replaced "Email Pengguna" with "Email Kodingmu 📧" and "Password" with "Kata Kunci / Password".
+  - Replaced "Masuk ke Akun Sekarang" with "Masuk ke Dunia Koding! 🚀".
+  - Replaced "Kanvas Kode" with "Panggung Koding 🎨".
 
-2. ZERO-SCROLL & ANDROID RESPONSIVENESS
+2. RUNNER & SYSTEM BLUEPRINT
 --------------------------------------------------------------------------------
-- Container Layout  : `h-screen max-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-hidden`
-- Viewport Config   : `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
-- Touch Height      : Input fields and buttons maintain `py-2.5` to `py-3.5` touch-friendly targets.
+Framework      : React 19 + Vite 6 Runner (`vite.config.js`)
+Client Router  : React Router DOM v7 (`react-router-dom`, `src/App.jsx`)
+Styling        : Tailwind CSS, Framer Motion, Lucide React
+State          : Zustand Stores (`src/store/`)
+Backend / DB   : Supabase Auth & PostgreSQL (`aws-0-ap-southeast-1.pooler.supabase.com:6543`)
 
 3. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------
-- Dev Runner        : `npm run dev` (Vite React JSX runner on http://localhost:3000)
-- Unit Tests        : Vitest PASS (6/6 tests passing)
-- Build Output      : `npm run build` -> dist/ bundle compiled cleanly
+- Dev Runner    : `npm run dev` (Vite React JSX runner on http://localhost:3000)
+- Unit Tests    : Vitest PASS (6/6 tests passing)
+- Build Output  : `npm run build` -> dist/ bundle compiled cleanly

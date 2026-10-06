@@ -48,7 +48,7 @@ export default function RegisterPage() {
         <AnimatedRegisterHero />
       </div>
 
-      {/* Right Side: Compact Form Panel (Fits 100% in Single Viewport without Scroll) */}
+      {/* Right Side: Compact Form Panel */}
       <div className="w-full h-full max-h-screen bg-white p-5 sm:p-8 lg:p-10 flex flex-col justify-between overflow-y-auto lg:overflow-hidden">
         {/* Mobile Header Logo */}
         <div className="flex items-center justify-between lg:hidden mb-2 pt-1">
@@ -73,10 +73,10 @@ export default function RegisterPage() {
             </Link>
 
             <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 leading-snug">
-              Daftar Akun Blokuma
+              Buat Akun Baru
             </h1>
             <p className="text-xs text-slate-500 mt-1">
-              Pilih peran dan siapkan akun barumu untuk belajar koding.
+              Pilih peranmu dan ayo buat akun untuk mulai koding!
             </p>
           </div>
 
@@ -88,7 +88,7 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} className="space-y-2.5">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Pilih Peran:</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Siapa Kamu?</label>
               <div className="grid grid-cols-3 gap-1.5">
                 <button
                   type="button"
@@ -127,7 +127,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Nama Lengkapmu</label>
               <input
                 type="text"
                 value={fullName}
@@ -151,12 +151,12 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Password</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Kata Kunci / Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimal 6 Karakter"
+                placeholder="Minimal 6 karakter ya!"
                 minLength={6}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition shadow-sm"
                 required
@@ -165,7 +165,7 @@ export default function RegisterPage() {
 
             {role === 'student' && (
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Kelas SD</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Kamu Kelas Berapa?</label>
                 <select
                   value={grade}
                   onChange={(e) => setGrade(Number(e.target.value))}
@@ -188,7 +188,7 @@ export default function RegisterPage() {
               {loading ? (
                 <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : role === 'student' ? (
-                'Lanjut ke Onboarding'
+                'Siapkan Karaktermu! 🚀'
               ) : (
                 'Daftar Akun Sekarang'
               )}
@@ -198,14 +198,14 @@ export default function RegisterPage() {
           <div className="mt-4 pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
             Sudah punya akun?{' '}
             <Link to="/login" className="text-teal-600 font-bold hover:underline">
-              Masuk Sekarang
+              Masuk di Sini
             </Link>
           </div>
         </div>
 
         {/* Footer info */}
         <div className="text-center text-[11px] text-slate-400 pt-2 border-t border-slate-100">
-          © 2026 Blokuma Platform. Child-Safe & Adaptive Learning.
+          © 2026 Blokuma Platform. Belajar Koding Seru Anak SD.
         </div>
       </div>
     </div>
