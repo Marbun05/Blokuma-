@@ -1,22 +1,44 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA CRYSTAL CLEAR PHOTO AUTH UI BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA VIBE CODING BLUEPRINT & SYSTEM ARCHITECTURE
 ================================================================================
 
-1. AUTH PAGE HIGH-CLARITY PHOTO PANEL DESIGN
+1. RUNNER SYSTEM & TECH STACK
 --------------------------------------------------------------------------------
-Pages           : app/(public)/login/page.jsx & app/(public)/register/page.jsx
-Photo Rendering : 100% Full Opacity (`/Anak.jpg` on login, `/Register.jpeg` on register)
-Gradient Overlay: Bottom-only subtle gradient (`bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent h-2/3 bottom-0`)
-Text Card       : Glassmorphism card (`backdrop-blur-md bg-slate-900/50 rounded-3xl border border-white/20`) ensures crisp photo visibility while preserving high contrast text readability.
+Framework      : React 19 + Vite 6 Runner (`vite.config.js` with `@vitejs/plugin-react`)
+Client Router  : React Router DOM v7 (`react-router-dom`, `src/App.jsx`)
+Styling        : Tailwind CSS, Framer Motion, Lucide React
+State          : Zustand Stores (`src/store/`)
+Backend / DB   : Supabase (Auth, PostgreSQL, Row Level Security)
+Database Host  : `aws-0-ap-southeast-1.pooler.supabase.com:6543` (Target: sjmnjoiqrtgxhknbnjyd)
+Dev Runner     : `npm run dev` (`vite`) -> http://localhost:3000
+Testing        : Vitest (`npm run test`)
 
-2. MOBILE & ANDROID RESPONSIVENESS
+2. STRICT REPOSITORY MAP & EXTENSIONS
 --------------------------------------------------------------------------------
-- Layout Grid   : `min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-slate-900 overflow-x-hidden`
-- Android Inputs: Touch-friendly heights (`py-3.5 px-4 text-base sm:text-sm`) prevent viewport distortions.
-- Viewport Config: `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
+/                          : Root bundler & config (index.html, vite.config.js, jsconfig.json, package.json)
+public/                    : Static media assets (favicon.svg, Anak.jpg, Register.jpeg)
+src/                       : Application root entry (main.jsx, App.jsx, index.css)
+src/components/            : Reusable React JSX components (Navbar.jsx, Footer.jsx, StudentSidebar.jsx, UI)
+app/                       : Route views (.jsx) grouped into (public), (student), (parent), (teacher), (admin)
+engine/                    : Visual Block AST Engine, Rule Engine, Guided Debugger, JS/Python Generators (.js)
+domain/                    : Domain entity constants & schemas (.js)
+services/                  : Real Supabase Client & Data Access Layer (`services/auth/auth-service.js`, `services/projects/project-service.js`)
+store/                     : Zustand stores (auth, learning, playground)
+supabase/                  : Database migration DDL SQL scripts (`supabase/migrations/20261005000000_initial_schema.sql`)
+tests/                     : Unit test suites (Vitest `.test.js`)
 
-3. BUILD & RUNNER VERIFICATION
+3. AUTH UI & ANDROID RESPONSIVENESS SPECIFICATION
 --------------------------------------------------------------------------------
-- Dev Runner    : `npm run dev` (Vite React JSX runner on http://localhost:3000)
-- Unit Tests    : Vitest PASS (6/6 tests passing)
-- Build Output  : `npm run build` -> dist/ bundle compiled cleanly
+- Full-Screen Split Layout : Edge-to-edge 2-side split screen (`grid-cols-1 lg:grid-cols-2`)
+- Login Page (/login)      : Left Hero Panel uses `public/Anak.jpg` with crystal-clear rendering & glassmorphism text card
+- Register Page (/register): Left Hero Panel uses `public/Register.jpeg` with crystal-clear rendering & glassmorphism text card
+- Real Auth Integration    : Supabase Auth (`signUp`, `signInWithPassword`, `signOut`) & `public.profiles` database sync
+- Android Touch Targets    : Large inputs (`py-3.5 px-4 text-base sm:text-sm`) & viewport `viewport-fit=cover`
+- Mobile Bottom Navigation : Fixed bottom bar in `StudentSidebar.jsx` for student mobile/Android navigation
+
+4. CURRENT BUILD & VERIFICATION STATUS
+--------------------------------------------------------------------------------
+- Vite Runner  : PASS (`npm run build` -> dist/ bundle compiled cleanly in 9s)
+- Unit Tests   : PASS (6/6 tests passing in Vitest)
+- Supabase DB  : PASS (Executed DDL migration via terminal -> public.profiles, student_progress, projects, classrooms live)
+- Git Target   : https://github.com/Marbun05/Blokuma-.git (branch: main)
