@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
+import { AnimatedRegisterHero } from '../../../components/ui/AnimatedRegisterHero.jsx';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -42,13 +43,9 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-x-hidden">
-      {/* Left Side: 100% Pure Photo Only (No Text, No Badges) Register.jpeg */}
-      <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:block overflow-hidden bg-slate-950">
-        <img
-          src="/Register.jpeg"
-          alt="Daftar Akun Blokuma Anak"
-          className="w-full h-full object-cover object-center"
-        />
+      {/* Left Side: Animated Interactive Kiko Stage for Elementary Students */}
+      <div className="hidden lg:block w-full h-full min-h-screen">
+        <AnimatedRegisterHero />
       </div>
 
       {/* Right Side: Full-Screen Form Panel */}

@@ -1,13 +1,15 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA PURE PHOTO AUTH UI BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA ANIMATED REGISTER HERO BLUEPRINT
 ================================================================================
 
-1. PURE PHOTO HERO PANEL SPECIFICATION
+1. ANIMATED REGISTER HERO STAGE
 --------------------------------------------------------------------------------
-Pages           : app/(public)/login/page.jsx & app/(public)/register/page.jsx
-Hero Left Panel : 100% Pure Image Only (`/Anak.jpg` on /login, `/Register.jpeg` on /register)
-Zero Overlays   : Removed all text, badges, gradients, and logo overlays from the left panel so the photo is 100% pure, clean, and uncluttered.
-Desktop Branding: Moved brand logo (`Blokuma 🚀`) cleanly to the top of the right-side form panel.
+Component       : components/ui/AnimatedRegisterHero.jsx & src/components/ui/AnimatedRegisterHero.jsx
+Page Integration: app/(public)/register/page.jsx (Left-Side Panel for Elementary School Students)
+Key Animations  :
+  - Bouncing Robot Kiko character in glowing aura sphere (`animate-bounce`, `animate-pulse`)
+  - Floating Code Blocks (`🡆 MAJU 10 LANGKAH`, `🔁 ULANGI 3 KALI`, `🎵 MAINkan SUARA`, `⚡ JIKA NABRAK`)
+  - Dynamic multi-layered background glow spheres (`blur-3xl`, `bg-teal-500/30`, `bg-amber-500/20`, `bg-purple-500/20`)
 
 2. MOBILE & ANDROID RESPONSIVENESS
 --------------------------------------------------------------------------------

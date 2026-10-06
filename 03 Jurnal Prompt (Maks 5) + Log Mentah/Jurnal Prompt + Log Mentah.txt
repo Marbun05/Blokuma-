@@ -30,19 +30,20 @@ Prompt: Integrate real Supabase Auth (signUp, signInWithPassword) & public.profi
 Status: Success
 
 PROMPT #5
-Tanggal: 2026-10-06T15:48:25+07:00
-Scope: Pure Photo Hero Panel UI Refinement
-Prompt: Remove all text, badges, and overlays from the left-side hero image panel on /login and /register pages so the photo (/Anak.jpg and /Register.jpeg) is 100% pure, clean, and uncluttered, move brand logo to the right form panel, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
+Tanggal: 2026-10-06T16:05:17+07:00
+Scope: Animated Interactive Stage Hero Panel for Elementary Students
+Prompt: Replace static image on register page left-panel with custom animated component AnimatedRegisterHero.jsx featuring bouncing Robot Kiko, floating visual code blocks, glowing background aura, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
 Status: Success
 
 --------------------------------------------------------------------------------
 LOG MENTAH
 --------------------------------------------------------------------------------
-[2026-10-06 15:52]
-Scope: Pure Image Hero Panel Layout Sync
-Files Updated:
+[2026-10-06 16:08]
+Scope: Animated Register Hero Panel Integration
+Files Created/Updated:
+- components/ui/AnimatedRegisterHero.jsx
+- src/components/ui/AnimatedRegisterHero.jsx
 - app/(public)/register/page.jsx
-- app/(public)/login/page.jsx
 - 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
 - 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
 Validation:
