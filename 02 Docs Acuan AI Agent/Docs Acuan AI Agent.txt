@@ -1,38 +1,38 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA CODEBASE SPECIFICATION
+# 02 DOCS ACUAN AI AGENT — BLOKUMA CODEBASE SPECIFICATION (REACT JSX MODE)
 ================================================================================
 
 1. CODEBASE ARCHITECTURE & TECH STACK
 --------------------------------------------------------------------------------
-Framework      : Next.js 15 (App Router, TypeScript Strict Mode)
+Framework      : Next.js 15 App Router (Pure React .jsx / .js)
 Styling        : Tailwind CSS, Framer Motion, Lucide React
 State          : Zustand
 Backend / DB   : Supabase (Auth, PostgreSQL, Row Level Security)
 Deployment     : Vercel (vercel.json)
 Testing        : Vitest
 
-2. STRICT FOLDER STRUCTURE
+2. STRICT FOLDER STRUCTURE & EXTENSIONS
 --------------------------------------------------------------------------------
-app/           : App Router pages grouped by route groups: (public), (student), (parent), (teacher), (admin), api/
-components/    : Reusable UI, Layout, Navigation, Playground, Stage, Badges, Charts
-engine/        : Core Visual Coding AST Parser, Validator, Runtime, Rule Engine, Code Generators (JS/Python)
-domain/        : Typed Entity definitions (Users, Students, Projects, Lessons, Skills)
-services/      : Supabase Data Access Services
-store/         : Zustand State Stores (Auth, Playground, Grade, Learning)
-supabase/      : Migrations, Seed SQL, Config
-tests/         : Unit and Integration Test Suites
+app/           : App Router pages (.jsx / .js) grouped into (public), (student), (parent), (teacher), (admin), api/
+components/    : Reusable React JSX components (.jsx)
+engine/        : Core Visual Coding AST Parser, Validator, Runtime, Rule Engine, Code Generators (.js)
+domain/        : Entity schema constants and domain logic (.js)
+services/      : Supabase Data Access Services (.js)
+store/         : Zustand State Stores (.js)
+supabase/      : Migrations SQL, Seed SQL, Config
+tests/         : Unit Test Suites (.test.js)
 
-3. NAMING & CODING CONVENTIONS
+3. NAMING & VIBE CODING CONVENTIONS
 --------------------------------------------------------------------------------
-Files          : kebab-case.ts / kebab-case.tsx
-Components     : PascalCase (e.g., ProjectCard)
-Functions      : camelCase (e.g., validateBlockAST)
-Constants      : UPPER_SNAKE_CASE (e.g., MAX_BLOCKS)
-Strict Types   : No 'any' types allowed. Explicit interface definitions required.
+Files          : kebab-case.js / kebab-case.jsx
+Components     : PascalCase (e.g., StudentSidebar, ProjectCard)
+Functions      : camelCase (e.g., generateGuidedFeedback, parseBlockList)
+Constants      : UPPER_SNAKE_CASE (e.g., PALETTE_BLOCKS, USER_ROLES)
+Clean Code     : Single responsibility, modular hooks/stores, no dead code or placeholder UI.
 
 4. CURRENT IMPLEMENTATION STATE
 --------------------------------------------------------------------------------
-Status         : Fully configured Next.js + Vercel + Supabase architecture.
-AST Engine     : Block AST, Rule Engine (Guided Debugger), Stage Execution, JS/Python Generators implemented in engine/.
+Status         : Fully converted to React .jsx / .js Next.js App Router architecture.
+AST Engine     : Block AST, Rule Engine (Guided Debugger), Stage Execution, JS/Python Generators in engine/.
 Grade Adaptive : Grade 1-2 (Phase A: Dunia Ikon & Suara), Grade 3-4 (Phase B: Dunia Blok & Logika), Grade 5-6 (Phase C: Dunia Algoritma & Game).
-Routes         : (public), (student), (parent), (teacher), (admin) all routed and interconnected.
+Routes         : 32 static & dynamic routes fully interconnected and functional.
