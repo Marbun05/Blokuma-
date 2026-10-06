@@ -1,27 +1,21 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA REGISTER MEDIA ASSET & RESPONSIVE BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA CRYSTAL CLEAR PHOTO AUTH UI BLUEPRINT
 ================================================================================
 
-1. AUTH PAGE MEDIA ASSETS ASSIGNMENT
+1. AUTH PAGE HIGH-CLARITY PHOTO PANEL DESIGN
 --------------------------------------------------------------------------------
-- Login Page (/login)       : Uses `public/Anak.jpg` on Left-Side Hero Panel
-- Register Page (/register) : Uses `public/Register.jpeg` on Left-Side Hero Panel
-- Layout Style              : Full-Screen Edge-to-Edge Split Grid (`min-h-screen w-full grid grid-cols-1 lg:grid-cols-2`)
-- Responsiveness            : 100% full-screen edge-to-edge on Android devices and all screen sizes.
+Pages           : app/(public)/login/page.jsx & app/(public)/register/page.jsx
+Photo Rendering : 100% Full Opacity (`/Anak.jpg` on login, `/Register.jpeg` on register)
+Gradient Overlay: Bottom-only subtle gradient (`bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent h-2/3 bottom-0`)
+Text Card       : Glassmorphism card (`backdrop-blur-md bg-slate-900/50 rounded-3xl border border-white/20`) ensures crisp photo visibility while preserving high contrast text readability.
 
-2. MOBILE & ANDROID UX SPECIFICATION
+2. MOBILE & ANDROID RESPONSIVENESS
 --------------------------------------------------------------------------------
-- Viewport Config           : `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
-- Touch Input Heights       : Large, touch-friendly inputs (`py-3.5 px-4 text-base sm:text-sm`) prevent keyboard distortion on Android.
-- Mobile Bottom Nav Bar     : Fixed bottom navigation in `StudentSidebar.jsx` (`md:hidden fixed bottom-0 left-0 right-0 z-50`).
+- Layout Grid   : `min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-slate-900 overflow-x-hidden`
+- Android Inputs: Touch-friendly heights (`py-3.5 px-4 text-base sm:text-sm`) prevent viewport distortions.
+- Viewport Config: `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
 
-3. VIBE CODING STACK & RUNNER
---------------------------------------------------------------------------------
-Framework       : React 19 + Vite 6 Runner (`vite.config.js`)
-Router          : React Router DOM (`react-router-dom`, `src/App.jsx`)
-Supabase Auth   : services/auth/auth-service.js (`loginWithSupabase`, `registerWithSupabase`)
-
-4. BUILD & RUNNER VERIFICATION
+3. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------
 - Dev Runner    : `npm run dev` (Vite React JSX runner on http://localhost:3000)
 - Unit Tests    : Vitest PASS (6/6 tests passing)

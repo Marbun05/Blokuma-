@@ -30,18 +30,19 @@ Prompt: Run automated PostgreSQL schema DDL migration from terminal using PASSWO
 Status: Success
 
 PROMPT #5
-Tanggal: 2026-10-06T15:12:00+07:00
-Scope: Full-Screen Edge-to-Edge Auth UI & Register.jpeg Image Assignment
-Prompt: Update /register page to use public/Register.jpeg image on the left-side hero panel, maintain public/Anak.jpg on /login page, enforce full-screen edge-to-edge Android responsiveness, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
+Tanggal: 2026-10-06T15:13:58+07:00
+Scope: Crystal Clear Original Photo Auth UI Panel Enhancement
+Prompt: Remove heavy dark overlay over hero photos (/Anak.jpg and /Register.jpeg), implement bottom-only subtle gradient and glassmorphism text card for 100% bright, vibrant photo clarity, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
 Status: Success
 
 --------------------------------------------------------------------------------
 LOG MENTAH
 --------------------------------------------------------------------------------
-[2026-10-06 15:14]
-Scope: Register Page Media Asset & Full-Screen Edge-to-Edge Auth UI
+[2026-10-06 15:16]
+Scope: Crystal Clear Photo Auth UI Enhancement
 Files Updated:
-- app/(public)/register/page.jsx (Image src set to /Register.jpeg)
+- app/(public)/login/page.jsx
+- app/(public)/register/page.jsx
 - 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
 - 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
 Validation:

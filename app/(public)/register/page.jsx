@@ -42,18 +42,24 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-x-hidden">
-      {/* Left Side: Edge-to-Edge Hero Banner Image Register.jpeg */}
-      <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:flex flex-col justify-between p-8 xl:p-14 overflow-hidden">
+      {/* Left Side: Edge-to-Edge Vibrant Clear Photo Panel Register.jpeg */}
+      <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:flex flex-col justify-between p-8 xl:p-12 overflow-hidden bg-slate-950">
+        {/* Crystal Clear Original Photo */}
         <img
           src="/Register.jpeg"
           alt="Daftar Akun Blokuma Anak"
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-90 transform hover:scale-105 transition duration-1000"
+          className="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-teal-950/40" />
 
-        {/* Top Brand Logo */}
+        {/* Subtle Bottom Gradient Overlay for Text Legibility */}
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent pointer-events-none" />
+
+        {/* Top Brand Logo with Glassmorphism */}
         <div className="relative z-10">
-          <Link to="/" className="inline-flex items-center gap-3 bg-slate-900/40 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-3 bg-slate-900/60 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 shadow-xl"
+          >
             <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-lg">
               🚀
             </div>
@@ -63,21 +69,21 @@ export default function RegisterPage() {
           </Link>
         </div>
 
-        {/* Bottom Headline & Tagline */}
-        <div className="relative z-10 max-w-xl">
-          <span className="inline-block px-4 py-1.5 bg-amber-400 text-slate-900 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-amber-300 shadow-lg">
+        {/* Bottom Headline & Tagline inside Glassmorphism Card */}
+        <div className="relative z-10 max-w-xl bg-slate-900/50 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl">
+          <span className="inline-block px-3.5 py-1 bg-amber-400 text-slate-900 font-bold rounded-full text-xs uppercase tracking-wider mb-3 shadow-md">
             ⭐ Mari Mulai Karyamu
           </span>
-          <h2 className="font-heading text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 leading-tight drop-shadow-md">
+          <h2 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 leading-tight">
             Ubah Ide Menjadi Game, Animasi & Cerita Digital!
           </h2>
-          <p className="text-sm lg:text-base text-slate-200 leading-relaxed font-medium drop-shadow">
+          <p className="text-xs lg:text-sm text-slate-200 leading-relaxed font-medium">
             Bergabunglah sebagai Arsitek Kode dan nikmati modul koding adaptif ramah anak SD kelas 1–6.
           </p>
         </div>
       </div>
 
-      {/* Right Side: Full-Screen Form Panel (100% Width Edge-to-Edge for Android & Desktop) */}
+      {/* Right Side: Full-Screen Form Panel */}
       <div className="w-full min-h-screen bg-white p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col justify-between">
         {/* Mobile Header Logo */}
         <div className="flex items-center justify-between lg:hidden mb-6 pt-2">
