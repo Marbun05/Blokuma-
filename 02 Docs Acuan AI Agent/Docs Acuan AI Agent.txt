@@ -1,40 +1,25 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA VIBE CODING SYSTEM SPECIFICATION
+# 02 DOCS ACUAN AI AGENT — BLOKUMA WHITE ANIMATED REGISTER HERO BLUEPRINT
 ================================================================================
 
-1. RUNNER & SYSTEM BLUEPRINT
+1. WHITE BACKGROUND ANIMATED REGISTER HERO STAGE
 --------------------------------------------------------------------------------
-Framework      : React 19 + Vite 6 Runner (`vite.config.js`)
-Client Router  : React Router DOM v7 (`react-router-dom`, `src/App.jsx`)
-Styling        : Tailwind CSS, Framer Motion, Lucide React
-State          : Zustand Stores (`src/store/`)
-Backend / DB   : Supabase Auth & PostgreSQL (`aws-0-ap-southeast-1.pooler.supabase.com:6543`)
-Dev Runner     : `npm run dev` (`vite`) -> http://localhost:3000
-Testing        : Vitest (`npm run test`)
+Component       : components/ui/AnimatedRegisterHero.jsx & src/components/ui/AnimatedRegisterHero.jsx
+Page Integration: app/(public)/register/page.jsx (Left-Side Panel for Elementary School Students)
+Background Theme: Clean White & Pastel Soft Gradient (`bg-gradient-to-br from-white via-teal-50/60 to-amber-50/40`)
+Key Visuals     :
+  - Bouncing Robot Kiko character in white glow circle (`w-44 h-44 rounded-full bg-white border-4 border-teal-400`)
+  - Pastel Floating Code Blocks (`🡆 MAJU 10 LANGKAH`, `🔁 ULANGI 3 KALI`, `🎵 MAINkan SUARA`, `⚡ JIKA NABRAK`)
+  - Soft Pastel Glow Spheres (`bg-teal-200/50`, `bg-amber-200/50`, `bg-sky-200/40`)
+  - Clean Dark Typography (`text-slate-900`, `text-slate-700`) for high-contrast legibility.
 
-2. REPOSITORY & JOURNAL STRUCTURE
+2. MOBILE & ANDROID RESPONSIVENESS
 --------------------------------------------------------------------------------
-/                          : Root bundler & config (index.html, vite.config.js, jsconfig.json, package.json)
-public/                    : Static media assets (favicon.svg, Anak.jpg, Register.jpeg)
-src/                       : Application root entry (main.jsx, App.jsx, index.css)
-src/components/            : Reusable React JSX components (Navbar.jsx, Footer.jsx, StudentSidebar.jsx, UI)
-app/                       : Route views (.jsx) grouped into (public), (student), (parent), (teacher), (admin)
-engine/                    : Visual Block AST Engine, Rule Engine, Guided Debugger, JS/Python Generators (.js)
-services/                  : Real Supabase Client (`lib/supabase/client.js`) & auth service (`services/auth/auth-service.js`)
-store/                     : Zustand stores (auth, learning, playground)
-supabase/                  : Database migration DDL SQL scripts (`supabase/migrations/20261005000000_initial_schema.sql`)
-tests/                     : Unit test suites (Vitest `.test.js`)
-03 Jurnal Prompt/           : Standardized 5-Category Prompt Journal (Ide/PRD, Debugging, Audit & Optimasi, Finishing, Bebas)
+- Viewport Config : `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
+- Touch Height    : Input fields and buttons maintain `py-3.5 px-4` touch-friendly targets.
 
-3. ZERO-SCROLL AUTH UI & ANDROID RESPONSIVENESS
+3. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------
-- Layout Container: `h-screen max-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-hidden`
-- Hero Left Stage : `AnimatedRegisterHero.jsx` on /register, `/Anak.jpg` on /login (`h-full max-h-screen overflow-hidden`)
-- Right Form Panel: `max-w-sm w-full mx-auto my-auto flex flex-col justify-center space-y-2.5`
-- Mobile Bottom Nav: Fixed bottom navigation bar in `StudentSidebar.jsx` for student mobile/Android navigation (`md:hidden fixed bottom-0 left-0 right-0 z-50`)
-
-4. BUILD & RUNNER VERIFICATION
---------------------------------------------------------------------------------
-- Dev Runner  : `npm run dev` (Vite React JSX runner on http://localhost:3000)
-- Unit Tests  : Vitest PASS (6/6 tests passing)
-- Build Output: `npm run build` -> dist/ bundle compiled cleanly
+- Dev Runner      : `npm run dev` (Vite React JSX runner on http://localhost:3000)
+- Unit Tests      : Vitest PASS (6/6 tests passing)
+- Build Output    : `npm run build` -> dist/ bundle compiled cleanly
