@@ -1,20 +1,19 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA ANIMATED REGISTER HERO BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA SINGLE VIEWPORT ZERO-SCROLL AUTH BLUEPRINT
 ================================================================================
 
-1. ANIMATED REGISTER HERO STAGE
+1. ZERO-SCROLL SINGLE VIEWPORT LAYOUT SPECIFICATION
 --------------------------------------------------------------------------------
-Component       : components/ui/AnimatedRegisterHero.jsx & src/components/ui/AnimatedRegisterHero.jsx
-Page Integration: app/(public)/register/page.jsx (Left-Side Panel for Elementary School Students)
-Key Animations  :
-  - Bouncing Robot Kiko character in glowing aura sphere (`animate-bounce`, `animate-pulse`)
-  - Floating Code Blocks (`🡆 MAJU 10 LANGKAH`, `🔁 ULANGI 3 KALI`, `🎵 MAINkan SUARA`, `⚡ JIKA NABRAK`)
-  - Dynamic multi-layered background glow spheres (`blur-3xl`, `bg-teal-500/30`, `bg-amber-500/20`, `bg-purple-500/20`)
+Pages           : app/(public)/login/page.jsx & app/(public)/register/page.jsx
+Layout Container: `h-screen max-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-hidden`
+Zero Scrollbar  : Compact form spacing (`space-y-2.5` to `space-y-3.5`) and inputs (`py-2` to `py-2.5`) ensure 100% of form elements and hero stage fit cleanly inside a single 100vh viewport across all desktop, tablet, and mobile screens.
+Left Stage      : `AnimatedRegisterHero.jsx` on /register, `/Anak.jpg` on /login (`h-full max-h-screen overflow-hidden`)
+Right Panel     : `h-full max-h-screen flex flex-col justify-between overflow-y-auto lg:overflow-hidden`
 
 2. MOBILE & ANDROID RESPONSIVENESS
 --------------------------------------------------------------------------------
 - Viewport Config : `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />`
-- Touch Height    : Input fields and buttons maintain `py-3.5 px-4` touch-friendly targets.
+- Touch Heights   : Input fields and buttons maintain `min-h-[40px]` touch-friendly targets.
 
 3. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------
