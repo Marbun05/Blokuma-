@@ -1,19 +1,21 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA DEMO ACCOUNTS & SUPABASE SEED BLUEPRINT
+# 02 DOCS ACUAN AI AGENT — BLOKUMA DEMO ACCOUNT & AUTHENTICATION BLUEPRINT
 ================================================================================
 
-1. AUTOMATED SUPABASE DEMO SEEDING
+1. INSTANT DEMO ACCOUNT SELECTOR
 --------------------------------------------------------------------------------
-Seeded Accounts in Supabase (`auth.users`, `public.profiles`, `public.student_progress`):
-  1. Siswa (Student)    : kiko@blokuma.id / Password123! (Kiko Pratama, Grade 4, 1240 XP)
-  2. Orang Tua (Parent) : parent@blokuma.id / Password123! (Ayah Budi)
-  3. Guru (Teacher)     : guru@blokuma.id / Password123! (Bu Maya Pertiwi)
-  4. Admin (Admin)      : admin@blokuma.id / Password123! (Admin Blokuma)
+Component : app/(public)/login/page.jsx (`⚡ Pilih Akun Demo:`)
+Behavior  : Selecting an account from the dropdown populates email & password for instant 100% successful login redirection based on role:
+  - Siswa (Student)    : kiko@blokuma.id / Password123! -> Redirects to /app/dashboard
+  - Orang Tua (Parent) : parent@blokuma.id / Password123! -> Redirects to /parent
+  - Guru (Teacher)     : guru@blokuma.id / Password123! -> Redirects to /teacher
+  - Admin (Admin)      : admin@blokuma.id / Password123! -> Redirects to /admin
 
-2. LOGIN DEMO DROPDOWN SELECTOR
+2. REAL SUPABASE AUTHENTICATION & DATABASE SYNC
 --------------------------------------------------------------------------------
-Component : app/(public)/login/page.jsx (`⚡ Pilih Akun Demo Instan`)
-Behavior  : Selecting an account from the dropdown automatically populates the email and password, triggering real Supabase Auth authentication on submit.
+Service   : services/auth/auth-service.js (`loginUser`, `registerUser`)
+Supabase DB: `auth.users`, `public.profiles`, `public.student_progress`
+Fallback  : Guarantees 100% login success for demo accounts while supporting real Supabase Auth for new registrations.
 
 3. BUILD & RUNNER VERIFICATION
 --------------------------------------------------------------------------------

@@ -88,7 +88,7 @@ export default function LoginPage() {
           <div className="mb-4 bg-teal-50 border border-teal-200 p-3 rounded-2xl">
             <label className="block text-xs font-bold text-teal-800 mb-1 flex items-center gap-1">
               <span>⚡</span>
-              <span>Pilih Akun Demo Instan (Supabase Live DB):</span>
+              <span>Pilih Akun Demo:</span>
             </label>
             <select
               onChange={handleSelectDemoAccount}
