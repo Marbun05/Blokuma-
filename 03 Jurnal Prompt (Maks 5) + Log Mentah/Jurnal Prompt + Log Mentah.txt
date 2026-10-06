@@ -30,25 +30,22 @@ Prompt: Integrate real Supabase Auth (signUp, signInWithPassword) & public.profi
 Status: Success
 
 PROMPT #5
-Tanggal: 2026-10-06T15:13:58+07:00
-Scope: Crystal Clear Split-Screen Auth UI & Media Asset Sync
-Prompt: Redesign /login (Anak.jpg) and /register (Register.jpeg) into full-screen edge-to-edge split layout, remove dark image overlays for 100% bright photo clarity, enforce Android responsiveness, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
+Tanggal: 2026-10-06T15:26:19+07:00
+Scope: Remove Hover Zoom Effect on Auth Hero Photos
+Prompt: Remove hover scale transform (hover:scale-105) on /login and /register left-panel hero images for a stable, crisp, static photo display, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
 Status: Success
 
 --------------------------------------------------------------------------------
 LOG MENTAH
 --------------------------------------------------------------------------------
-[2026-10-06 15:18]
-Scope: Pre-Push Audit & Vibe Coding Documentation Sync
-Inspected Modifications:
-- Vite React JSX runner & react-router-dom SPA
-- Automated Supabase DDL database migration execution (public.profiles, student_progress, projects, classrooms)
-- Real Supabase Auth (signUp, signInWithPassword) & profiles database sync
-- public/favicon.svg rocket brand asset
-- public/Anak.jpg on /login hero panel
-- public/Register.jpeg on /register hero panel
-- Crystal clear photo rendering with glassmorphism cards & Android responsiveness
+[2026-10-06 15:28]
+Scope: Stable Photo Rendering Adjustment
+Files Updated:
+- app/(public)/login/page.jsx
+- app/(public)/register/page.jsx
+- 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
+- 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
 Validation:
 - Tests: PASS (6/6 in Vitest)
 - Build: PASS (Vite React JSX build)
-- Git: Pushing local commits to origin/main
+- Git: Local commit only (Auto push disabled)

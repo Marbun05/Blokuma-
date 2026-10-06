@@ -42,13 +42,13 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-x-hidden">
-      {/* Left Side: Edge-to-Edge Vibrant Clear Photo Panel Register.jpeg */}
+      {/* Left Side: Edge-to-Edge Stable Clear Photo Panel Register.jpeg */}
       <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:flex flex-col justify-between p-8 xl:p-12 overflow-hidden bg-slate-950">
-        {/* Crystal Clear Original Photo */}
+        {/* Stable Crystal Clear Original Photo (No Hover Zoom) */}
         <img
           src="/Register.jpeg"
           alt="Daftar Akun Blokuma Anak"
-          className="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
         {/* Subtle Bottom Gradient Overlay for Text Legibility */}
