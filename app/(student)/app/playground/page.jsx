@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar';
 import { usePlaygroundStore } from '../../../../store/playground/use-playground-store';
 import { PALETTE_BLOCKS } from '../../../../engine/blocks/definitions';
@@ -12,7 +12,7 @@ export default function PlaygroundPage() {
   const [posX, setPosX] = useState(0);
   const [posY, setPosY] = useState(0);
   const [rotation, setRotation] = useState(0);
-  const [speechBubble, setSpeechBubble] = useState<string | null>(null);
+  const [speechBubble, setSpeechBubble] = useState(null);
 
   const currentPos = useRef({ x: 0, y: 0, rot: 0 });
   const feedback = generateGuidedFeedback(nodes);
@@ -25,96 +25,87 @@ export default function PlaygroundPage() {
     setSpeechBubble(null);
   };
 
-  // 1. Fungsi Bicara (Gunakan Suara Native + Utterance)
-  const speakText = (text: string) => {
+  const speakText = (text) => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel(); // Bersihkan antrean lama
-
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'id-ID';
-      utterance.rate = 0.9;
-      utterance.pitch = 1.2;
-
-      // Paksa jalankan eksekusi bicara
+      utterance.pitch = 1.3;
+      utterance.rate = 1.0;
       window.speechSynthesis.speak(utterance);
     }
   };
 
-  // 2. Fungsi Mainkan Suara (Gunakan Audio Synthesizer Beep + Melody)
   const playBeepSound = () => {
     if (typeof window !== 'undefined') {
       try {
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-        const audioCtx = new AudioContextClass();
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
 
-        // Resume Audio Context jika ditahan oleh browser
-        if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
 
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
         osc.type = 'sine';
-        // Suara efek ceria (C5 -> E5 -> G5)
-        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
-        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
 
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
 
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
+        gain.connect(ctx.destination);
 
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.4);
+        osc.stop(ctx.currentTime + 0.4);
       } catch (e) {
         console.error('Audio Error:', e);
       }
     }
   };
 
-  const runAction = (node: any) => {
-    // Ambil string label atau type
-    const key = (node.label || node.type || node.id || '').toLowerCase();
+  const runAction = (node) => {
+    const rawKey = `${node.id || ''} ${node.type || ''} ${node.label || ''}`.toLowerCase();
 
-    if (key.includes('maju') || key.includes('move')) {
+    if (rawKey.includes('maju') || rawKey.includes('move')) {
       currentPos.current.x += 30;
       setPosX(currentPos.current.x);
-    } else if (key.includes('putar') || key.includes('rotate')) {
+    } else if (rawKey.includes('putar') || rawKey.includes('rotate')) {
       currentPos.current.rot += 90;
       setRotation(currentPos.current.rot);
-    } else if (key.includes('lompat') || key.includes('jump')) {
+    } else if (rawKey.includes('lompat') || rawKey.includes('jump')) {
       setPosY(-40);
       setTimeout(() => setPosY(0), 300);
-    } else if (key.includes('bicara') || key.includes('say') || key.includes('halo')) {
+    } else if (rawKey.includes('bicara') || rawKey.includes('say') || rawKey.includes('speak') || rawKey.includes('halo')) {
       const textToSay = 'Halo teman-teman!';
       setSpeechBubble(textToSay);
-      speakText(textToSay); // <--- Memanggil suara
+      speakText(textToSay);
       setTimeout(() => setSpeechBubble(null), 2500);
-    } else if (key.includes('suara') || key.includes('sound') || key.includes('mainkan')) {
-      playBeepSound(); // <--- Memanggil nada musik
+    } else if (rawKey.includes('suara') || rawKey.includes('sound') || rawKey.includes('play') || rawKey.includes('mainkan')) {
+      playBeepSound();
     }
   };
 
-  // Eksekusi Keseluruhan
   const handleRun = () => {
-    resetCharacter();
-
-    // Trigger awal agar browser mengizinkan audio saat tombol diklik
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.resume();
+      const silent = new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(silent);
     }
+
+    resetCharacter();
 
     if (!nodes || nodes.length === 0) return;
 
-    let queue: any[] = [];
+    let queue = [];
 
     nodes.forEach((node) => {
-      const key = (node.label || node.type || node.id || '').toLowerCase();
+      const rawKey = `${node.id || ''} ${node.type || ''} ${node.label || ''}`.toLowerCase();
 
-      if (key.includes('ulangi') || key.includes('repeat') || key.includes('loop')) {
+      if (rawKey.includes('ulangi') || rawKey.includes('repeat') || rawKey.includes('loop')) {
         if (queue.length > 0) {
           const previousBlocks = [...queue];
           queue.push(...previousBlocks, ...previousBlocks);
@@ -172,7 +163,7 @@ export default function PlaygroundPage() {
 
         {/* Layout 3 Kolom */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 overflow-hidden">
-          {/* Palet Blok */}
+          {/* Kolom 1: Palet Blok */}
           <div className="lg:col-span-3 bg-white rounded-2xl p-4 border border-slate-200 overflow-y-auto">
             <h3 className="font-heading font-bold text-xs uppercase text-slate-400 mb-3">Palet Blok</h3>
             <div className="space-y-2">
@@ -189,7 +180,7 @@ export default function PlaygroundPage() {
             </div>
           </div>
 
-          {/* Kanvas Kode */}
+          {/* Kolom 2: Kanvas Kode */}
           <div className="lg:col-span-5 bg-white rounded-2xl p-4 border border-slate-200 flex flex-col">
             <div className="flex items-center justify-between mb-3 border-b pb-2">
               <span className="font-heading font-bold text-xs text-slate-600">Kanvas Kode</span>
@@ -235,19 +226,17 @@ export default function PlaygroundPage() {
             </div>
           </div>
 
-          {/* Panggung Karakter */}
+          {/* Kolom 3: Panggung Karakter */}
           <div className="lg:col-span-4 bg-slate-900 rounded-2xl p-4 text-white flex flex-col justify-between">
             <div>
               <span className="font-heading font-bold text-xs text-teal-400 block mb-2">Panggung Karakter</span>
-              <div className="h-56 bg-slate-800 rounded-xl flex items-center justify-center relative overflow-hidden">
-                {/* Balon Bicara */}
+              <div className="h-64 bg-slate-800 rounded-xl flex items-center justify-center relative overflow-hidden">
                 {speechBubble && (
                   <div className="absolute top-4 bg-white text-slate-900 px-3 py-1.5 rounded-xl text-xs font-bold shadow-md z-10 animate-bounce">
                     {speechBubble}
                   </div>
                 )}
 
-                {/* Maskot Robot WEBP */}
                 <div
                   className="transition-all duration-500 ease-in-out select-none flex items-center justify-center"
                   style={{
@@ -258,12 +247,18 @@ export default function PlaygroundPage() {
                     src="/images/robot.webp"
                     alt="Robot Mascot"
                     className="w-28 h-28 object-contain drop-shadow-xl"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.parentElement) {
+                        e.currentTarget.parentElement.innerText = '🤖';
+                        e.currentTarget.parentElement.className += ' text-6xl';
+                      }
+                    }}
                   />
                 </div>
               </div>
             </div>
 
-            {/* Panel Panduan Kiko */}
             <div className="bg-slate-800 p-3 rounded-xl border border-slate-700 text-xs mt-4">
               <span className="font-bold text-amber-300 block mb-1">💡 Panduan Kiko:</span>
               <p className="text-slate-300">{feedback.friendlyExplanation}</p>
