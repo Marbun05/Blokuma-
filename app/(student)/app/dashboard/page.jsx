@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 
 export default function StudentDashboardPage() {
+  const [studentNickname, setStudentNickname] = useState('Kiko');
+
+  // Memuat data nama siswa dari localStorage
+  const loadProfileData = () => {
+    if (typeof window !== 'undefined') {
+      const savedName = localStorage.getItem('student_nickname');
+      if (savedName) {
+        setStudentNickname(savedName);
+      }
+    }
+  };
+
+  useEffect(() => {
+    // 1. Muat nama saat pertama kali komponen dibuka
+    loadProfileData();
+
+    // 2. Listener Custom Event agar nama di banner update secara otomatis jika diubah dari halaman Pengaturan
+    const handleProfileUpdate = () => {
+      loadProfileData();
+    };
+
+    window.addEventListener('student_profile_updated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('student_profile_updated', handleProfileUpdate);
+    };
+  }, []);
+
   return (
     <div className="flex min-h-screen bg-slate-50">
       <StudentSidebar />
@@ -14,7 +41,11 @@ export default function StudentDashboardPage() {
               <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                 Arsitek Kode Level 6
               </span>
-              <h1 className="font-heading text-3xl font-bold mt-1">Halo, Kiko! 👋</h1>
+              
+              {/* Nama siswa dinamis berdasarkan localStorage */}
+              <h1 className="font-heading text-3xl font-bold mt-1">
+                Halo, {studentNickname}! 👋
+              </h1>
             </div>
             <div className="text-right">
               <span className="text-2xl font-bold">🔥 7 Hari</span>

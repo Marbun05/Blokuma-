@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useLearningStore } from '../../store/learning/use-learning-store.js';
 
 const menuItems = [
   { name: 'Beranda', href: '/app/dashboard', icon: '🏠' },
@@ -16,7 +15,52 @@ const menuItems = [
 
 export function StudentSidebar() {
   const location = useLocation();
-  const { grade, getPhaseModeTitle } = useLearningStore();
+
+  const [currentGrade, setCurrentGrade] = useState('Kelas 4 SD');
+  const [currentSubtheme, setCurrentSubtheme] = useState('Dunia Blok & Logika');
+  const [studentNickname, setStudentNickname] = useState('Kiko');
+
+  // Helper untuk menentukan subtema materi
+  const getSubthemeByClass = (selectedClass) => {
+    if (!selectedClass) return 'Dunia Blok & Logika';
+    if (selectedClass.includes('1') || selectedClass.includes('2')) {
+      return 'Dunia Ikon & Suara';
+    } else if (selectedClass.includes('3') || selectedClass.includes('4')) {
+      return 'Dunia Blok & Logika';
+    } else if (selectedClass.includes('5') || selectedClass.includes('6')) {
+      return 'Dunia Algoritma & Game';
+    }
+    return 'Dunia Blok & Logika';
+  };
+
+  // Fungsi memuat data profil dari localStorage
+  const loadProfileData = () => {
+    const savedClass = localStorage.getItem('student_class');
+    const savedName = localStorage.getItem('student_nickname');
+
+    if (savedClass) {
+      setCurrentGrade(savedClass);
+      setCurrentSubtheme(getSubthemeByClass(savedClass));
+    }
+    if (savedName) {
+      setStudentNickname(savedName);
+    }
+  };
+
+  useEffect(() => {
+    // 1. Muat data saat pertama di-render
+    loadProfileData();
+
+    // 2. Pasang Listener Custom Event untuk menangkap simpanan dari halaman Pengaturan
+    const handleProfileUpdate = () => {
+      loadProfileData();
+    };
+
+    window.addEventListener('student_profile_updated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('student_profile_updated', handleProfileUpdate);
+    };
+  }, []);
 
   const mobileNavItems = [
     { name: 'Beranda', href: '/app/dashboard', icon: '🏠' },
@@ -37,8 +81,8 @@ export function StudentSidebar() {
             </div>
             <div>
               <span className="font-heading text-xl font-bold text-slate-800 block">Blokuma</span>
-              <span className="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                Kelas {grade} • {getPhaseModeTitle()}
+              <span className="text-[11px] font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 block mt-0.5">
+                {currentGrade} • {currentSubtheme}
               </span>
             </div>
           </div>
@@ -68,14 +112,14 @@ export function StudentSidebar() {
           <div className="flex items-center gap-3">
             <div className="text-2xl">🧑‍🚀</div>
             <div>
-              <p className="font-bold text-slate-800 text-sm">Kiko</p>
+              <p className="font-bold text-slate-800 text-sm">{studentNickname}</p>
               <p className="text-xs text-slate-500">Arsitek Kode Level 6</p>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* Android / Mobile Fixed Bottom Bar */}
+      {/* Mobile Bottom Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-2 flex justify-around items-center shadow-lg">
         {mobileNavItems.map((item) => {
           const isActive = location.pathname === item.href;
