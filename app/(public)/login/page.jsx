@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
+import { supabase } from '../../../lib/supabase/client.js';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -9,6 +10,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
 
+  // State Lupa Kata Sandi
+  const [isResetting, setIsResetting] = useState(false);
+  const [resetMessage, setResetMessage] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -16,30 +21,55 @@ export default function LoginPage() {
     try {
       const userProfile = await loginWithSupabase(email, password);
 
-      if (userProfile.role === 'student') navigate('/app/dashboard');
-      else if (userProfile.role === 'parent') navigate('/parent');
-      else if (userProfile.role === 'teacher') navigate('/teacher');
+      if (userProfile?.role === 'student') navigate('/app/dashboard');
+      else if (userProfile?.role === 'parent') navigate('/parent');
+      else if (userProfile?.role === 'teacher') navigate('/teacher');
       else navigate('/admin');
     } catch (err) {
       setErrorMessage(err.message || 'Gagal masuk. Periksa kembali email dan password Anda.');
     }
   };
 
+  // Fungsi Kirim Link Reset Password
+  const handleForgotPassword = async () => {
+    if (!email) {
+      alert('Silakan isi Email Pengguna terlebih dahulu pada kolom email!');
+      return;
+    }
+
+    setIsResetting(true);
+    setResetMessage(null);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      setIsResetting(false);
+
+      if (error) {
+        alert(`Gagal mengirim email reset: ${error.message}`);
+      } else {
+        setResetMessage('Link reset kata sandi telah dikirim ke email kamu! Cek kotak masuk atau spam.');
+      }
+    } catch (err) {
+      setIsResetting(false);
+      alert('Terjadi kesalahan saat menghubungkan ke server Supabase.');
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-x-hidden">
-      {/* Left Side: Edge-to-Edge Vibrant Clear Photo Panel */}
+      {/* Left Side: Photo Panel */}
       <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:flex flex-col justify-between p-8 xl:p-12 overflow-hidden bg-slate-950">
-        {/* Crystal Clear Original Photo */}
         <img
           src="/Anak.jpg"
           alt="Anak Belajar Coding Blokuma"
           className="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000"
         />
 
-        {/* Subtle Bottom Gradient Overlay for Text Legibility */}
         <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent pointer-events-none" />
 
-        {/* Top Brand Logo with Glassmorphism */}
         <div className="relative z-10">
           <Link
             to="/"
@@ -54,7 +84,6 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Bottom Headline & Tagline inside Glassmorphism Card */}
         <div className="relative z-10 max-w-xl bg-slate-900/50 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl">
           <span className="inline-block px-3.5 py-1 bg-teal-500 text-white rounded-full text-xs font-bold uppercase tracking-wider mb-3 shadow-md">
             ✨ Creative Digital Workshop
@@ -68,9 +97,8 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right Side: Full-Screen Form Panel */}
+      {/* Right Side: Form Panel */}
       <div className="w-full min-h-screen bg-white p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col justify-between">
-        {/* Mobile Header Logo */}
         <div className="flex items-center justify-between lg:hidden mb-6 pt-2">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-md">
@@ -97,6 +125,12 @@ export default function LoginPage() {
             </div>
           )}
 
+          {resetMessage && (
+            <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs sm:text-sm font-bold rounded-2xl text-center shadow-sm">
+              {resetMessage}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">
@@ -113,9 +147,20 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">
-                Password
-              </label>
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs sm:text-sm font-bold text-slate-700">
+                  Password
+                </label>
+                {/* Tombol Lupa Kata Sandi */}
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  disabled={isResetting}
+                  className="text-xs text-teal-600 font-bold hover:underline"
+                >
+                  {isResetting ? 'Mengirim...' : 'Lupa kata sandi?'}
+                </button>
+              </div>
               <input
                 type="password"
                 value={password}
@@ -147,7 +192,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Footer info */}
         <div className="text-center text-xs text-slate-400 mt-8 pt-4 border-t border-slate-100">
           © 2026 Blokuma Platform. Child-Safe & Adaptive Learning.
         </div>
