@@ -169,7 +169,7 @@ export default function RegisterPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="kiko@blokuma.id"
+                placeholder="kiko@gmail.com"
                 className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-base sm:text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-100 transition shadow-sm"
                 required
               />
