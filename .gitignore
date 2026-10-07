@@ -2,9 +2,11 @@
 /node_modules
 /.pnpm-store
 
-# Next.js build outputs
+# Build outputs
 /.next/
 /out/
+/dist/
+supabase/.temp/
 
 # Environment files
 .env

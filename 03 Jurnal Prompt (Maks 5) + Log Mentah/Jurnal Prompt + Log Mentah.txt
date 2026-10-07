@@ -6,36 +6,49 @@ JURNAL PROMPT (SISTEM CATATAN INTERAKSI AI AGENT)
 --------------------------------------------------------------------------------
 
 PROMPT #1
-Tanggal: 2026-10-05T13:14:07+07:00
-Scope: Git Remote & Environment Setup
-Prompt: Connect project to https://github.com/Marbun05/Blokuma-.git with PAT token and add .env file.
+Tanggal: 2026-10-06T14:15:14+07:00
+Scope: React JSX / JS Full Codebase Migration
+Prompt: Convert all Next.js codebase files to pure React .jsx and .js files, update jsconfig.json.
 Status: Success
 
 PROMPT #2
-Tanggal: 2026-10-05T13:15:49+07:00
-Scope: Git Local User Configuration
-Prompt: Set local git user config user.name "Marbun05" and user.email "119002067+Marbun05@users.noreply.github.com".
+Tanggal: 2026-10-06T14:28:24+07:00
+Scope: Vite + React JSX Development Runner Setup
+Prompt: Configure Vite + React JSX runner (vite.config.js, index.html, src/main.jsx, src/App.jsx, react-router-dom), update package.json dev scripts.
 Status: Success
 
 PROMPT #3
-Tanggal: 2026-10-05T13:35:51+07:00
-Scope: End-to-End Blokuma Master Build Specification
-Prompt: Build full Next.js + Vercel + Supabase architecture with 02 Docs and 03 Journal prompt files, clean code rules, visual block AST engine, adaptive grade system, student/parent/teacher dashboards, auto commit & push.
+Tanggal: 2026-10-06T14:51:41+07:00
+Scope: Automated Terminal Supabase Database Migration
+Prompt: Run automated PostgreSQL schema DDL migration from terminal using PASSWORD_SUPABASE, create public tables and RLS policies.
+Status: Success
+
+PROMPT #4
+Tanggal: 2026-10-06T14:56:54+07:00
+Scope: Real Supabase Auth & Profile Integration
+Prompt: Integrate real Supabase Auth (signUp, signInWithPassword) & public.profiles & public.student_progress database synchronization.
+Status: Success
+
+PROMPT #5
+Tanggal: 2026-10-06T15:13:58+07:00
+Scope: Crystal Clear Split-Screen Auth UI & Media Asset Sync
+Prompt: Redesign /login (Anak.jpg) and /register (Register.jpeg) into full-screen edge-to-edge split layout, remove dark image overlays for 100% bright photo clarity, enforce Android responsiveness, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
 Status: Success
 
 --------------------------------------------------------------------------------
 LOG MENTAH
 --------------------------------------------------------------------------------
-[2026-10-05 13:45]
-Scope: Base Architecture Setup
-Files Created/Updated:
-- app/ layout, page, routes
-- engine/ blocks AST, rule engine, guided debugger, JS/Python generators
-- domain/ student, project, lesson schemas
-- services/ Supabase integration
-- 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
-- 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
+[2026-10-06 15:18]
+Scope: Pre-Push Audit & Vibe Coding Documentation Sync
+Inspected Modifications:
+- Vite React JSX runner & react-router-dom SPA
+- Automated Supabase DDL database migration execution (public.profiles, student_progress, projects, classrooms)
+- Real Supabase Auth (signUp, signInWithPassword) & profiles database sync
+- public/favicon.svg rocket brand asset
+- public/Anak.jpg on /login hero panel
+- public/Register.jpeg on /register hero panel
+- Crystal clear photo rendering with glassmorphism cards & Android responsiveness
 Validation:
-- TypeScript: PASS
-- Tests: PASS
-- Build: PASS
+- Tests: PASS (6/6 in Vitest)
+- Build: PASS (Vite React JSX build)
+- Git: Pushing local commits to origin/main

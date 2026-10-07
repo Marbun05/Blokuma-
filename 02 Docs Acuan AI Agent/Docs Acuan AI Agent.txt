@@ -1,38 +1,44 @@
 ================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA CODEBASE SPECIFICATION
+# 02 DOCS ACUAN AI AGENT — BLOKUMA VIBE CODING BLUEPRINT & SYSTEM ARCHITECTURE
 ================================================================================
 
-1. CODEBASE ARCHITECTURE & TECH STACK
+1. RUNNER SYSTEM & TECH STACK
 --------------------------------------------------------------------------------
-Framework      : Next.js 15 (App Router, TypeScript Strict Mode)
+Framework      : React 19 + Vite 6 Runner (`vite.config.js` with `@vitejs/plugin-react`)
+Client Router  : React Router DOM v7 (`react-router-dom`, `src/App.jsx`)
 Styling        : Tailwind CSS, Framer Motion, Lucide React
-State          : Zustand
+State          : Zustand Stores (`src/store/`)
 Backend / DB   : Supabase (Auth, PostgreSQL, Row Level Security)
-Deployment     : Vercel (vercel.json)
-Testing        : Vitest
+Database Host  : `aws-0-ap-southeast-1.pooler.supabase.com:6543` (Target: sjmnjoiqrtgxhknbnjyd)
+Dev Runner     : `npm run dev` (`vite`) -> http://localhost:3000
+Testing        : Vitest (`npm run test`)
 
-2. STRICT FOLDER STRUCTURE
+2. STRICT REPOSITORY MAP & EXTENSIONS
 --------------------------------------------------------------------------------
-app/           : App Router pages grouped by route groups: (public), (student), (parent), (teacher), (admin), api/
-components/    : Reusable UI, Layout, Navigation, Playground, Stage, Badges, Charts
-engine/        : Core Visual Coding AST Parser, Validator, Runtime, Rule Engine, Code Generators (JS/Python)
-domain/        : Typed Entity definitions (Users, Students, Projects, Lessons, Skills)
-services/      : Supabase Data Access Services
-store/         : Zustand State Stores (Auth, Playground, Grade, Learning)
-supabase/      : Migrations, Seed SQL, Config
-tests/         : Unit and Integration Test Suites
+/                          : Root bundler & config (index.html, vite.config.js, jsconfig.json, package.json)
+public/                    : Static media assets (favicon.svg, Anak.jpg, Register.jpeg)
+src/                       : Application root entry (main.jsx, App.jsx, index.css)
+src/components/            : Reusable React JSX components (Navbar.jsx, Footer.jsx, StudentSidebar.jsx, UI)
+app/                       : Route views (.jsx) grouped into (public), (student), (parent), (teacher), (admin)
+engine/                    : Visual Block AST Engine, Rule Engine, Guided Debugger, JS/Python Generators (.js)
+domain/                    : Domain entity constants & schemas (.js)
+services/                  : Real Supabase Client & Data Access Layer (`services/auth/auth-service.js`, `services/projects/project-service.js`)
+store/                     : Zustand stores (auth, learning, playground)
+supabase/                  : Database migration DDL SQL scripts (`supabase/migrations/20261005000000_initial_schema.sql`)
+tests/                     : Unit test suites (Vitest `.test.js`)
 
-3. NAMING & CODING CONVENTIONS
+3. AUTH UI & ANDROID RESPONSIVENESS SPECIFICATION
 --------------------------------------------------------------------------------
-Files          : kebab-case.ts / kebab-case.tsx
-Components     : PascalCase (e.g., ProjectCard)
-Functions      : camelCase (e.g., validateBlockAST)
-Constants      : UPPER_SNAKE_CASE (e.g., MAX_BLOCKS)
-Strict Types   : No 'any' types allowed. Explicit interface definitions required.
+- Full-Screen Split Layout : Edge-to-edge 2-side split screen (`grid-cols-1 lg:grid-cols-2`)
+- Login Page (/login)      : Left Hero Panel uses `public/Anak.jpg` with crystal-clear rendering & glassmorphism text card
+- Register Page (/register): Left Hero Panel uses `public/Register.jpeg` with crystal-clear rendering & glassmorphism text card
+- Real Auth Integration    : Supabase Auth (`signUp`, `signInWithPassword`, `signOut`) & `public.profiles` database sync
+- Android Touch Targets    : Large inputs (`py-3.5 px-4 text-base sm:text-sm`) & viewport `viewport-fit=cover`
+- Mobile Bottom Navigation : Fixed bottom bar in `StudentSidebar.jsx` for student mobile/Android navigation
 
-4. CURRENT IMPLEMENTATION STATE
+4. CURRENT BUILD & VERIFICATION STATUS
 --------------------------------------------------------------------------------
-Status         : Fully configured Next.js + Vercel + Supabase architecture.
-AST Engine     : Block AST, Rule Engine (Guided Debugger), Stage Execution, JS/Python Generators implemented in engine/.
-Grade Adaptive : Grade 1-2 (Phase A: Dunia Ikon & Suara), Grade 3-4 (Phase B: Dunia Blok & Logika), Grade 5-6 (Phase C: Dunia Algoritma & Game).
-Routes         : (public), (student), (parent), (teacher), (admin) all routed and interconnected.
+- Vite Runner  : PASS (`npm run build` -> dist/ bundle compiled cleanly in 9s)
+- Unit Tests   : PASS (6/6 tests passing in Vitest)
+- Supabase DB  : PASS (Executed DDL migration via terminal -> public.profiles, student_progress, projects, classrooms live)
+- Git Target   : https://github.com/Marbun05/Blokuma-.git (branch: main)
