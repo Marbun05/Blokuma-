@@ -28,10 +28,12 @@ export default function LandingPage() {
   };
 
   // Hapus semua blok di Kanvas
-  const handleClearCanvas = () => {
+ const handleClearCanvas = () => {
     if (isRunning) return;
     setCanvasBlocks([]);
-    setActionMessage('Kanvas dikosongkan. Pilih blok baru!');
+    setRobotPosition(0); // Memastikan maskot kembali ke posisi awal/tengah
+    setRobotJump(false);
+    setActionMessage('Kanvas dikosongkan & Maskot kembali ke posisi awal!');
   };
 
   // Fungsi Pemutar Audio POP Kustom (public/sounds/pop.mp3)
@@ -70,7 +72,7 @@ export default function LandingPage() {
   };
 
   // Jalankan Kode Sesuai Urutan Kanvas
-  const handleRunCode = async () => {
+ const handleRunCode = async () => {
     if (isRunning) return;
 
     if (canvasBlocks.length === 0) {
@@ -78,20 +80,20 @@ export default function LandingPage() {
       return;
     }
 
-    // Validasi khusus: Jika blok pertama adalah ULANGI 3 KALI (tidak ada perintah sebelumnya)
+    // Validasi: Jika blok pertama adalah ULANGI 3 KALI (tidak ada perintah sebelumnya)
     if (canvasBlocks[0].id === 'repeat') {
       setActionMessage('⚠️ Masukkan perintah lain terlebih dahulu sebelum menambahkan blok Ulangi 3 Kali!');
       return;
     }
 
     setIsRunning(true);
-    setRobotPosition(0); // Reset posisi awal
+    // CATATAN: setRobotPosition(0) sengaja tidak dipanggil di sini 
+    // agar posisi maju terakumulasi saat Jalankan Kode diklik berturut-turut!
 
     for (let i = 0; i < canvasBlocks.length; i++) {
       const currentBlock = canvasBlocks[i];
 
       if (currentBlock.id === 'repeat') {
-        // Ambil perintah tepat sebelum blok 'ULANGI 3 KALI'
         const previousBlock = i > 0 ? canvasBlocks[i - 1] : null;
 
         if (previousBlock && previousBlock.id !== 'repeat') {
@@ -114,7 +116,6 @@ export default function LandingPage() {
     setActionMessage('✨ Horay! Seluruh instruksi di Kanvas berhasil dijalankan!');
     setIsRunning(false);
   };
-
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Navbar />
