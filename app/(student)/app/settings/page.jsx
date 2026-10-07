@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 
 export default function StudentSettingsPage() {
@@ -18,6 +18,7 @@ export default function StudentSettingsPage() {
 
   // Helper untuk menentukan subtema materi berdasarkan kelas
   const getSubthemeByClass = (selectedClass) => {
+    if (!selectedClass) return 'Dunia Blok dan Logika';
     if (selectedClass.includes('1') || selectedClass.includes('2')) {
       return 'Dunia Ikon dan Suara';
     } else if (selectedClass.includes('3') || selectedClass.includes('4')) {
@@ -28,16 +29,35 @@ export default function StudentSettingsPage() {
     return 'Dunia Blok dan Logika';
   };
 
+  // 1. TAMBAHAN UTAMA: Membaca data tersimpan saat halaman dimuat/di-refresh
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedName = localStorage.getItem('student_nickname');
+      const savedClass = localStorage.getItem('student_class');
+
+      if (savedName) {
+        setNickname(savedName);
+      }
+      if (savedClass) {
+        setGradeClass(savedClass);
+      }
+    }
+  }, []);
+
   const handleSaveSettings = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simpan ke localStorage agar nilai kelas & materi dapat dibaca modul lain
+
     const currentSubtheme = getSubthemeByClass(gradeClass);
+
+    // Simpan ke localStorage
     localStorage.setItem('student_nickname', nickname);
     localStorage.setItem('student_class', gradeClass);
     localStorage.setItem('student_subtheme', currentSubtheme);
-window.dispatchEvent(new Event('student_profile_updated'));
+
+    // Memicu event agar Sidebar & Dashboard ter-refresh secara bersamaan
+    window.dispatchEvent(new Event('student_profile_updated'));
+
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSaved(true);
@@ -64,7 +84,7 @@ window.dispatchEvent(new Event('student_profile_updated'));
           <div className="mb-6 p-4 bg-teal-50 border border-teal-200 text-teal-800 rounded-2xl flex items-center gap-3">
             <span className="text-xl">✨</span>
             <span className="text-sm font-bold">
-              Profil berhasil diperbarui! Kelas diset ke {gradeClass} ({getSubthemeByClass(gradeClass)}).
+              Profil berhasil diperbarui! Nama dan kelas kamu sudah tersimpan.
             </span>
           </div>
         )}
