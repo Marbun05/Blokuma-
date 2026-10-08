@@ -13,26 +13,29 @@ export default function AdminDashboardPage() {
       </header>
 
       <main className="max-w-6xl mx-auto space-y-6">
-        <div className="bg-slate-800 rounded-3xl p-6 border border-slate-700">
-          <h1 className="font-heading text-2xl font-bold mb-2">Ringkasan Sistem Blokuma</h1>
-          <p className="text-xs text-slate-400 mb-6">Manajemen platform, pengguna, galeri publik, dan analytics.</p>
+        <div className="bg-slate-800 rounded-2xl p-6 sm:p-7 border-2 border-slate-700 shadow-md">
+          <div className="inline-block px-3 py-1 bg-teal-900/60 text-teal-300 font-bold text-xs rounded-full border border-teal-700 mb-2">
+            Panel Pengawas Sistem
+          </div>
+          <h1 className="font-heading text-2xl font-bold mb-1">Ringkasan Sistem Blokuma</h1>
+          <p className="text-xs text-slate-400 mb-6">Manajemen platform, monitoring aktivitas belajar siswa, dan keamanan konten galeri.</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800">
-              <span className="text-xs text-slate-500 font-bold">Total Pengguna</span>
-              <p className="font-heading text-2xl font-bold text-teal-400 mt-1">1,250</p>
+            <div className="bg-slate-900/80 p-5 rounded-xl border border-slate-700 shadow-sm">
+              <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Siswa Aktif</span>
+              <p className="font-heading text-3xl font-bold text-teal-400 mt-1">1,250</p>
             </div>
-            <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800">
-              <span className="text-xs text-slate-500 font-bold">Total Guru</span>
-              <p className="font-heading text-2xl font-bold text-amber-400 mt-1">48</p>
+            <div className="bg-slate-900/80 p-5 rounded-xl border border-slate-700 shadow-sm">
+              <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Guru Terverifikasi</span>
+              <p className="font-heading text-3xl font-bold text-amber-400 mt-1">48</p>
             </div>
-            <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800">
-              <span className="text-xs text-slate-500 font-bold">Project Publik</span>
-              <p className="font-heading text-2xl font-bold text-purple-400 mt-1">380</p>
+            <div className="bg-slate-900/80 p-5 rounded-xl border border-slate-700 shadow-sm">
+              <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Karya di Galeri</span>
+              <p className="font-heading text-3xl font-bold text-purple-400 mt-1">380</p>
             </div>
-            <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800">
-              <span className="text-xs text-slate-500 font-bold">Moderasi Galeri</span>
-              <p className="font-heading text-2xl font-bold text-emerald-400 mt-1">0 Laporan</p>
+            <div className="bg-slate-900/80 p-5 rounded-xl border border-slate-700 shadow-sm">
+              <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Moderasi Child-Safe</span>
+              <p className="font-heading text-3xl font-bold text-emerald-400 mt-1">100% Aman</p>
             </div>
           </div>
         </div>

@@ -67,42 +67,45 @@ export default function StudentSettingsPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-6 sm:p-8 max-w-4xl">
+      <main className="flex-1 p-5 sm:p-8 max-w-4xl">
         <div className="mb-6">
-          <h1 className="font-heading text-3xl font-bold text-slate-900 mb-1">
+          <div className="inline-block px-3 py-1 bg-teal-100 text-teal-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-teal-300">
+            ⚙️ Pengaturan Profil
+          </div>
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
             Pengaturan Akun Siswa
           </h1>
-          <p className="text-slate-600 text-sm">
-            Atur profil dan preferensi kodingmu.
+          <p className="text-slate-600 text-sm sm:text-base font-medium">
+            Atur nama panggilan dan kelasmu agar materi koding otomatis menyesuaikan.
           </p>
         </div>
 
         {isSaved && (
-          <div className="mb-6 p-4 bg-teal-50 border border-teal-200 text-teal-800 rounded-2xl flex items-center gap-3">
-            <span className="text-xl">✨</span>
+          <div className="mb-6 p-4 bg-teal-50 border-2 border-teal-300 text-teal-900 rounded-2xl flex items-center gap-3 shadow-sm">
+            <span className="text-2xl">✨</span>
             <span className="text-sm font-bold">
-              Profil berhasil diperbarui! Nama dan kelas kamu sudah tersimpan.
+              Hore! Profil berhasil diperbarui. Nama dan kelas kamu sudah tersimpan dengan aman!
             </span>
           </div>
         )}
 
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border-2 border-slate-200 card-chunky shadow-sm">
           <form onSubmit={handleSaveSettings} className="space-y-6">
             
             {/* Input Nickname */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Nickname
+                Nickname / Nama Panggilan
               </label>
               <input
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 required
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 font-medium text-sm transition"
+                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:outline-none focus:border-teal-500 text-slate-800 font-medium text-sm transition"
                 placeholder="Masukkan nama panggilanmu"
               />
             </div>
@@ -110,12 +113,12 @@ export default function StudentSettingsPage() {
             {/* Dropdown Pilihan Kelas */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Kelas
+                Jenjang Kelas SD
               </label>
               <select
                 value={gradeClass}
                 onChange={(e) => setGradeClass(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 font-medium text-sm bg-white cursor-pointer transition"
+                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:outline-none focus:border-teal-500 text-slate-800 font-medium text-sm bg-white cursor-pointer transition"
               >
                 {classOptions.map((option) => (
                   <option key={option} value={option}>
@@ -126,9 +129,9 @@ export default function StudentSettingsPage() {
             </div>
 
             {/* Preview Subtema Materi */}
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-              <p className="text-xs text-slate-500 font-medium mb-1">Materi Pembelajaran Otomatis:</p>
-              <p className="text-sm font-bold text-teal-700">
+            <div className="p-4 bg-teal-50/70 rounded-xl border-2 border-teal-200">
+              <p className="text-xs text-teal-900 font-medium mb-1">Materi Pembelajaran Otomatis Sesuai Kelas:</p>
+              <p className="text-sm font-bold text-teal-800">
                 📚 {getSubthemeByClass(gradeClass)}
               </p>
             </div>
@@ -138,19 +141,20 @@ export default function StudentSettingsPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-6 py-3 rounded-xl font-bold text-sm text-white shadow-md transition transform active:scale-95 flex items-center justify-center gap-2 ${
-                  isSubmitting
-                    ? 'bg-slate-400 cursor-not-allowed'
-                    : 'bg-teal-500 hover:bg-teal-600 active:bg-teal-700'
+                className={`toy-btn-teal px-8 py-3.5 rounded-xl font-bold text-sm text-white shadow-toyTeal flex items-center justify-center gap-2 ${
+                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >
                 {isSubmitting ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Menyimpan...
+                    <span>Menyimpan Profil...</span>
                   </>
                 ) : (
-                  '💾 Simpan Perubahan'
+                  <>
+                    <span>💾</span>
+                    <span>Simpan Perubahan Profil</span>
+                  </>
                 )}
               </button>
             </div>

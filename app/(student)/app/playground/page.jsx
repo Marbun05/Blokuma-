@@ -9,10 +9,10 @@ export default function StudentPlaygroundPage() {
   const [actionMessage, setActionMessage] = useState('Pilih blok lalu klik Jalankan Kode!');
 
   const availableBlocks = [
-    { id: 'move', label: '➔ MAJU 1 LANGKAH', color: 'bg-teal-500 hover:bg-teal-600 text-white' },
-    { id: 'jump', label: '🦘 MELOMPAT', color: 'bg-indigo-500 hover:bg-indigo-600 text-white' },
-    { id: 'repeat', label: '🔁 ULANGI 3 KALI', color: 'bg-amber-400 hover:bg-amber-500 text-slate-900' },
-    { id: 'sound', label: '🎵 MAINKAN SUARA POP', color: 'bg-sky-500 hover:bg-sky-600 text-white' },
+    { id: 'move', label: '➔ MAJU 1 LANGKAH', color: 'bg-teal-500 hover:bg-teal-600 text-white border-b-4 border-teal-700' },
+    { id: 'jump', label: '🦘 MELOMPAT TINGGI', color: 'bg-indigo-500 hover:bg-indigo-600 text-white border-b-4 border-indigo-700' },
+    { id: 'repeat', label: '🔁 ULANGI 3 KALI', color: 'bg-amber-400 hover:bg-amber-500 text-slate-900 border-b-4 border-amber-600' },
+    { id: 'sound', label: '🎵 SUARA POP CERIA', color: 'bg-sky-500 hover:bg-sky-600 text-white border-b-4 border-sky-700' },
   ];
 
   const handleAddBlock = (block) => {
@@ -30,11 +30,23 @@ export default function StudentPlaygroundPage() {
 
   const playPopSound = () => {
     try {
-      const audio = new Audio('/sounds/jokowi-saya-akan-lawan.mp3');
-      audio.volume = 0.8;
-      audio.play().catch((e) => console.log('Audio autoplay:', e));
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.15);
+      }
     } catch (e) {
-      console.error(e);
+      // Audio autoplay policy fallback
     }
   };
 
@@ -101,27 +113,32 @@ export default function StudentPlaygroundPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-6 sm:p-8 max-w-6xl">
-        <h1 className="font-heading text-3xl font-bold text-slate-900 mb-2">
-          Playground Kode Interaktif
-        </h1>
-        <p className="text-slate-600 text-sm mb-6">
-          Susun dan coba instruksi blok langsung pada Panggung Karakter Kiko!
-        </p>
+      <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+        <div className="mb-6">
+          <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-amber-300">
+            🧩 Meja Eksperimen Kode Bebas
+          </div>
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
+            Kanvas Coding Robot Kiko
+          </h1>
+          <p className="text-slate-600 text-sm sm:text-base font-medium">
+            Rakit perintah balok warna-warni dan lihat aksi Kiko melompat serta bergerak di panggung!
+          </p>
+        </div>
 
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 sm:p-7 rounded-2xl border-2 border-slate-200 card-chunky shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-left">
             
             {/* 1. Panel Pilih Perintah */}
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
+            <div className="bg-[#FAF8F5] p-5 rounded-2xl border-2 border-slate-200 flex flex-col justify-between shadow-sm">
               <div>
                 <p className="font-heading font-bold text-slate-800 text-sm mb-3 flex items-center justify-between">
-                  <span>📋 Pilih Perintah:</span>
+                  <span>📋 1. Ambil Balok Perintah:</span>
                   <span className="text-[10px] bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-bold">
-                    Klik untuk tambah
+                    Klik untuk tambah +
                   </span>
                 </p>
                 <div className="space-y-2.5">
@@ -133,37 +150,38 @@ export default function StudentPlaygroundPage() {
                       className={`w-full p-3 rounded-xl font-bold text-xs shadow-sm text-left transition transform active:scale-95 flex items-center justify-between ${block.color}`}
                     >
                       <span>{block.label}</span>
-                      <span className="text-base">+</span>
+                      <span className="text-base font-extrabold">+</span>
                     </button>
                   ))}
                 </div>
               </div>
-              <p className="text-[11px] text-slate-400 mt-4 italic">
-                *Klik perintah di atas untuk memasukkannya ke Kanvas.
+              <p className="text-[11px] text-slate-500 mt-4 italic font-medium">
+                *Klik balok di atas untuk merakit perintah ke Kanvas.
               </p>
             </div>
 
             {/* 2. Kanvas Blok */}
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between min-h-[260px]">
+            <div className="bg-[#FAF8F5] p-5 rounded-2xl border-2 border-slate-200 flex flex-col justify-between min-h-[260px] shadow-sm">
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <p className="font-heading font-bold text-slate-800 text-sm">🧩 Kanvas Blok:</p>
+                  <p className="font-heading font-bold text-slate-800 text-sm">🧩 2. Kanvas Rakit Kode:</p>
                   {canvasBlocks.length > 0 && (
                     <button
                       onClick={handleClearCanvas}
                       disabled={isRunning}
-                      className="text-xs text-rose-500 hover:underline font-bold"
+                      className="text-xs text-rose-600 hover:text-rose-700 font-bold bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200 hover:bg-rose-100 transition"
                     >
-                      Reset Kanvas
+                      ✕ Bersihkan Kanvas
                     </button>
                   )}
                 </div>
 
-                <div className="space-y-2 min-h-[160px] p-3 bg-white rounded-xl border border-dashed border-slate-200">
+                <div className="space-y-2 min-h-[160px] p-3 bg-white rounded-xl border-2 border-dashed border-amber-200">
                   {canvasBlocks.length === 0 ? (
-                    <div className="h-32 flex flex-col items-center justify-center text-slate-400 text-xs text-center">
-                      <span>Belum ada blok dipilih.</span>
-                      <span>Klik perintah di sebelah kiri!</span>
+                    <div className="h-32 flex flex-col items-center justify-center text-slate-400 text-xs text-center font-medium">
+                      <span className="text-2xl mb-1">📦</span>
+                      <span className="font-bold text-slate-600">Kanvas masih kosong nih!</span>
+                      <span>Klik balok di sebelah kiri untuk mulai merakit aksi.</span>
                     </div>
                   ) : (
                     canvasBlocks.map((block, idx) => (
@@ -177,17 +195,27 @@ export default function StudentPlaygroundPage() {
                   )}
                 </div>
               </div>
+              <p className="text-[11px] text-slate-400 mt-2 text-right">
+                {canvasBlocks.length} balok terpasang
+              </p>
             </div>
 
-            {/* 3. Area Maskot & Eksekusi */}
-            <div className="bg-slate-900 rounded-2xl p-6 text-white flex flex-col items-center justify-between min-h-[280px] text-center relative overflow-hidden">
-              <div className="my-auto w-full flex flex-col items-center gap-3">
+            {/* 3. Area Maskot & Eksekusi - Panggung Ceria Ramah Anak */}
+            <div className="bg-gradient-to-b from-sky-200 via-sky-100 to-emerald-100 rounded-2xl p-6 border-2 border-sky-300 flex flex-col items-center justify-between min-h-[290px] text-center relative overflow-hidden shadow-sm">
+              <div className="w-full flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-sky-800 bg-white/80 px-2.5 py-0.5 rounded-full border border-sky-200">
+                  Panggung Kiko
+                </span>
+                <span className="text-xs">🌳 ☀️</span>
+              </div>
+
+              <div className="my-auto w-full flex flex-col items-center gap-2">
                 <div
                   className={`transition-all duration-300 ease-out transform ${
-                    robotJump ? '-translate-y-10 scale-110' : 'translate-y-0'
+                    robotJump ? '-translate-y-8 scale-110' : 'translate-y-0'
                   }`}
                   style={{
-                    transform: `translateX(${robotPosition}px) ${robotJump ? 'translateY(-35px)' : ''}`,
+                    transform: `translateX(${robotPosition}px) ${robotJump ? 'translateY(-30px)' : ''}`,
                   }}
                 >
                   <img
@@ -197,27 +225,33 @@ export default function StudentPlaygroundPage() {
                   />
                 </div>
 
-                <p className="font-heading font-bold text-teal-300 text-xs sm:text-sm transition-all min-h-[36px] flex items-center justify-center">
+                <div className="bg-white/95 backdrop-blur-sm text-slate-800 px-3.5 py-1.5 rounded-xl border border-teal-200 shadow-sm text-xs font-bold min-h-[32px] flex items-center justify-center max-w-full">
                   {actionMessage}
-                </p>
+                </div>
               </div>
+
+              {/* Garis Lantai Hijau */}
+              <div className="w-full h-3 bg-emerald-400 rounded-full border-t border-emerald-500 mb-3" />
 
               <button
                 onClick={handleRunCode}
                 disabled={isRunning}
-                className={`w-full py-3 px-6 font-bold text-sm rounded-xl shadow transition flex items-center justify-center gap-2 ${
+                className={`w-full py-3.5 px-6 font-bold text-sm sm:text-base rounded-xl transition flex items-center justify-center gap-2 ${
                   isRunning
-                    ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
-                    : 'bg-teal-500 hover:bg-teal-600 text-white active:scale-95'
+                    ? 'bg-slate-300 text-slate-500 cursor-not-allowed border-b-2 border-slate-400'
+                    : 'toy-btn-teal shadow-toyTeal active:scale-95'
                 }`}
               >
                 {isRunning ? (
                   <>
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Menjalankan Kode...
+                    <span className="w-4 h-4 border-2 border-teal-700 border-t-transparent rounded-full animate-spin" />
+                    <span>Sedang Beraksi...</span>
                   </>
                 ) : (
-                  '▶ Jalankan Kode'
+                  <>
+                    <span>▶</span>
+                    <span>Jalankan Kreasimu! 🚀</span>
+                  </>
                 )}
               </button>
             </div>

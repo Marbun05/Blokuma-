@@ -75,19 +75,19 @@ export function StudentSidebar() {
       {/* Desktop Sidebar */}
       <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col justify-between p-4 min-h-screen">
         <div>
-          <div className="flex items-center gap-3 px-2 py-3 mb-4 border-b border-slate-100">
-            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow">
-              🚀
+          <div className="flex items-center gap-3 px-2 py-3 mb-4 border-b-2 border-slate-100">
+            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-toyTeal border-b-2 border-teal-700">
+              🧱
             </div>
             <div>
-              <span className="font-heading text-xl font-bold text-slate-800 block">Blokuma</span>
-              <span className="text-[11px] font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 block mt-0.5">
+              <span className="font-heading text-xl font-bold text-slate-800 block leading-tight">Blokuma</span>
+              <span className="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300 block mt-0.5">
                 {currentGrade} • {currentSubtheme}
               </span>
             </div>
           </div>
 
-          <nav className="space-y-1">
+          <nav className="space-y-1.5">
             {menuItems.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -96,7 +96,7 @@ export function StudentSidebar() {
                   to={item.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold text-sm transition ${
                     isActive
-                      ? 'bg-teal-50 text-teal-700 border border-teal-200 shadow-sm'
+                      ? 'bg-teal-50 text-teal-800 border-2 border-teal-300 shadow-sm'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
@@ -108,12 +108,14 @@ export function StudentSidebar() {
           </nav>
         </div>
 
-        <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+        <div className="bg-amber-50/90 p-3.5 rounded-2xl border-2 border-amber-200 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="text-2xl">🧑‍🚀</div>
-            <div>
-              <p className="font-bold text-slate-800 text-sm">{studentNickname}</p>
-              <p className="text-xs text-slate-500">Arsitek Kode Level 6</p>
+            <div className="w-10 h-10 rounded-xl bg-white border border-amber-300 flex items-center justify-center text-2xl shadow-sm">
+              🧑‍🚀
+            </div>
+            <div className="overflow-hidden">
+              <p className="font-heading font-bold text-slate-900 text-sm truncate">{studentNickname}</p>
+              <p className="text-[11px] font-bold text-teal-700">Arsitek Kode Lv. 6 🎖️</p>
             </div>
           </div>
         </div>

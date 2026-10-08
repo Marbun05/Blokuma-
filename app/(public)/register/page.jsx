@@ -70,57 +70,57 @@ export default function RegisterPage() {
         </div>
 
         {/* Bottom Headline & Tagline inside Glassmorphism Card */}
-        <div className="relative z-10 max-w-xl bg-slate-900/50 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl">
+        <div className="relative z-10 max-w-xl bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-2xl">
           <span className="inline-block px-3.5 py-1 bg-amber-400 text-slate-900 font-bold rounded-full text-xs uppercase tracking-wider mb-3 shadow-md">
             ⭐ Mari Mulai Karyamu
           </span>
           <h2 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 leading-tight">
-            Ubah Ide Menjadi Game, Animasi & Cerita Digital!
+            Ubah Imajinasimu Jadi Game, Animasi & Cerita Digital!
           </h2>
           <p className="text-xs lg:text-sm text-slate-200 leading-relaxed font-medium">
-            Bergabunglah sebagai Arsitek Kode dan nikmati modul koding adaptif ramah anak SD kelas 1–6.
+            Bergabunglah sebagai Arsitek Kode cilik dan nikmati petualangan koding visual adaptif ramah anak SD kelas 1–6.
           </p>
         </div>
       </div>
 
       {/* Right Side: Full-Screen Form Panel */}
-      <div className="w-full min-h-screen bg-white p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col justify-between">
+      <div className="w-full min-h-screen bg-[#FBF9F5] p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col justify-between">
         {/* Mobile Header Logo */}
         <div className="flex items-center justify-between lg:hidden mb-6 pt-2">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-md">
-              🚀
+            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-toyTeal border-b-2 border-teal-700">
+              🧱
             </div>
             <span className="font-heading text-2xl font-bold text-slate-900">Blokuma</span>
           </Link>
         </div>
 
-        <div className="max-w-md w-full mx-auto my-auto">
+        <div className="max-w-md w-full mx-auto my-auto bg-white p-7 sm:p-8 rounded-2xl border-2 border-slate-200 card-chunky shadow-sm">
           <div className="text-left mb-6">
-            <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 leading-snug">
-              Daftar Akun Blokuma
+            <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 leading-snug">
+              Buat Akun Petualang Baru 🚀
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-2">
-              Pilih peran dan siapkan akun barumu untuk belajar koding.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
+              Pilih peranmu dan siapkan profil koding seru bareng Robot Kiko!
             </p>
           </div>
 
           {errorMessage && (
-            <div className="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm font-bold rounded-2xl text-center shadow-sm">
+            <div className="mb-6 p-4 bg-rose-50 border-2 border-rose-300 text-rose-700 text-xs sm:text-sm font-bold rounded-xl text-center shadow-sm">
               {errorMessage}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Pilih Peran:</label>
+              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Pilih Peranmu:</label>
               <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
                   onClick={() => setRole('student')}
-                  className={`py-3 text-xs sm:text-sm font-bold rounded-2xl border transition ${
+                  className={`py-3 text-xs sm:text-sm font-bold rounded-xl border-2 transition ${
                     role === 'student'
-                      ? 'bg-teal-50 border-teal-500 text-teal-700 shadow-sm'
+                      ? 'bg-teal-50 border-teal-500 text-teal-800 shadow-sm'
                       : 'bg-slate-50 border-slate-200 text-slate-600'
                   }`}
                 >
@@ -129,9 +129,9 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setRole('parent')}
-                  className={`py-3 text-xs sm:text-sm font-bold rounded-2xl border transition ${
+                  className={`py-3 text-xs sm:text-sm font-bold rounded-xl border-2 transition ${
                     role === 'parent'
-                      ? 'bg-amber-50 border-amber-500 text-amber-800 shadow-sm'
+                      ? 'bg-amber-50 border-amber-500 text-amber-900 shadow-sm'
                       : 'bg-slate-50 border-slate-200 text-slate-600'
                   }`}
                 >
@@ -140,9 +140,9 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setRole('teacher')}
-                  className={`py-3 text-xs sm:text-sm font-bold rounded-2xl border transition ${
+                  className={`py-3 text-xs sm:text-sm font-bold rounded-xl border-2 transition ${
                     role === 'teacher'
-                      ? 'bg-purple-50 border-purple-500 text-purple-700 shadow-sm'
+                      ? 'bg-purple-50 border-purple-500 text-purple-800 shadow-sm'
                       : 'bg-slate-50 border-slate-200 text-slate-600'
                   }`}
                 >
@@ -158,7 +158,7 @@ export default function RegisterPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Contoh: Kiko Pratama"
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-base sm:text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-100 transition shadow-sm"
+                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
                 required
               />
             </div>
@@ -170,31 +170,31 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="kiko@gmail.com"
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-base sm:text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-100 transition shadow-sm"
+                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Password</label>
+              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Kata Sandi</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimal 6 Karakter"
+                placeholder="Minimal 6 karakter"
                 minLength={6}
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-base sm:text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-100 transition shadow-sm"
+                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
                 required
               />
             </div>
 
             {role === 'student' && (
               <div>
-                <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Kelas SD</label>
+                <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Jenjang Kelas SD</label>
                 <select
                   value={grade}
                   onChange={(e) => setGrade(Number(e.target.value))}
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-base sm:text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-100 transition shadow-sm bg-white"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-teal-500 transition shadow-sm bg-white cursor-pointer font-medium"
                 >
                   {[1, 2, 3, 4, 5, 6].map((g) => (
                     <option key={g} value={g}>
@@ -208,22 +208,22 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-teal-500 hover:bg-teal-600 disabled:bg-slate-300 text-white font-bold text-base rounded-2xl shadow-xl shadow-teal-200 transition transform active:scale-95 flex items-center justify-center gap-2 mt-2"
+              className="toy-btn-teal w-full py-4 text-white font-bold text-base rounded-xl shadow-toyTeal flex items-center justify-center gap-2 mt-4"
             >
               {loading ? (
                 <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : role === 'student' ? (
-                'Lanjut ke Onboarding'
+                'Yuk, Siapkan Profil & Avatar! ➔'
               ) : (
-                'Daftar Akun Sekarang'
+                'Daftar Akun Sekarang! 🚀'
               )}
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-100 text-center text-xs sm:text-sm text-slate-500">
+          <div className="mt-6 pt-4 border-t border-slate-100 text-center text-xs sm:text-sm text-slate-600 font-medium">
             Sudah punya akun?{' '}
-            <Link to="/login" className="text-teal-600 font-bold hover:underline">
-              Masuk Sekarang
+            <Link to="/login" className="text-teal-700 font-bold hover:underline">
+              Masuk ke Sini
             </Link>
           </div>
         </div>
