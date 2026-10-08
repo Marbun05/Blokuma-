@@ -107,9 +107,11 @@ export function AnimatedRegisterHero() {
               transform: `translateX(${kikoX}px) translateY(${isJumping ? '-24px' : '0px'}) rotate(${rotation}deg)`,
             }}
           >
-            <span className="text-7xl sm:text-8xl">
-              🤖
-            </span>
+            <img
+              src="/images/Robot.webp"
+              alt="Robot Kiko"
+              className="w-24 h-24 sm:w-28 sm:h-28 object-contain"
+            />
           </div>
         </div>
 

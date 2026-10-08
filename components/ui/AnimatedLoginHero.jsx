@@ -101,9 +101,11 @@ export function AnimatedLoginHero() {
               transform: `translateX(${kikoX}px) ${isJumping ? 'translateY(-24px)' : 'translateY(0px)'}`,
             }}
           >
-            <span className="text-7xl sm:text-8xl transition transform active:scale-110">
-              🧑‍🚀
-            </span>
+            <img
+              src="/images/Robot.webp"
+              alt="Robot Kiko"
+              className="w-24 h-24 sm:w-28 sm:h-28 object-contain transition transform active:scale-110"
+            />
           </div>
         </div>
 
