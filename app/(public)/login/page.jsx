@@ -108,23 +108,32 @@ export default function LoginPage() {
           </div>
 
           {/* Quick Demo Dropdown Selector */}
-          <div className="mb-4 bg-teal-50 border border-teal-200 p-3 rounded-2xl">
-            <label className="block text-xs font-bold text-teal-800 mb-1 flex items-center gap-1">
-              <span>⚡</span>
-              <span>Pilih Akun Demo:</span>
+          <div className="mb-6 relative overflow-hidden bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 p-4 rounded-2xl shadow-sm group hover:shadow-md transition duration-300">
+            <div className="absolute -right-4 -top-4 w-16 h-16 bg-teal-100/50 rounded-full blur-xl group-hover:bg-teal-200/50 transition duration-300"></div>
+            <label className="block text-xs font-bold text-teal-800 mb-2 flex items-center gap-1.5 relative z-10">
+              <span className="text-sm">⚡</span>
+              <span className="tracking-wide">Pilih Akun Demo Cepat</span>
             </label>
-            <select
-              onChange={handleSelectDemoAccount}
-              defaultValue=""
-              className="w-full px-3 py-2 rounded-xl border border-teal-300 text-xs font-bold bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400"
-            >
-              <option value="" disabled>-- Pilih Peran Akun Demo --</option>
-              {DEMO_ACCOUNTS.map((acc) => (
-                <option key={acc.email} value={acc.email}>
-                  {acc.label}
-                </option>
-              ))}
-            </select>
+            <div className="relative z-10">
+              <select
+                onChange={handleSelectDemoAccount}
+                defaultValue=""
+                className="w-full px-4 py-2.5 rounded-xl border border-teal-200 text-sm font-bold bg-white text-slate-700 focus:outline-none focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition shadow-sm appearance-none cursor-pointer"
+              >
+                <option value="" disabled>-- Pilih Peran Akun Demo --</option>
+                {DEMO_ACCOUNTS.map((acc) => (
+                  <option key={acc.email} value={acc.email}>
+                    {acc.label}
+                  </option>
+                ))}
+              </select>
+              {/* Custom Dropdown Arrow */}
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-teal-600">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
           </div>
 
           {errorMessage && (
