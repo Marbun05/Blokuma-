@@ -169,7 +169,7 @@ export default function LandingPage() {
             {/* Tombol CTA Percakapan Seru */}
             <div className="flex flex-wrap items-center gap-4">
               <Link
-                to="/register"
+                to="/login"
                 className="toy-btn-teal px-8 py-4 font-bold text-lg rounded-2xl shadow-toyTeal flex items-center gap-2.5 group"
               >
                 <span className="text-xl group-hover:scale-125 transition transform">🚀</span>
@@ -520,7 +520,7 @@ export default function LandingPage() {
             Yuk, bergabung dengan ribuan anak lain yang sudah asyik merancang game dan animasinya di Blokuma. Gratis selamanya!
           </p>
           <Link
-            to="/register"
+            to="/login"
             className="toy-btn-amber px-10 py-5 font-bold text-xl rounded-2xl shadow-toyAmber inline-flex items-center gap-3 transition transform active:scale-95"
           >
             <span>🚀</span>

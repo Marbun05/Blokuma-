@@ -20,29 +20,12 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-7 text-slate-600 font-bold text-sm">
-          <a href="#demo" className="hover:text-teal-600 transition flex items-center gap-1">
-            <span>🎮</span> Coba Main
-          </a>
-          <a href="#adaptive" className="hover:text-teal-600 transition flex items-center gap-1">
-            <span>🎒</span> Pilihan Kelas
-          </a>
-          <Link to="/parent" className="hover:text-teal-600 transition flex items-center gap-1">
-            <span>👨‍👩‍👧</span> Ruang Orang Tua
-          </Link>
-          <Link to="/teacher" className="hover:text-teal-600 transition flex items-center gap-1">
-            <span>👩‍🏫</span> Ruang Guru
-          </Link>
+          {/* Menu fitur dihilangkan agar landing page tidak terlalu ramai */}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
           <Link
             to="/login"
-            className="px-4 py-2 text-sm font-bold text-slate-700 hover:text-teal-600 transition"
-          >
-            Masuk
-          </Link>
-          <Link
-            to="/register"
             className="toy-btn-teal px-5 py-2.5 text-sm font-bold rounded-xl shadow-toyTeal flex items-center gap-1.5"
           >
             <span>🚀</span> Yuk, Mulai Main!
