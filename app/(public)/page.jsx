@@ -175,13 +175,6 @@ export default function LandingPage() {
                 <span className="text-xl group-hover:scale-125 transition transform">🚀</span>
                 <span>Yuk, Mulai Petualangan!</span>
               </Link>
-              <a
-                href="#demo"
-                className="toy-btn-white px-6 py-4 font-bold text-lg rounded-2xl flex items-center gap-2 text-slate-700"
-              >
-                <span>🎮</span>
-                <span>Ayo Coba Main Dulu!</span>
-              </a>
             </div>
           </div>
 
@@ -222,7 +215,7 @@ export default function LandingPage() {
                 <div className="my-auto flex flex-col items-center justify-center py-2">
                   <div className="relative">
                     <img
-                      src="/images/robot.webp"
+                      src="/images/Robot.webp"
                       alt="Robot Kiko Maskot Blokuma"
                       className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-md hover:scale-105 transition transform"
                     />
@@ -353,7 +346,7 @@ export default function LandingPage() {
                   }}
                 >
                   <img
-                    src="/images/robot.webp"
+                    src="/images/Robot.webp"
                     alt="Robot Kiko"
                     className="w-24 h-24 sm:w-28 sm:h-28 object-contain drop-shadow-md"
                   />
