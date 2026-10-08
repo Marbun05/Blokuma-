@@ -2,3 +2,6 @@ project_id = "sjmnjoiqrtgxhknbnjyd"
 
 [functions.kiko-smart-hint]
 verify_jwt = false
+
+[functions.kiko-story-generator]
+verify_jwt = false

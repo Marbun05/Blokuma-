@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 import { KikoSmartHint } from '../../../../components/ui/KikoSmartHint.jsx';
+import { KikoStoryGeneratorModal } from '../../../../components/ui/KikoStoryGeneratorModal.jsx';
 
 export default function StudentPlaygroundPage() {
   const [canvasBlocks, setCanvasBlocks] = useState([]);
@@ -10,6 +11,7 @@ export default function StudentPlaygroundPage() {
   const [actionMessage, setActionMessage] = useState('Pilih balok lalu klik Jalankan Kode!');
   const [attemptCount, setAttemptCount] = useState(0);
   const [lastExecutionResult, setLastExecutionResult] = useState({ status: 'idle' });
+  const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
 
   const availableBlocks = [
     { id: 'move', label: '➔ MAJU 1 LANGKAH', color: 'bg-teal-500 hover:bg-teal-600 text-white border-b-4 border-teal-700' },
@@ -138,15 +140,36 @@ export default function StudentPlaygroundPage() {
             </p>
           </div>
 
-          {/* Kiko Smart Hint Integration */}
-          <KikoSmartHint
-            canvasBlocks={canvasBlocks}
-            targetLevel={{ targetDistance: 4, riverWidth: 2, hasRiver: true }}
-            executionResult={lastExecutionResult}
-            attemptCount={attemptCount}
-            autoOpenOnFail={true}
-          />
+          {/* Integration: Smart Hint & Storyfication Dongeng Generator */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={() => setIsStoryModalOpen(true)}
+              className="toy-btn-teal px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-toyTeal flex items-center gap-2 border-2 border-teal-700 active:scale-95"
+              title="Sulap koding balokmu menjadi Dongeng Petualangan!"
+            >
+              <span>📖</span>
+              <span>Ubah Kode Jadi Dongeng!</span>
+            </button>
+
+            <KikoSmartHint
+              canvasBlocks={canvasBlocks}
+              targetLevel={{ targetDistance: 4, riverWidth: 2, hasRiver: true }}
+              executionResult={lastExecutionResult}
+              attemptCount={attemptCount}
+              autoOpenOnFail={true}
+            />
+          </div>
         </div>
+
+        {/* Modal Dongeng Generator */}
+        <KikoStoryGeneratorModal
+          isOpen={isStoryModalOpen}
+          onClose={() => setIsStoryModalOpen(false)}
+          studentName="Kiko"
+          projectTitle="Petualangan Balok Kiko"
+          canvasBlocks={canvasBlocks}
+          xpEarned={75}
+        />
 
         <div className="bg-white p-5 sm:p-7 rounded-2xl border-2 border-slate-200 card-chunky shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-left">

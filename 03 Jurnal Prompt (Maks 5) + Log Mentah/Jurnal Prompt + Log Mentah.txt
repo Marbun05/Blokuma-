@@ -6,10 +6,12 @@ SECTION 1: JURNAL PROMPT STRATEGIS (5 CATEGORY BENCHMARK)
 
 1. Ide/PRD:
    Prompt:
-   "Rancang pembaruan arsitektur komprehensif untuk fitur Kiko Smart Hint (Bantuan Tanpa Memberi Bocoran) berbasis AI Socratic Pedagogy.
-   - Target Segmen: Siswa Sekolah Dasar Kelas 1 - 6 (Ages 6–12).
-   - Problem Statement: Mengeliminasi frustrasi dan mental-block pada anak saat menghadapi kesalahan logika koding balok visual.
-   - AI Engine Architecture: Bangun AST (Abstract Syntax Tree) Parser Engine untuk menganalisis JSON susunan balok anak secara otomatis. Integrasikan Supabase Edge Functions menggunakan LLM qwen/qwen3.8-27b. AI wajib di-prompt dengan Socratic Prompting Framework untuk menghasilkan arahan eksploratif ceria tanpa membocorkan jawaban langsung, serta dilengkapi Fallback Engine 0ms tanpa error."
+   "Rancang pembaruan arsitektur komprehensif khusus fitur 'Dongeng Generator' dari Kode Anak (Storyfication) untuk siswa SD Kelas 1-4.
+   - Masalah: Koding sering terasa kaku dan matematis bagi anak-anak usia dini.
+   - Cara Kerja AI: Setelah anak selesai membuat project atau menyelesaikan misi, AI akan melihat kode tersebut dan menyulapnya menjadi cerita mini/dongeng petualangan imajinatif.
+   - Contoh: 'Hari ini, Pahlawan [Nama Siswa] membuat mantra ajaib bernama Loop. Karena mantra itu, naga merah bisa menari 5 kali tanpa lelah! Hebat!'
+   - Model yang Cocok: openai/gpt-oss-120b (Untuk merangkai imajinasi dan cerita yang kaya).
+   - Backend Architecture: Tambah Serverless Edge Function baru kiko-story-generator di Supabase, deploy dari CLI tanpa error, terhubung dengan real data dan fallback engine 0ms."
 
 2. Debugging:
    Prompt:
@@ -17,7 +19,7 @@ SECTION 1: JURNAL PROMPT STRATEGIS (5 CATEGORY BENCHMARK)
 
 3. Audit & Optimasi:
    Prompt:
-   "Lakukan otomatisasi pipeline deployment Supabase Edge Function kiko-smart-hint langsung dari terminal CLI. Konfigurasikan project-ref sjmnjoiqrtgxhknbnjyd, suntikkan secret environment GROQ_TOKEN dan AI_MODEL=qwen/qwen3.8-27b, serta jalankan verifikasi HTTP 200 OK endpoint secara teruji."
+   "Lakukan otomatisasi pipeline deployment Supabase Edge Function kiko-story-generator langsung dari terminal CLI. Konfigurasikan project-ref sjmnjoiqrtgxhknbnjyd, suntikkan secret environment AI_STORY_MODEL=openai/gpt-oss-120b, serta jalankan verifikasi HTTP 200 OK endpoint secara teruji."
 
 4. Finishing:
    Prompt:
@@ -25,7 +27,7 @@ SECTION 1: JURNAL PROMPT STRATEGIS (5 CATEGORY BENCHMARK)
 
 5. Bebas:
    Prompt:
-   "Eksekusi deployment otomatis Edge Function menggunakan SUPABASE_ACCESS_TOKEN dari .env dan pastikan seluruh konfigurasi terhubung sempurna ke Supabase Cloud Platform."
+   "Integrasikan KikoStoryGeneratorModal di halaman Playground agar siswa dapat menyulap balok koding menjadi dongeng ajaib secara interaktif dilengkapi fitur Text-to-Speech audio '🔊 Suara Kiko Mendongeng'."
 
 ================================================================================
 SECTION 2: LOG MENTAH REKAPITULASI COMMIT & ARSITEKTUR KODE
@@ -38,11 +40,13 @@ SECTION 2: LOG MENTAH REKAPITULASI COMMIT & ARSITEKTUR KODE
 - Added `components/ui/KikoSmartHint.jsx`: Membangun komponen UI Pop-up Maskot Kiko interaktif lengkap dengan penyesuaian usia (`SD 1-2`, `SD 3-4`, `SD 5-6`) serta Text-to-Speech Web Speech API (`id-ID`).
 - Updated `app/(student)/app/playground/page.jsx`: Mengintegrasikan Kiko Smart Hint Widget dengan tracking automatik pada percobaan eksekusi gagal anak.
 
-[COMMIT 2] Serverless CLI Deployment & Environment Secret Injection
-- Executed `npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt` via Supabase Personal Access Token.
-- Executed `npx supabase secrets set GROQ_TOKEN="[REDACTED]" AI_MODEL="qwen/qwen3.8-27b"`.
-- Performed end-to-end verification via cURL test, menghasilkan status `HTTP 200 OK` dan struktur payload Socratic Hint valid.
+[COMMIT 2] Feature: Kiko Story Generator (Storyfication AI openai/gpt-oss-120b)
+- Added `supabase/functions/kiko-story-generator/index.ts`: Deno/TypeScript Serverless Edge Function yang menyulap susunan balok koding anak SD 1-4 menjadi dongeng petualangan imajinatif berbasis model `openai/gpt-oss-120b`.
+- Added `lib/supabase/kikoStoryGenerator.js`: Transport client wrapper untuk memanggil Edge Function `kiko-story-generator` dengan fallback local story generator.
+- Added `components/ui/KikoStoryGeneratorModal.jsx`: Pop-up modal storybook interaktif dengan Web Speech API (`id-ID`) untuk mendengarkan dongeng Kiko secara audio.
+- Updated `app/(student)/app/playground/page.jsx`: Menambahkan tombol `📖 Ubah Kode Jadi Dongeng!` pada header Playground.
 
-[COMMIT 3] Standarisasi Aset Visual & Optimalisasi Animasi 2-Layer DOM
-- Standardized seluruh image source path ke `/images/Robot.webp` dengan handler `onError` fallback otomatis di seluruh komponen aplikasi.
-- Solved CSS animation collision dengan memisahkan Outer Layout Node (`style={{ transform: translateX(...) }}`) dan Inner Animated Character Node (`animate-kiko-idle`, `animate-kiko-walk`, `robotJump`).
+[COMMIT 3] Serverless CLI Deployment & Environment Secret Injection
+- Executed `npx supabase functions deploy kiko-story-generator --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt` via Supabase Personal Access Token.
+- Executed `npx supabase secrets set AI_STORY_MODEL="openai/gpt-oss-120b"`.
+- Performed end-to-end verification via cURL test, menghasilkan status `HTTP 200 OK` dan struktur payload Storyfication valid.

@@ -8,22 +8,24 @@
 - Frontend Core: React 19 Engine, Vite 6 Build System, Tailwind CSS v3 Utility Framework, React Router DOM v7 Routing Pipeline.
 - State Management: Zustand Reactive State Stores (`src/store/`).
 - Database & Serverless Backend: Supabase Infrastructure (PostgreSQL, Row Level Security, Supabase Auth, Distributed Edge Runtime Deno/TypeScript).
-- AI Cognitive Engine: Supabase Serverless Edge Function `kiko-smart-hint` mengintegrasikan Qwen3.8-27b Large Language Model via OpenRouter/Groq API, dilengkapi Socratic Rule Engine lokal berlatensi 0ms sebagai Fallback Telemetri.
+- AI Cognitive Engine Suite:
+  - **Kiko Smart Hint Engine:** Supabase Edge Function `kiko-smart-hint` (Model `qwen/qwen3.8-27b`) untuk Socratic Guidance tanpa spoiler.
+  - **Kiko Story Generator Engine:** Supabase Edge Function `kiko-story-generator` (Model `openai/gpt-oss-120b`) untuk Storyfication (menyulap balok koding anak SD 1-4 menjadi dongeng petualangan imajinatif).
 - Directory Hierarchy:
   - `app/` -> App Router & Multi-Role Page Views (`(student)`, `(public)`, `(parent)`, `(teacher)`).
-  - `components/ui/` -> Atomic Design System & Interactive Mascots (`KikoSmartHint.jsx`, `AnimatedLoginHero.jsx`, `AnimatedRegisterHero.jsx`).
+  - `components/ui/` -> Atomic Design System & Interactive Mascots (`KikoSmartHint.jsx`, `KikoStoryGeneratorModal.jsx`, `AnimatedLoginHero.jsx`, `AnimatedRegisterHero.jsx`).
   - `lib/blockEngine/` -> AST (Abstract Syntax Tree) Static Code Analysis Engine (`astAnalyzer.js`).
-  - `lib/supabase/` -> Supabase Client Initializer (`client.js`) & Edge Function Transport Wrapper (`kikoSmartHint.js`).
-  - `supabase/functions/kiko-smart-hint/` -> Serverless Edge Runtime Worker (`index.ts`).
+  - `lib/supabase/` -> Supabase Client Initializer (`client.js`), Smart Hint Wrapper (`kikoSmartHint.js`), & Story Generator Wrapper (`kikoStoryGenerator.js`).
+  - `supabase/functions/` -> Serverless Edge Runtime Workers (`kiko-smart-hint/index.ts`, `kiko-story-generator/index.ts`).
 
 ## 3. CODING STANDARDS & DESIGN PATTERNS
 - Functional Architecture: React 19 Declarative Functional Components dengan Immutable Hooks Pattern.
 - Code Style Standard: Terapkan ES-Next `export default function ComponentName()` atau `const ArrowFunction = () => {}`.
-- Socratic Pedagogy UX: Terapkan Child-First Empathetic UX Copywriting. Seluruh balasan AI dipandu oleh Socratic Questioning Method untuk merangsang Computational Thinking (SD 1-6) tanpa pernah memberikan spoiler solusi.
+- Storyfication Pedagogy UX: Terapkan Child-First Empathetic Copywriting. Balasan AI Storyfication merubah konsep matematis (loop, jump, move) menjadi mantra ajaib dan petualangan pahlawan untuk merangsang kreativitas siswa SD 1-4.
 - Documentation & Comments: Berikan komentar teknis HANYA pada algoritma kompleks (AST Traversal, Edge Worker CORS Intercept, dan Fault-Tolerant Engine).
 
 ## 4. STRICT ANTI-PATTERNS (DON'TS)
-- STRICT PROHIBITION: Dilarang keras menampilkan error log kaku (seperti "SyntaxError line 4") pada antarmuka anak; wajib dialihkan ke Socratic AI Guidance.
+- STRICT PROHIBITION: Dilarang keras menampilkan error log kaku (seperti "SyntaxError line 4") pada antarmuka anak; wajib dialihkan ke Socratic AI Guidance dan Storyfication.
 - STYLING CONSTRAINT: Dilarang menggunakan CSS Modules. Seluruh styling wajib menggunakan Tailwind Utility Classes dan CSS Variables di `src/index.css`.
 - ANIMATION DOM ISOLATION: Dilarang menggabungkan inline `style={{ transform: 'translateX(...)' }}` dengan CSS Keyframe Animation pada DOM Node yang sama; pisahkan ke dalam Outer Layout Wrapper (Posisi X) dan Inner Character Node (Keyframe Animation).
 - SECURITY PROTOCOL: Dilarang menyimpan Secret Tokens/PAT secara hardcoded dalam codebase; seluruh secret disuntikkan via Supabase Edge Function Environment Secrets.
@@ -32,5 +34,5 @@
 - Dev Server Execution: `npm run dev` (Vite Hot-Module-Replacement Server di http://localhost:3000)
 - Production Build Verification: `npm run build` (Vite Optimization Bundler)
 - Automated Test Suite: `npm run test` (Vitest Framework)
-- Edge Function Deployment: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
-- Environment Secret Injection: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase secrets set GROQ_TOKEN="..." AI_MODEL="qwen/qwen3.8-27b" --project-ref sjmnjoiqrtgxhknbnjyd`
+- Edge Functions Deployment: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase functions deploy kiko-story-generator --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
+- Environment Secret Injection: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase secrets set AI_STORY_MODEL="openai/gpt-oss-120b" --project-ref sjmnjoiqrtgxhknbnjyd`
