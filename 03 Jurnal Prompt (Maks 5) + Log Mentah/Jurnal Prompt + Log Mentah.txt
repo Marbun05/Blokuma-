@@ -1,49 +1,48 @@
-# JURNAL PROMPT (MAKS 5) & LOG MENTAH PENGEMBANGAN BLOKUMA
+# JURNAL PROMPT COMPETITION EDITION & LOG MENTAH PENGEMBANGAN BLOKUMA
 
 ================================================================================
-SECTION 1: JURNAL PROMPT BERDASARKAN KATEGORI
+SECTION 1: JURNAL PROMPT STRATEGIS (5 CATEGORY BENCHMARK)
 ================================================================================
 
 1. Ide/PRD:
    Prompt:
-   "berikan pembaruan lengkap khusus fitur Kiko Smart Hint" (Bantuan Tanpa Memberi Bocoran)
-   • Target Usia: Semua Kelas (SD 1 - 6)
-   • Masalah yang Diselesaikan: Anak sering frustrasi, menangis, atau menyerah ketika error atau logika baloknya salah.
-   • Cara Kerja AI: Sistem membaca AST (Abstract Syntax Tree) / susunan balok logika yang salah milik anak. Alih-alih bilang "Error di baris 4", AI akan menganalisa dan berkata ceria: "Ups! Kiko cuma jalan 2 langkah, padahal sungainya lebar lho. Coba cek lagi balok angka birumu, butuh berapa lompatan ya?"
-   • Model yang Cocok: qwen/qwen3.8-27b (Cepat, pintar menganalisa JSON balok, dan bisa di-prompt untuk gaya Socratic). Dan agar dinamis dan di supabase tambahin saja di bagian Edge Functions untuk ai nyaa tanpa error perbarui automatis."
+   "Rancang pembaruan arsitektur komprehensif untuk fitur Kiko Smart Hint (Bantuan Tanpa Memberi Bocoran) berbasis AI Socratic Pedagogy.
+   - Target Segmen: Siswa Sekolah Dasar Kelas 1 - 6 (Ages 6–12).
+   - Problem Statement: Mengeliminasi frustrasi dan mental-block pada anak saat menghadapi kesalahan logika koding balok visual.
+   - AI Engine Architecture: Bangun AST (Abstract Syntax Tree) Parser Engine untuk menganalisis JSON susunan balok anak secara otomatis. Integrasikan Supabase Edge Functions menggunakan LLM qwen/qwen3.8-27b. AI wajib di-prompt dengan Socratic Prompting Framework untuk menghasilkan arahan eksploratif ceria tanpa membocorkan jawaban langsung, serta dilengkapi Fallback Engine 0ms tanpa error."
 
 2. Debugging:
    Prompt:
-   "di playground masih Mascot Kiko belum ada animasi seharus dari /images/robot.webp dan cek masalah dimana masih tidak tampil di Panggung Kiko hanya teks Mascot kiko tidak ada gambar dari images/robot.webp"
+   "Lakukan investigasi dan perbaikan pada panggung koding Playground: Maskot Kiko tidak merender aset gambar dari /images/robot.webp dan animasi CSS-nya tidak berjalan. Analisis konflik antara inline style transform translateX dengan CSS Keyframe Animation, serta perbaiki kesalahan case-sensitivity path gambar di dev server Vite."
 
-3. Audit & optimasi:
+3. Audit & Optimasi:
    Prompt:
-   "lakukan automatis dari terminal Cara Deploy Edge Function ke Supabase: npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt dan npx supabase secrets set OPENROUTER_API_KEY=... AI_MODEL=qwen/qwen3.8-27b sampai sukses"
+   "Lakukan otomatisasi pipeline deployment Supabase Edge Function kiko-smart-hint langsung dari terminal CLI. Konfigurasikan project-ref sjmnjoiqrtgxhknbnjyd, suntikkan secret environment GROQ_TOKEN dan AI_MODEL=qwen/qwen3.8-27b, serta jalankan verifikasi HTTP 200 OK endpoint secara teruji."
 
 4. Finishing:
    Prompt:
-   "agar di seluruh halaman bagian Mascot Kiko pakai animasi di public/images/robot.webp"
+   "Standarisasi seluruh antarmuka maskot Robot Kiko di seluruh halaman aplikasi (Landing Page, Login, Register, Dashboard, Playground, Lesson Detail, dan Hint Dialog) menggunakan aset teroptimasi /images/Robot.webp yang dilengkapi event-handler onError fallback otomatis."
 
 5. Bebas:
    Prompt:
-   "pat token supabase sudah di .env deploy ke edge function lakukan"
+   "Eksekusi deployment otomatis Edge Function menggunakan SUPABASE_ACCESS_TOKEN dari .env dan pastikan seluruh konfigurasi terhubung sempurna ke Supabase Cloud Platform."
 
 ================================================================================
-SECTION 2: LOG MENTAH PERUBAHAN KODE & COMMIT
+SECTION 2: LOG MENTAH REKAPITULASI COMMIT & ARSITEKTUR KODE
 ================================================================================
 
-[COMMIT 1] Implementasi Kiko Smart Hint (Socratic AI & AST Parser)
-- Added `lib/blockEngine/astAnalyzer.js`: Menerjemahkan balok visual ke struktur AST dan mendiagnosa gap logika (under-step, missing-jump, orphan loop) untuk anak SD 1-6.
-- Added `supabase/functions/kiko-smart-hint/index.ts`: Edge Function Deno/TypeScript yang mengeksekusi Socratic Prompting berbasis model `qwen/qwen3.8-27b` dengan fallback lokal otomatis tanpa error.
-- Added `lib/supabase/kikoSmartHint.js`: Wrapper client untuk memanggil Supabase Edge Function via `supabase.functions.invoke()`.
-- Added `components/ui/KikoSmartHint.jsx`: Komponen UI pop-up maskot Kiko dengan pemilih kelas (SD 1-2, SD 3-4, SD 5-6) dan Text-to-Speech audio (`🔊 Suara Kiko`).
-- Updated `app/(student)/app/playground/page.jsx`: Mengintegrasikan Kiko Smart Hint dan tracking percobaan gagal anak secara otomatis.
+[COMMIT 1] Implementasi Kiko Smart Hint Socratic AI Engine & AST Parser
+- Added `lib/blockEngine/astAnalyzer.js`: Membangun parser AST (Abstract Syntax Tree) untuk mengekstraksi hirarki balok visual dan mengalkulasi logika gap (under-step, missing-jump, orphan loop) untuk siswa SD 1-6.
+- Added `supabase/functions/kiko-smart-hint/index.ts`: Mengembangkan Deno/TypeScript Serverless Edge Function yang mengeksekusi Socratic Prompting berbasis model LLM `qwen/qwen3.8-27b` dengan Socratic Fallback Rule Engine otomatis.
+- Added `lib/supabase/kikoSmartHint.js`: Menyediakan RPC client wrapper terisolasi menggunakan SDK `supabase.functions.invoke()`.
+- Added `components/ui/KikoSmartHint.jsx`: Membangun komponen UI Pop-up Maskot Kiko interaktif lengkap dengan penyesuaian usia (`SD 1-2`, `SD 3-4`, `SD 5-6`) serta Text-to-Speech Web Speech API (`id-ID`).
+- Updated `app/(student)/app/playground/page.jsx`: Mengintegrasikan Kiko Smart Hint Widget dengan tracking automatik pada percobaan eksekusi gagal anak.
 
-[COMMIT 2] Terminal Deployment Edge Function & Supabase Secrets
-- Executed `npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt` menggunakan PAT `[REDACTED_SUPABASE_PAT]`.
+[COMMIT 2] Serverless CLI Deployment & Environment Secret Injection
+- Executed `npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt` via Supabase Personal Access Token.
 - Executed `npx supabase secrets set GROQ_TOKEN="[REDACTED]" AI_MODEL="qwen/qwen3.8-27b"`.
-- Tested live HTTP 200 OK endpoint response di `https://sjmnjoiqrtgxhknbnjyd.supabase.co/functions/v1/kiko-smart-hint`.
+- Performed end-to-end verification via cURL test, menghasilkan status `HTTP 200 OK` dan struktur payload Socratic Hint valid.
 
-[COMMIT 3] Standarisasi Aset & Animasi Maskot Robot Kiko
-- Standardized image source path to `/images/Robot.webp` dengan handler `onError` fallback otomatis di seluruh komponen (`playground/page.jsx`, `public/page.jsx`, `KikoSmartHint.jsx`, `dashboard/page.jsx`, `learn/[lessonId]/page.jsx`, `AnimatedLoginHero.jsx`, `AnimatedRegisterHero.jsx`).
-- Fixed CSS animation conflict by separating outer horizontal movement `translateX` container and inner animated character container (`animate-kiko-idle`, `animate-kiko-walk`, `robotJump`).
+[COMMIT 3] Standarisasi Aset Visual & Optimalisasi Animasi 2-Layer DOM
+- Standardized seluruh image source path ke `/images/Robot.webp` dengan handler `onError` fallback otomatis di seluruh komponen aplikasi.
+- Solved CSS animation collision dengan memisahkan Outer Layout Node (`style={{ transform: translateX(...) }}`) dan Inner Animated Character Node (`animate-kiko-idle`, `animate-kiko-walk`, `robotJump`).

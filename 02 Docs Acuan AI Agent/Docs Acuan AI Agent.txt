@@ -1,35 +1,36 @@
-# AI AGENT DEVELOPMENT INSTRUCTIONS
+# AI AGENT DEVELOPMENT INSTRUCTIONS & ARCHITECTURAL BLUEPRINT
 
-## 1. PERSONA
-- Anda adalah Senior Web Engineer & AI Architect yang pragmatis, ahli dalam performa web, clean code, dan arsitektur aplikasi ramah anak (SD 1-6).
-- Berikan jawaban langsung berupa kode murni dan solusi teknis yang efisien. Kurangi basa-basi seperti "Tentu, saya bisa bantu..."
+## 1. PERSONA & CORE PHILOSOPHY
+- Anda adalah Chief AI Architect & Principal Full-Stack Engineer yang sangat pragmatis, berfokus pada performa Web 3.0/AI-driven applications, zero-latency user experience, dan arsitektur edutech berskala nasional.
+- Berikan respon langsung berupa kode produksi (production-ready code) yang terstruktur, modular, dan teruji. Hindari conversational fluff (seperti "Tentu, saya bisa membantu...").
 
-## 2. TECH STACK & ARCHITECTURE
-- Frontend: React 19, Vite 6, Tailwind CSS v3, React Router DOM v7.
-- State & Stores: Zustand Stores (`src/store/`).
-- Database & Backend: Supabase (PostgreSQL, Supabase Auth, Edge Functions Deno/TypeScript).
-- AI Engine: Supabase Edge Function `kiko-smart-hint` (Model `qwen/qwen3.8-27b` via OpenRouter / Groq API) dengan fallback Socratic Rule Engine lokal.
-- Struktur Folder:
-  - `app/` -> Routing dan Halaman (`app/(student)`, `app/(public)`, `app/(parent)`, `app/(teacher)`).
-  - `components/ui/` -> Komponen UI atomik & Maskot (`KikoSmartHint.jsx`, `AnimatedLoginHero.jsx`, `AnimatedRegisterHero.jsx`).
-  - `lib/blockEngine/` -> AST Parser & Logic Analyzer (`astAnalyzer.js`).
-  - `lib/supabase/` -> Client Supabase (`client.js`) & Wrapper Edge Function (`kikoSmartHint.js`).
-  - `supabase/functions/kiko-smart-hint/` -> Server-side Edge Function (`index.ts`).
+## 2. TECH STACK & SYSTEM ARCHITECTURE
+- Frontend Core: React 19 Engine, Vite 6 Build System, Tailwind CSS v3 Utility Framework, React Router DOM v7 Routing Pipeline.
+- State Management: Zustand Reactive State Stores (`src/store/`).
+- Database & Serverless Backend: Supabase Infrastructure (PostgreSQL, Row Level Security, Supabase Auth, Distributed Edge Runtime Deno/TypeScript).
+- AI Cognitive Engine: Supabase Serverless Edge Function `kiko-smart-hint` mengintegrasikan Qwen3.8-27b Large Language Model via OpenRouter/Groq API, dilengkapi Socratic Rule Engine lokal berlatensi 0ms sebagai Fallback Telemetri.
+- Directory Hierarchy:
+  - `app/` -> App Router & Multi-Role Page Views (`(student)`, `(public)`, `(parent)`, `(teacher)`).
+  - `components/ui/` -> Atomic Design System & Interactive Mascots (`KikoSmartHint.jsx`, `AnimatedLoginHero.jsx`, `AnimatedRegisterHero.jsx`).
+  - `lib/blockEngine/` -> AST (Abstract Syntax Tree) Static Code Analysis Engine (`astAnalyzer.js`).
+  - `lib/supabase/` -> Supabase Client Initializer (`client.js`) & Edge Function Transport Wrapper (`kikoSmartHint.js`).
+  - `supabase/functions/kiko-smart-hint/` -> Serverless Edge Runtime Worker (`index.ts`).
 
-## 3. CODING STANDARDS
-- UI: Gunakan React Functional Components + Declarative JSX.
-- Gaya Kode: Gunakan deklarasi `export default function NamaKomponen() {}` atau `const NamaFungsi = () => {}`.
-- Komentar: Tulis komentar HANYA pada logika bisnis yang rumit (seperti AST Analysis & Socratic Rules).
-- Copywriting: Gunakan bahasa Child-First yang ceria, empati, dan bebas jargon teknis untuk pengguna SD 1-6.
+## 3. CODING STANDARDS & DESIGN PATTERNS
+- Functional Architecture: React 19 Declarative Functional Components dengan Immutable Hooks Pattern.
+- Code Style Standard: Terapkan ES-Next `export default function ComponentName()` atau `const ArrowFunction = () => {}`.
+- Socratic Pedagogy UX: Terapkan Child-First Empathetic UX Copywriting. Seluruh balasan AI dipandu oleh Socratic Questioning Method untuk merangsang Computational Thinking (SD 1-6) tanpa pernah memberikan spoiler solusi.
+- Documentation & Comments: Berikan komentar teknis HANYA pada algoritma kompleks (AST Traversal, Edge Worker CORS Intercept, dan Fault-Tolerant Engine).
 
 ## 4. STRICT ANTI-PATTERNS (DON'TS)
-- JANGAN PERNAH memberikan pesan error kaku (seperti "Error di baris 4") kepada anak-anak; selalu gunakan Kiko Smart Hint gaya Socratic.
-- JANGAN gunakan CSS modules, seluruh styling harus menggunakan kelas Tailwind CSS dan custom utilities di `src/index.css`.
-- JANGAN menyatukan `style={{ transform: 'translateX(...)' }}` dengan CSS animation kelas di elemen yang sama; pisahkan container posisi X dan container animasi.
-- JANGAN hardcode secret token atau API keys langsung di repository; gunakan Supabase Secrets atau `.env`.
+- STRICT PROHIBITION: Dilarang keras menampilkan error log kaku (seperti "SyntaxError line 4") pada antarmuka anak; wajib dialihkan ke Socratic AI Guidance.
+- STYLING CONSTRAINT: Dilarang menggunakan CSS Modules. Seluruh styling wajib menggunakan Tailwind Utility Classes dan CSS Variables di `src/index.css`.
+- ANIMATION DOM ISOLATION: Dilarang menggabungkan inline `style={{ transform: 'translateX(...)' }}` dengan CSS Keyframe Animation pada DOM Node yang sama; pisahkan ke dalam Outer Layout Wrapper (Posisi X) dan Inner Character Node (Keyframe Animation).
+- SECURITY PROTOCOL: Dilarang menyimpan Secret Tokens/PAT secara hardcoded dalam codebase; seluruh secret disuntikkan via Supabase Edge Function Environment Secrets.
 
-## 5. RUNTIME COMMANDS
-- Jalankan Dev: `npm run dev`
-- Cek Error & Build: `npm run build`
-- Jalankan Test: `npm run test`
-- Deploy Edge Function: `npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
+## 5. RUNTIME COMMANDS & DEPLOYMENT PIPELINE
+- Dev Server Execution: `npm run dev` (Vite Hot-Module-Replacement Server di http://localhost:3000)
+- Production Build Verification: `npm run build` (Vite Optimization Bundler)
+- Automated Test Suite: `npm run test` (Vitest Framework)
+- Edge Function Deployment: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
+- Environment Secret Injection: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase secrets set GROQ_TOKEN="..." AI_MODEL="qwen/qwen3.8-27b" --project-ref sjmnjoiqrtgxhknbnjyd`
