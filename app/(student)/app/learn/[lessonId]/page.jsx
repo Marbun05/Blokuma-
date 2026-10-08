@@ -4,31 +4,51 @@ import { StudentSidebar } from '../../../../../components/navigation/StudentSide
 
 export default function LessonDetailPage() {
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-6 sm:p-8 max-w-4xl">
-        <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm mb-6">
-          <span className="px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full">
-            Misi Sequence #1
-          </span>
-          <h1 className="font-heading text-3xl font-bold text-slate-900 mt-3 mb-4">
-            Desa Urutan: Langkah Pertama Kiko
-          </h1>
-
-          <div className="bg-teal-50 border border-teal-200 p-4 rounded-2xl mb-6">
-            <h3 className="font-heading font-bold text-teal-900 text-sm mb-1">📖 Cerita Misi:</h3>
-            <p className="text-xs text-teal-800 leading-relaxed">
-              Robot Kiko tersesat di Desa Urutan! Susun 2 blok MAJU di panggung koding untuk membantu Kiko mencapai gerbang desa.
-            </p>
+      <main className="flex-1 p-5 sm:p-8 max-w-4xl">
+        <div className="bg-white rounded-2xl p-6 sm:p-8 border-2 border-slate-200 card-chunky shadow-sm mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <span className="px-3.5 py-1 bg-amber-100 text-amber-900 font-bold text-xs rounded-full border border-amber-300">
+              ⭐ Misi Sequence #1 • Level Pemula
+            </span>
+            <span className="text-xs font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200">
+              Hadiah: +50 XP 💎
+            </span>
           </div>
 
-          <div className="flex gap-4">
+          <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 mb-4">
+            Desa Urutan: Langkah Pertama Kiko Menuju Gerbang
+          </h1>
+
+          <div className="bg-amber-50/80 border-2 border-amber-300 p-5 rounded-xl mb-6 shadow-sm">
+            <h3 className="font-heading font-bold text-amber-900 text-sm mb-2 flex items-center gap-2">
+              <span>📖</span>
+              <span>Cerita Petualangan:</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-amber-950 leading-relaxed font-medium mb-3">
+              Robot Kiko baru saja mendarat di Desa Urutan dan bingung mencari jalan keluar. Susun 2 balok <strong className="text-teal-700">"MAJU 1 LANGKAH"</strong> di kanvas untuk menuntun Kiko sampai ke gerbang desa!
+            </p>
+            <div className="bg-white/80 p-2.5 rounded-lg border border-amber-200 text-xs font-bold text-slate-700 flex items-center gap-2">
+              <span>🎯</span>
+              <span>Target Kemenangan: Hubungkan 2 balok MAJU lalu klik tombol Jalankan Kreasimu!</span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/app/playground"
-              className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white font-bold text-sm rounded-xl shadow transition"
+              className="toy-btn-teal px-8 py-3.5 font-bold text-sm sm:text-base rounded-xl shadow-toyTeal flex items-center gap-2"
             >
-              🚀 Buka Playground Misi
+              <span>🚀</span>
+              <span>Buka Panggung Misi Sekarang!</span>
+            </Link>
+            <Link
+              to="/app/learn"
+              className="toy-btn-white px-5 py-3.5 font-bold text-sm rounded-xl text-slate-700"
+            >
+              Kembali ke Materi
             </Link>
           </div>
         </div>

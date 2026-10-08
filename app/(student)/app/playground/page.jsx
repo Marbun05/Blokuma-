@@ -1,122 +1,261 @@
 import React, { useState } from 'react';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
-import { usePlaygroundStore } from '../../../../store/playground/use-playground-store.js';
-import { PALETTE_BLOCKS } from '../../../../engine/blocks/definitions/index.js';
-import { generateGuidedFeedback } from '../../../../engine/debugger/guided-debugger.js';
 
-export default function PlaygroundPage() {
-  const { nodes, previewMode, addBlock, clearAll, setPreviewMode, getCodeText } = usePlaygroundStore();
-  const [stagePos, setStagePos] = useState(0);
+export default function StudentPlaygroundPage() {
+  const [canvasBlocks, setCanvasBlocks] = useState([]);
+  const [isRunning, setIsRunning] = useState(false);
+  const [robotPosition, setRobotPosition] = useState(0);
+  const [robotJump, setRobotJump] = useState(false);
+  const [actionMessage, setActionMessage] = useState('Pilih blok lalu klik Jalankan Kode!');
 
-  const feedback = generateGuidedFeedback(nodes);
+  const availableBlocks = [
+    { id: 'move', label: '➔ MAJU 1 LANGKAH', color: 'bg-teal-500 hover:bg-teal-600 text-white border-b-4 border-teal-700' },
+    { id: 'jump', label: '🦘 MELOMPAT TINGGI', color: 'bg-indigo-500 hover:bg-indigo-600 text-white border-b-4 border-indigo-700' },
+    { id: 'repeat', label: '🔁 ULANGI 3 KALI', color: 'bg-amber-400 hover:bg-amber-500 text-slate-900 border-b-4 border-amber-600' },
+    { id: 'sound', label: '🎵 SUARA POP CERIA', color: 'bg-sky-500 hover:bg-sky-600 text-white border-b-4 border-sky-700' },
+  ];
 
-  const handleRun = () => {
-    setStagePos((prev) => prev + 20);
+  const handleAddBlock = (block) => {
+    if (isRunning) return;
+    setCanvasBlocks((prev) => [...prev, { ...block, instanceId: Date.now() + Math.random() }]);
+  };
+
+  const handleClearCanvas = () => {
+    if (isRunning) return;
+    setCanvasBlocks([]);
+    setRobotPosition(0);
+    setRobotJump(false);
+    setActionMessage('Kanvas dikosongkan & Maskot kembali ke posisi awal!');
+  };
+
+  const playPopSound = () => {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.15);
+      }
+    } catch (e) {
+      // Audio autoplay policy fallback
+    }
+  };
+
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const executeSingleBlock = async (blockId) => {
+    if (blockId === 'move') {
+      setActionMessage('🚀 Robot Kiko: Maju 1 Langkah!');
+      setRobotPosition((prev) => Math.min(prev + 25, 140));
+      await sleep(600);
+    } else if (blockId === 'jump') {
+      setActionMessage('🦘 Robot Kiko: Melompat!');
+      setRobotJump(true);
+      await sleep(400);
+      setRobotJump(false);
+      await sleep(300);
+    } else if (blockId === 'sound') {
+      setActionMessage('🎵 Robot Kiko: Memainkan Suara POP!');
+      playPopSound();
+      await sleep(600);
+    }
+  };
+
+  const handleRunCode = async () => {
+    if (isRunning) return;
+
+    if (canvasBlocks.length === 0) {
+      setActionMessage('⚠️ Kanvas masih kosong! Tambahkan blok terlebih dahulu.');
+      return;
+    }
+
+    if (canvasBlocks[0].id === 'repeat') {
+      setActionMessage('⚠️ Masukkan perintah lain terlebih dahulu sebelum menambahkan blok Ulangi 3 Kali!');
+      return;
+    }
+
+    setIsRunning(true);
+
+    for (let i = 0; i < canvasBlocks.length; i++) {
+      const currentBlock = canvasBlocks[i];
+
+      if (currentBlock.id === 'repeat') {
+        const previousBlock = i > 0 ? canvasBlocks[i - 1] : null;
+
+        if (previousBlock && previousBlock.id !== 'repeat') {
+          setActionMessage(`🔁 Mengulangi perintah "${previousBlock.label}" sebanyak 3 Kali...`);
+          await sleep(500);
+
+          for (let r = 1; r <= 3; r++) {
+            setActionMessage(`🔁 Perulangan (${r}/3): ${previousBlock.label}`);
+            await executeSingleBlock(previousBlock.id);
+          }
+        } else {
+          setActionMessage('⚠️ Tidak ada perintah valid sebelum blok Ulangi!');
+          await sleep(1000);
+        }
+      } else {
+        await executeSingleBlock(currentBlock.id);
+      }
+    }
+
+    setActionMessage('✨ Horay! Seluruh instruksi di Kanvas berhasil dijalankan!');
+    setIsRunning(false);
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-4 sm:p-6 flex flex-col h-screen overflow-hidden">
-        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🧩</span>
-            <div>
-              <h1 className="font-heading text-lg font-bold text-slate-900">Visual Coding Playground</h1>
-              <p className="text-xs text-slate-500">Susun blok untuk mengontrol karakter</p>
-            </div>
+      <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+        <div className="mb-6">
+          <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-amber-300">
+            🧩 Meja Eksperimen Kode Bebas
           </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleRun}
-              className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs rounded-xl shadow transition"
-            >
-              ▶ Jalankan Kode
-            </button>
-            <button
-              onClick={clearAll}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition"
-            >
-              Hapus
-            </button>
-          </div>
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
+            Kanvas Coding Robot Kiko
+          </h1>
+          <p className="text-slate-600 text-sm sm:text-base font-medium">
+            Rakit perintah balok warna-warni dan lihat aksi Kiko melompat serta bergerak di panggung!
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 overflow-hidden">
-          <div className="lg:col-span-3 bg-white rounded-2xl p-4 border border-slate-200 overflow-y-auto">
-            <h3 className="font-heading font-bold text-xs uppercase text-slate-400 mb-3">Palet Blok</h3>
-            <div className="space-y-2">
-              {PALETTE_BLOCKS.map((b) => (
-                <button
-                  key={b.id}
-                  onClick={() => addBlock(b)}
-                  className="w-full text-left p-2.5 rounded-xl bg-teal-50 border border-teal-200 text-teal-800 font-bold text-xs flex items-center gap-2 hover:bg-teal-100 transition"
-                >
-                  <span>{b.icon}</span>
-                  <span>{b.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="lg:col-span-5 bg-white rounded-2xl p-4 border border-slate-200 flex flex-col">
-            <div className="flex items-center justify-between mb-3 border-b pb-2">
-              <span className="font-heading font-bold text-xs text-slate-600">Kanvas Kode</span>
-              <div className="flex gap-1">
-                <button
-                  onClick={() => setPreviewMode('blocks')}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg ${previewMode === 'blocks' ? 'bg-teal-500 text-white' : 'bg-slate-100 text-slate-600'}`}
-                >
-                  Blok
-                </button>
-                <button
-                  onClick={() => setPreviewMode('javascript')}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg ${previewMode === 'javascript' ? 'bg-teal-500 text-white' : 'bg-slate-100 text-slate-600'}`}
-                >
-                  JS
-                </button>
-                <button
-                  onClick={() => setPreviewMode('python')}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg ${previewMode === 'python' ? 'bg-teal-500 text-white' : 'bg-slate-100 text-slate-600'}`}
-                >
-                  Python
-                </button>
-              </div>
-            </div>
-
-            <div className="flex-1 bg-slate-50 rounded-xl p-3 border border-slate-200 overflow-y-auto space-y-2">
-              {previewMode === 'blocks' ? (
-                nodes.map((n) => (
-                  <div key={n.id} className="p-3 bg-amber-400 text-slate-900 rounded-xl font-bold text-xs shadow-sm flex items-center gap-2">
-                    <span>{n.icon || '📦'}</span>
-                    <span>{n.label}</span>
-                  </div>
-                ))
-              ) : (
-                <pre className="text-xs font-mono bg-slate-900 text-teal-300 p-3 rounded-xl">{getCodeText()}</pre>
-              )}
-            </div>
-          </div>
-
-          <div className="lg:col-span-4 bg-slate-900 rounded-2xl p-4 text-white flex flex-col justify-between">
-            <div>
-              <span className="font-heading font-bold text-xs text-teal-400 block mb-2">Panggung Karakter</span>
-              <div className="h-48 bg-slate-800 rounded-xl flex items-center justify-center relative overflow-hidden">
-                <div
-                  className="text-5xl transition-all duration-300"
-                  style={{ transform: `translateX(${stagePos}px)` }}
-                >
-                  🧑‍🚀
+        <div className="bg-white p-5 sm:p-7 rounded-2xl border-2 border-slate-200 card-chunky shadow-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-left">
+            
+            {/* 1. Panel Pilih Perintah */}
+            <div className="bg-[#FAF8F5] p-5 rounded-2xl border-2 border-slate-200 flex flex-col justify-between shadow-sm">
+              <div>
+                <p className="font-heading font-bold text-slate-800 text-sm mb-3 flex items-center justify-between">
+                  <span>📋 1. Ambil Balok Perintah:</span>
+                  <span className="text-[10px] bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-bold">
+                    Klik untuk tambah +
+                  </span>
+                </p>
+                <div className="space-y-2.5">
+                  {availableBlocks.map((block) => (
+                    <button
+                      key={block.id}
+                      onClick={() => handleAddBlock(block)}
+                      disabled={isRunning}
+                      className={`w-full p-3 rounded-xl font-bold text-xs shadow-sm text-left transition transform active:scale-95 flex items-center justify-between ${block.color}`}
+                    >
+                      <span>{block.label}</span>
+                      <span className="text-base font-extrabold">+</span>
+                    </button>
+                  ))}
                 </div>
               </div>
+              <p className="text-[11px] text-slate-500 mt-4 italic font-medium">
+                *Klik balok di atas untuk merakit perintah ke Kanvas.
+              </p>
             </div>
 
-            <div className="bg-slate-800 p-3 rounded-xl border border-slate-700 text-xs">
-              <span className="font-bold text-amber-300 block mb-1">💡 Panduan Kiko:</span>
-              <p className="text-slate-300">{feedback.friendlyExplanation}</p>
+            {/* 2. Kanvas Blok */}
+            <div className="bg-[#FAF8F5] p-5 rounded-2xl border-2 border-slate-200 flex flex-col justify-between min-h-[260px] shadow-sm">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="font-heading font-bold text-slate-800 text-sm">🧩 2. Kanvas Rakit Kode:</p>
+                  {canvasBlocks.length > 0 && (
+                    <button
+                      onClick={handleClearCanvas}
+                      disabled={isRunning}
+                      className="text-xs text-rose-600 hover:text-rose-700 font-bold bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200 hover:bg-rose-100 transition"
+                    >
+                      ✕ Bersihkan Kanvas
+                    </button>
+                  )}
+                </div>
+
+                <div className="space-y-2 min-h-[160px] p-3 bg-white rounded-xl border-2 border-dashed border-amber-200">
+                  {canvasBlocks.length === 0 ? (
+                    <div className="h-32 flex flex-col items-center justify-center text-slate-400 text-xs text-center font-medium">
+                      <span className="text-2xl mb-1">📦</span>
+                      <span className="font-bold text-slate-600">Kanvas masih kosong nih!</span>
+                      <span>Klik balok di sebelah kiri untuk mulai merakit aksi.</span>
+                    </div>
+                  ) : (
+                    canvasBlocks.map((block, idx) => (
+                      <div
+                        key={block.instanceId}
+                        className={`p-2.5 rounded-lg font-bold text-xs shadow-sm flex items-center justify-between ${block.color}`}
+                      >
+                        <span>{idx + 1}. {block.label}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-400 mt-2 text-right">
+                {canvasBlocks.length} balok terpasang
+              </p>
             </div>
+
+            {/* 3. Area Maskot & Eksekusi - Panggung Ceria Ramah Anak */}
+            <div className="bg-gradient-to-b from-sky-200 via-sky-100 to-emerald-100 rounded-2xl p-6 border-2 border-sky-300 flex flex-col items-center justify-between min-h-[290px] text-center relative overflow-hidden shadow-sm">
+              <div className="w-full flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-sky-800 bg-white/80 px-2.5 py-0.5 rounded-full border border-sky-200">
+                  Panggung Kiko
+                </span>
+                <span className="text-xs">🌳 ☀️</span>
+              </div>
+
+              <div className="my-auto w-full flex flex-col items-center gap-2">
+                <div
+                  className={`transition-all duration-300 ease-out transform ${
+                    robotJump ? '-translate-y-8 scale-110' : 'translate-y-0'
+                  }`}
+                  style={{
+                    transform: `translateX(${robotPosition}px) ${robotJump ? 'translateY(-30px)' : ''}`,
+                  }}
+                >
+                  <img
+                    src="/images/robot.webp"
+                    alt="Mascot Kiko"
+                    className="w-24 h-24 sm:w-28 sm:h-28 object-contain drop-shadow-md"
+                  />
+                </div>
+
+                <div className="bg-white/95 backdrop-blur-sm text-slate-800 px-3.5 py-1.5 rounded-xl border border-teal-200 shadow-sm text-xs font-bold min-h-[32px] flex items-center justify-center max-w-full">
+                  {actionMessage}
+                </div>
+              </div>
+
+              {/* Garis Lantai Hijau */}
+              <div className="w-full h-3 bg-emerald-400 rounded-full border-t border-emerald-500 mb-3" />
+
+              <button
+                onClick={handleRunCode}
+                disabled={isRunning}
+                className={`w-full py-3.5 px-6 font-bold text-sm sm:text-base rounded-xl transition flex items-center justify-center gap-2 ${
+                  isRunning
+                    ? 'bg-slate-300 text-slate-500 cursor-not-allowed border-b-2 border-slate-400'
+                    : 'toy-btn-teal shadow-toyTeal active:scale-95'
+                }`}
+              >
+                {isRunning ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-teal-700 border-t-transparent rounded-full animate-spin" />
+                    <span>Sedang Beraksi...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>▶</span>
+                    <span>Jalankan Kreasimu! 🚀</span>
+                  </>
+                )}
+              </button>
+            </div>
+
           </div>
         </div>
       </main>

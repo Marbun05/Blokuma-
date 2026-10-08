@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
 import { AnimatedLoginHero } from '../../../components/ui/AnimatedLoginHero.jsx';
+import { supabase } from '../../../lib/supabase/client.js';
 
 const DEMO_ACCOUNTS = [
   { label: '👦 Siswa (Kiko Pratama - Kelas 4 SD)', email: 'kiko@blokuma.id', password: 'Password123!' },
@@ -16,6 +17,10 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
+
+  // State Lupa Kata Sandi
+  const [isResetting, setIsResetting] = useState(false);
+  const [resetMessage, setResetMessage] = useState(null);
 
   const handleSelectDemoAccount = (e) => {
     const selectedEmail = e.target.value;
@@ -36,51 +41,69 @@ export default function LoginPage() {
     try {
       const userProfile = await loginWithSupabase(email, password);
 
-      if (userProfile.role === 'student') navigate('/app/dashboard');
-      else if (userProfile.role === 'parent') navigate('/parent');
-      else if (userProfile.role === 'teacher') navigate('/teacher');
+      if (userProfile?.role === 'student') navigate('/app/dashboard');
+      else if (userProfile?.role === 'parent') navigate('/parent');
+      else if (userProfile?.role === 'teacher') navigate('/teacher');
       else navigate('/admin');
     } catch (err) {
       setErrorMessage(err.message || 'Gagal masuk. Periksa kembali email dan password Anda.');
     }
   };
 
+  // Fungsi Kirim Link Reset Password
+  const handleForgotPassword = async () => {
+    if (!email) {
+      alert('Silakan isi Email Pengguna terlebih dahulu pada kolom email!');
+      return;
+    }
+
+    setIsResetting(true);
+    setResetMessage(null);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      setIsResetting(false);
+
+      if (error) {
+        alert(`Gagal mengirim email reset: ${error.message}`);
+      } else {
+        setResetMessage('Link reset kata sandi telah dikirim ke email kamu! Cek kotak masuk atau spam.');
+      }
+    } catch (err) {
+      setIsResetting(false);
+      alert('Terjadi kesalahan saat menghubungkan ke server Supabase.');
+    }
+  };
+
   return (
-    <div className="h-screen max-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+    <div className="min-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-x-hidden">
       {/* Left Side: Interactive Animated Portal Stage for Login */}
       <div className="hidden lg:block w-full h-full max-h-screen overflow-hidden">
         <AnimatedLoginHero />
       </div>
 
-      {/* Right Side: Compact Form Panel */}
-      <div className="w-full h-full max-h-screen bg-white p-5 sm:p-8 lg:p-10 flex flex-col justify-between overflow-y-auto lg:overflow-hidden">
-        {/* Mobile Header Logo */}
-        <div className="flex items-center justify-between lg:hidden mb-2 pt-1">
+      {/* Right Side: Form Panel */}
+      <div className="w-full min-h-screen bg-[#FBF9F5] p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col justify-between">
+        <div className="flex items-center justify-between lg:hidden mb-6 pt-2">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-lg shadow-md">
-              🚀
+            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-toyTeal border-b-2 border-teal-700">
+              🧱
             </div>
             <span className="font-heading text-xl font-bold text-slate-900">Blokuma</span>
           </Link>
         </div>
 
-        <div className="max-w-sm w-full mx-auto my-auto py-2">
-          {/* Desktop Logo & Title Header */}
-          <div className="text-left mb-4">
-            <Link to="/" className="hidden lg:flex items-center gap-2.5 mb-3">
-              <div className="w-9 h-9 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-lg shadow-md">
-                🚀
-              </div>
-              <span className="font-heading text-xl font-bold tracking-tight text-slate-900">
-                Blokuma
-              </span>
-            </Link>
-
+        <div className="max-w-md w-full mx-auto my-auto bg-white p-7 sm:p-8 rounded-2xl border-2 border-slate-200 card-chunky shadow-sm">
+          <div className="text-left mb-6">
+            <span className="text-3xl mb-1 block">👋</span>
             <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 leading-snug">
-              Masuk ke Blokuma
+              Halo Lagi, Sahabat Kiko!
             </h1>
-            <p className="text-xs text-slate-500 mt-1">
-              Masuk dengan akun terdaftar untuk melanjutkan petualangan kodingmu.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
+              Masukkan email dan kata sandimu untuk melanjutkan petualangan.
             </p>
           </div>
 
@@ -105,36 +128,53 @@ export default function LoginPage() {
           </div>
 
           {errorMessage && (
-            <div className="mb-3 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-xl text-center shadow-sm">
+            <div className="mb-6 p-4 bg-rose-50 border-2 border-rose-300 text-rose-700 text-xs sm:text-sm font-bold rounded-xl text-center shadow-sm">
               {errorMessage}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          {resetMessage && (
+            <div className="mb-6 p-4 bg-emerald-50 border-2 border-emerald-300 text-emerald-800 text-xs sm:text-sm font-bold rounded-xl text-center shadow-sm">
+              {resetMessage}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Email Pengguna
+              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">
+                Email Terdaftar
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="kiko@blokuma.id"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition shadow-sm"
+                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Password
-              </label>
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs sm:text-sm font-bold text-slate-700">
+                  Kata Sandi
+                </label>
+                {/* Tombol Lupa Kata Sandi */}
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  disabled={isResetting}
+                  className="text-xs text-teal-600 font-bold hover:underline"
+                >
+                  {isResetting ? 'Mengirim...' : 'Lupa kata sandi?'}
+                </button>
+              </div>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition shadow-sm"
+                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
                 required
               />
             </div>
@@ -142,26 +182,25 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-teal-500 hover:bg-teal-600 disabled:bg-slate-300 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-teal-200 transition transform active:scale-95 flex items-center justify-center gap-2 mt-2"
+              className="toy-btn-teal w-full py-4 text-white font-bold text-base rounded-xl shadow-toyTeal flex items-center justify-center gap-2 mt-4"
             >
               {loading ? (
                 <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                'Masuk ke Akun Sekarang'
+                'Yuk, Masuk Petualangan! 🚀'
               )}
             </button>
           </form>
 
-          <div className="mt-4 pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
+          <div className="mt-6 pt-5 border-t border-slate-100 text-center text-xs sm:text-sm text-slate-600 font-medium">
             Belum punya akun?{' '}
-            <Link to="/register" className="text-teal-600 font-bold hover:underline">
-              Daftar Akun Baru
+            <Link to="/register" className="text-teal-700 font-bold hover:underline">
+              Daftar & Main Gratis Di Sini!
             </Link>
           </div>
         </div>
 
-        {/* Footer info */}
-        <div className="text-center text-[11px] text-slate-400 pt-2 border-t border-slate-100">
+        <div className="text-center text-xs text-slate-400 mt-8 pt-4 border-t border-slate-100">
           © 2026 Blokuma Platform. Child-Safe & Adaptive Learning.
         </div>
       </div>

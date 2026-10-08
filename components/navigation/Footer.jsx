@@ -7,39 +7,45 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-2xl">🚀</span>
+            <span className="text-2xl">🧱</span>
             <span className="font-heading text-2xl font-bold text-white">Blokuma</span>
           </div>
-          <p className="text-sm text-slate-400 leading-relaxed">
-            Platform edukasi coding visual adaptif untuk anak SD usia 6–12 tahun. Rancang, buat, dan hidupkan karyamu!
+          <p className="text-sm text-slate-300 leading-relaxed">
+            Dunia kreasi coding balok interaktif untuk anak SD kelas 1–6. Belajar logika sambil bikin game, cerita kartun, dan musik seru!
           </p>
         </div>
 
         <div>
-          <h4 className="font-heading text-white text-lg font-semibold mb-3">Produk</h4>
+          <h4 className="font-heading text-white text-base font-bold mb-3 flex items-center gap-1.5">
+            <span>🎮</span> Zona Bermain
+          </h4>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/app/playground" className="hover:text-teal-400">Playground Visual</Link></li>
-            <li><Link to="/app/adventure" className="hover:text-teal-400">Peta Petualangan</Link></li>
-            <li><Link to="/app/gallery" className="hover:text-teal-400">Galeri Karya Anak</Link></li>
+            <li><Link to="/app/playground" className="hover:text-amber-400 transition">Kanvas Balok Visual</Link></li>
+            <li><Link to="/app/adventure" className="hover:text-amber-400 transition">Peta 6 Pulau Petualangan</Link></li>
+            <li><Link to="/app/gallery" className="hover:text-amber-400 transition">Pameran Karya Sahabat Kiko</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="font-heading text-white text-lg font-semibold mb-3">Akses Peran</h4>
+          <h4 className="font-heading text-white text-base font-bold mb-3 flex items-center gap-1.5">
+            <span>👥</span> Ruang Pengguna
+          </h4>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/app/dashboard" className="hover:text-teal-400">Dashboard Siswa</Link></li>
-            <li><Link to="/parent" className="hover:text-teal-400">Dashboard Orang Tua</Link></li>
-            <li><Link to="/teacher" className="hover:text-teal-400">Dashboard Guru</Link></li>
+            <li><Link to="/app/dashboard" className="hover:text-teal-400 transition">Meja Belajar Siswa</Link></li>
+            <li><Link to="/parent" className="hover:text-teal-400 transition">Laporan Ayah & Bunda</Link></li>
+            <li><Link to="/teacher" className="hover:text-teal-400 transition">Ruang Guru & Kelas</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="font-heading text-white text-lg font-semibold mb-3">Keamanan & Privasi</h4>
-          <p className="text-xs text-slate-400 mb-4">
-            Blokuma memprioritaskan privasi anak tanpa pengumpulan data sensitif.
+          <h4 className="font-heading text-white text-base font-bold mb-3 flex items-center gap-1.5">
+            <span>🛡️</span> Keamanan Ramah Anak
+          </h4>
+          <p className="text-xs text-slate-300 mb-3 leading-relaxed">
+            Blokuma dirancang 100% aman tanpa iklan, tanpa pelacakan data sensitif, dan ramah eksplorasi anak.
           </p>
-          <span className="inline-block px-3 py-1 text-xs font-semibold bg-teal-900/60 text-teal-300 rounded-full border border-teal-700">
-            ✓ Child Safe Guaranteed
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-teal-500/20 text-teal-300 rounded-xl border border-teal-500/40">
+            <span>✓</span> 100% Child-Safe Guaranteed
           </span>
         </div>
       </div>

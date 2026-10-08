@@ -6,10 +6,77 @@
 
 body {
   font-family: 'Nunito', sans-serif;
-  background-color: #F8FAFC;
-  color: #0F172A;
+  background-color: #FBF9F5;
+  color: #1E293B;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Fredoka', sans-serif;
 }
+
+/* Pola dot-grid kertas gambar ramah anak */
+.bg-craft-dots {
+  background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.bg-craft-dots-amber {
+  background-image: radial-gradient(#FDE68A 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/* Tombol Balok Mainan Taktil (Playful 3D Toy Button) */
+.toy-btn-teal {
+  background-color: #0D9488;
+  color: #FFFFFF;
+  border-bottom: 4px solid #0F766E;
+  transition: all 0.12s ease-in-out;
+}
+.toy-btn-teal:hover {
+  background-color: #14B8A6;
+  border-bottom-color: #0D9488;
+}
+.toy-btn-teal:active {
+  transform: translateY(3px);
+  border-bottom-width: 1px;
+}
+
+.toy-btn-amber {
+  background-color: #F59E0B;
+  color: #1E293B;
+  border-bottom: 4px solid #D97706;
+  transition: all 0.12s ease-in-out;
+}
+.toy-btn-amber:hover {
+  background-color: #FBBF24;
+  border-bottom-color: #B45309;
+}
+.toy-btn-amber:active {
+  transform: translateY(3px);
+  border-bottom-width: 1px;
+}
+
+.toy-btn-white {
+  background-color: #FFFFFF;
+  color: #334155;
+  border: 2px solid #E2E8F0;
+  border-bottom: 4px solid #CBD5E1;
+  transition: all 0.12s ease-in-out;
+}
+.toy-btn-white:hover {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  border-bottom-color: #94A3B8;
+}
+.toy-btn-white:active {
+  transform: translateY(3px);
+  border-bottom-width: 2px;
+}
+
+/* Card Playful dengan aksen garis hangat */
+.card-chunky {
+  border: 2px solid #E2E8F0;
+  border-bottom: 4px solid #CBD5E1;
+  border-radius: 1.25rem;
+}
+
