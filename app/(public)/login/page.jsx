@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
+import { AnimatedLoginHero } from '../../../components/ui/AnimatedLoginHero.jsx';
 import { supabase } from '../../../lib/supabase/client.js';
+
+const DEMO_ACCOUNTS = [
+  { label: '👦 Siswa (Kiko Pratama - Kelas 4 SD)', email: 'kiko@blokuma.id', password: 'Password123!' },
+  { label: '👨‍👩‍👧 Orang Tua (Ayah Budi)', email: 'parent@blokuma.id', password: 'Password123!' },
+  { label: '👩‍🏫 Guru (Bu Maya Pertiwi)', email: 'guru@blokuma.id', password: 'Password123!' },
+  { label: '🛡️ Admin (Admin Blokuma)', email: 'admin@blokuma.id', password: 'Password123!' },
+];
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -13,6 +21,18 @@ export default function LoginPage() {
   // State Lupa Kata Sandi
   const [isResetting, setIsResetting] = useState(false);
   const [resetMessage, setResetMessage] = useState(null);
+
+  const handleSelectDemoAccount = (e) => {
+    const selectedEmail = e.target.value;
+    if (!selectedEmail) return;
+
+    const acc = DEMO_ACCOUNTS.find((a) => a.email === selectedEmail);
+    if (acc) {
+      setEmail(acc.email);
+      setPassword(acc.password);
+      setErrorMessage(null);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,41 +80,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-x-hidden">
-      {/* Left Side: Photo Panel */}
-      <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:flex flex-col justify-between p-8 xl:p-12 overflow-hidden bg-slate-950">
-        <img
-          src="/Anak.jpg"
-          alt="Anak Belajar Coding Blokuma"
-          className="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000"
-        />
-
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent pointer-events-none" />
-
-        <div className="relative z-10">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-3 bg-slate-900/60 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 shadow-xl"
-          >
-            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-lg">
-              🚀
-            </div>
-            <span className="font-heading text-2xl font-bold tracking-tight text-white">
-              Blokuma
-            </span>
-          </Link>
-        </div>
-
-        <div className="relative z-10 max-w-xl bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-2xl">
-          <span className="inline-block px-3.5 py-1 bg-amber-400 text-slate-900 rounded-full text-xs font-bold uppercase tracking-wider mb-3 shadow-md">
-            🎈 Belajar Koding Ceria Anak SD
-          </span>
-          <h2 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 leading-tight">
-            "Yuk, Lanjutkan Petualangan Kodingmu Bareng Robot Kiko!"
-          </h2>
-          <p className="text-xs lg:text-sm text-slate-200 leading-relaxed font-medium">
-            Selamat datang kembali! Misi-misi seru di pulau petualangan sudah menunggumu untuk diselesaikan.
-          </p>
-        </div>
+      {/* Left Side: Interactive Animated Portal Stage for Login */}
+      <div className="hidden lg:block w-full h-full max-h-screen overflow-hidden">
+        <AnimatedLoginHero />
       </div>
 
       {/* Right Side: Form Panel */}
@@ -104,7 +92,7 @@ export default function LoginPage() {
             <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-toyTeal border-b-2 border-teal-700">
               🧱
             </div>
-            <span className="font-heading text-2xl font-bold text-slate-900">Blokuma</span>
+            <span className="font-heading text-xl font-bold text-slate-900">Blokuma</span>
           </Link>
         </div>
 
@@ -117,6 +105,26 @@ export default function LoginPage() {
             <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
               Masukkan email dan kata sandimu untuk melanjutkan petualangan.
             </p>
+          </div>
+
+          {/* Quick Demo Dropdown Selector */}
+          <div className="mb-4 bg-teal-50 border border-teal-200 p-3 rounded-2xl">
+            <label className="block text-xs font-bold text-teal-800 mb-1 flex items-center gap-1">
+              <span>⚡</span>
+              <span>Pilih Akun Demo:</span>
+            </label>
+            <select
+              onChange={handleSelectDemoAccount}
+              defaultValue=""
+              className="w-full px-3 py-2 rounded-xl border border-teal-300 text-xs font-bold bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            >
+              <option value="" disabled>-- Pilih Peran Akun Demo --</option>
+              {DEMO_ACCOUNTS.map((acc) => (
+                <option key={acc.email} value={acc.email}>
+                  {acc.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           {errorMessage && (
@@ -140,7 +148,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="kiko@gmail.com"
+                placeholder="kiko@blokuma.id"
                 className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
                 required
               />
@@ -177,7 +185,7 @@ export default function LoginPage() {
               className="toy-btn-teal w-full py-4 text-white font-bold text-base rounded-xl shadow-toyTeal flex items-center justify-center gap-2 mt-4"
             >
               {loading ? (
-                <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 'Yuk, Masuk Petualangan! 🚀'
               )}

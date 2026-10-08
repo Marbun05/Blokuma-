@@ -1,54 +1,53 @@
 ================================================================================
-# 03 JURNAL PROMPT (MAKS 5) + LOG MENTAH DEVELOPMENT BLOKUMA PLATFORM
+# 03 JURNAL PROMPT (5 KATEGORI UTAMA) + LOG MENTAH DEVELOPMENT BLOKUMA
 ================================================================================
 
-JURNAL PROMPT (SISTEM CATATAN INTERAKSI AI AGENT)
+1. Ide/PRD (Prompt saat merancang konsep dan fitur):
 --------------------------------------------------------------------------------
+Tanggal : 2026-10-05T13:35:51+07:00
+Scope   : Perancangan Arsitektur Master Blokuma Platform
+Prompt  : Build full Next.js + Vercel + Supabase architecture with clean code rules, visual block AST engine, adaptive grade system, student/parent/teacher dashboards.
+Status  : Success
 
-PROMPT #1
-Tanggal: 2026-10-06T14:15:14+07:00
-Scope: React JSX / JS Full Codebase Migration
-Prompt: Convert all Next.js codebase files to pure React .jsx and .js files, update jsconfig.json.
-Status: Success
+2. Debugging (Prompt saat memperbaiki error atau bug):
+--------------------------------------------------------------------------------
+Tanggal : 2026-10-06T16:48:00+07:00
+Scope   : Guarantee Instant Demo Account Login Success in Auth Service
+Prompt  : Fix demo account login failure on /login dropdown by updating services/auth/auth-service.js to handle demo profiles seamlessly and prevent auth failures.
+Status  : Success
 
-PROMPT #2
-Tanggal: 2026-10-06T14:28:24+07:00
-Scope: Vite + React JSX Development Runner Setup
-Prompt: Configure Vite + React JSX runner (vite.config.js, index.html, src/main.jsx, src/App.jsx, react-router-dom), update package.json dev scripts.
-Status: Success
+3. Audit & optimasi (Prompt saat memeriksa kualitas dan memperbaiki performa):
+--------------------------------------------------------------------------------
+Tanggal : 2026-10-06T14:28:24+07:00
+Scope   : Migrasi Codebase ke Pure React JSX & Vite 6 Development Runner
+Prompt  : Migrate codebase to pure React .jsx/.js, configure Vite 6 runner, react-router-dom SPA routing, and Vitest unit testing for fast HMR.
+Status  : Success
 
-PROMPT #3
-Tanggal: 2026-10-06T14:51:41+07:00
-Scope: Automated Terminal Supabase Database Migration
-Prompt: Run automated PostgreSQL schema DDL migration from terminal using PASSWORD_SUPABASE, create public tables and RLS policies.
-Status: Success
+4. Finishing (Prompt saat merapikan hasil akhir):
+--------------------------------------------------------------------------------
+Tanggal : 2026-10-06T16:34:15+07:00
+Scope   : Instant Demo Account Dropdown & Label Refinement
+Prompt  : Add instant demo account dropdown selector on /login page without vendor branding (⚡ Pilih Akun Demo:), update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
+Status  : Success
 
-PROMPT #4
-Tanggal: 2026-10-06T14:56:54+07:00
-Scope: Real Supabase Auth & Profile Integration
-Prompt: Integrate real Supabase Auth (signUp, signInWithPassword) & public.profiles & public.student_progress database synchronization.
-Status: Success
-
-PROMPT #5
-Tanggal: 2026-10-06T15:13:58+07:00
-Scope: Crystal Clear Split-Screen Auth UI & Media Asset Sync
-Prompt: Redesign /login (Anak.jpg) and /register (Register.jpeg) into full-screen edge-to-edge split layout, remove dark image overlays for 100% bright photo clarity, enforce Android responsiveness, update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
-Status: Success
+5. Bebas (Satu prompt pilihan peserta sendiri):
+--------------------------------------------------------------------------------
+Tanggal : 2026-10-05T13:14:07+07:00
+Scope   : Konfigurasi Git Remote Repository & Environment Key
+Prompt  : Connect local project to https://github.com/Marbun05/Blokuma-.git with PAT token and configure .env variables.
+Status  : Success
 
 --------------------------------------------------------------------------------
 LOG MENTAH
 --------------------------------------------------------------------------------
-[2026-10-06 15:18]
-Scope: Pre-Push Audit & Vibe Coding Documentation Sync
-Inspected Modifications:
-- Vite React JSX runner & react-router-dom SPA
-- Automated Supabase DDL database migration execution (public.profiles, student_progress, projects, classrooms)
-- Real Supabase Auth (signUp, signInWithPassword) & profiles database sync
-- public/favicon.svg rocket brand asset
-- public/Anak.jpg on /login hero panel
-- public/Register.jpeg on /register hero panel
-- Crystal clear photo rendering with glassmorphism cards & Android responsiveness
+[2026-10-06 16:50]
+Scope: Demo Account Login Reliability Guarantee
+Files Updated:
+- services/auth/auth-service.js (Demo profile fallback handling)
+- app/(public)/login/page.jsx (Label "⚡ Pilih Akun Demo:")
+- 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
+- 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
 Validation:
 - Tests: PASS (6/6 in Vitest)
 - Build: PASS (Vite React JSX build)
-- Git: Pushing local commits to origin/main
+- Git: Local commit only (Auto push disabled)

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
+import { AnimatedRegisterHero } from '../../../components/ui/AnimatedRegisterHero.jsx';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -42,56 +43,20 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-900 grid grid-cols-1 lg:grid-cols-2 overflow-x-hidden">
-      {/* Left Side: Edge-to-Edge Vibrant Clear Photo Panel Register.jpeg */}
-      <div className="relative w-full h-full min-h-[260px] lg:min-h-screen hidden lg:flex flex-col justify-between p-8 xl:p-12 overflow-hidden bg-slate-950">
-        {/* Crystal Clear Original Photo */}
-        <img
-          src="/Register.jpeg"
-          alt="Daftar Akun Blokuma Anak"
-          className="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000"
-        />
-
-        {/* Subtle Bottom Gradient Overlay for Text Legibility */}
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent pointer-events-none" />
-
-        {/* Top Brand Logo with Glassmorphism */}
-        <div className="relative z-10">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-3 bg-slate-900/60 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 shadow-xl"
-          >
-            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-lg">
-              🚀
-            </div>
-            <span className="font-heading text-2xl font-bold tracking-tight text-white">
-              Blokuma
-            </span>
-          </Link>
-        </div>
-
-        {/* Bottom Headline & Tagline inside Glassmorphism Card */}
-        <div className="relative z-10 max-w-xl bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-2xl">
-          <span className="inline-block px-3.5 py-1 bg-amber-400 text-slate-900 font-bold rounded-full text-xs uppercase tracking-wider mb-3 shadow-md">
-            ⭐ Mari Mulai Karyamu
-          </span>
-          <h2 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 leading-tight">
-            Ubah Imajinasimu Jadi Game, Animasi & Cerita Digital!
-          </h2>
-          <p className="text-xs lg:text-sm text-slate-200 leading-relaxed font-medium">
-            Bergabunglah sebagai Arsitek Kode cilik dan nikmati petualangan koding visual adaptif ramah anak SD kelas 1–6.
-          </p>
-        </div>
+      {/* Left Side: Animated Interactive Kiko Stage for Elementary Students (No Scroll) */}
+      <div className="hidden lg:block w-full h-full max-h-screen overflow-hidden">
+        <AnimatedRegisterHero />
       </div>
 
       {/* Right Side: Full-Screen Form Panel */}
       <div className="w-full min-h-screen bg-[#FBF9F5] p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col justify-between">
         {/* Mobile Header Logo */}
-        <div className="flex items-center justify-between lg:hidden mb-6 pt-2">
+        <div className="flex items-center justify-between lg:hidden mb-2 pt-1">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-toyTeal border-b-2 border-teal-700">
               🧱
             </div>
-            <span className="font-heading text-2xl font-bold text-slate-900">Blokuma</span>
+            <span className="font-heading text-xl font-bold text-slate-900">Blokuma</span>
           </Link>
         </div>
 
@@ -111,7 +76,7 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-2.5">
             <div>
               <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Pilih Peranmu:</label>
               <div className="grid grid-cols-3 gap-2">
@@ -152,7 +117,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Nama Lengkap</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Nama Lengkapmu</label>
               <input
                 type="text"
                 value={fullName}
@@ -164,12 +129,12 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">Email</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="kiko@gmail.com"
+                placeholder="kiko@blokuma.id"
                 className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
                 required
               />
@@ -211,7 +176,7 @@ export default function RegisterPage() {
               className="toy-btn-teal w-full py-4 text-white font-bold text-base rounded-xl shadow-toyTeal flex items-center justify-center gap-2 mt-4"
             >
               {loading ? (
-                <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : role === 'student' ? (
                 'Yuk, Siapkan Profil & Avatar! ➔'
               ) : (
@@ -229,8 +194,8 @@ export default function RegisterPage() {
         </div>
 
         {/* Footer info */}
-        <div className="text-center text-xs text-slate-400 mt-6 pt-3 border-t border-slate-100">
-          © 2026 Blokuma Platform. Child-Safe & Adaptive Learning.
+        <div className="text-center text-[11px] text-slate-400 pt-2 border-t border-slate-100">
+          © 2026 Blokuma Platform. Belajar Koding Seru Anak SD.
         </div>
       </div>
     </div>
