@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
+import { useAuthStore } from '../../../../store/auth/use-auth-store.js';
+import { supabase } from '../../../../lib/supabase/client.js';
 
 export default function StudentDashboardPage() {
-  const [studentNickname, setStudentNickname] = useState('Kiko');
+  const { user } = useAuthStore();
+  const [studentNickname, setStudentNickname] = useState(user?.nickname || 'Kiko');
+  const [progress, setProgress] = useState(null);
 
-  // Memuat data nama siswa dari localStorage
-  const loadProfileData = () => {
+  // Memuat data dari Supabase
+  const loadProfileData = async () => {
+    if (user?.id) {
+      const { data } = await supabase
+        .from('student_progress')
+        .select('*')
+        .eq('student_id', user.id)
+        .single();
+      if (data) {
+        setProgress(data);
+      }
+    }
+
     if (typeof window !== 'undefined') {
       const savedName = localStorage.getItem('student_nickname');
       if (savedName) {
@@ -16,7 +31,7 @@ export default function StudentDashboardPage() {
   };
 
   useEffect(() => {
-    // 1. Muat nama saat pertama kali komponen dibuka
+    // 1. Muat data saat pertama kali komponen dibuka
     loadProfileData();
 
     // 2. Listener Custom Event agar nama di banner update secara otomatis jika diubah dari halaman Pengaturan
@@ -28,7 +43,7 @@ export default function StudentDashboardPage() {
     return () => {
       window.removeEventListener('student_profile_updated', handleProfileUpdate);
     };
-  }, []);
+  }, [user]);
 
   return (
     <div className="flex min-h-screen bg-[#FBF9F5]">
@@ -40,11 +55,11 @@ export default function StudentDashboardPage() {
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
             <div>
               <span className="bg-teal-700/80 text-amber-200 border border-teal-500 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1.5 shadow-sm">
-                <span>🎖️</span> Arsitek Kode Level 6
+                <span>🎖️</span> Arsitek Kode Level {progress?.level || 1}
               </span>
               
               <h1 className="font-heading text-2xl sm:text-4xl font-bold mt-2">
-                Halo, {studentNickname}! 👋
+                Halo, {user?.nickname || studentNickname}! 👋
               </h1>
               <p className="text-teal-100 text-xs sm:text-sm font-medium mt-1">
                 Hari ini mau bikin game atau pecahkan teka-teki balok apa?
@@ -52,17 +67,17 @@ export default function StudentDashboardPage() {
             </div>
 
             <div className="bg-teal-700/70 border border-teal-500/80 px-4 py-2.5 rounded-2xl text-right sm:text-center self-start sm:self-auto shadow-sm">
-              <span className="text-xl sm:text-2xl font-bold block">🔥 7 Hari</span>
+              <span className="text-xl sm:text-2xl font-bold block">🔥 {progress?.streak_days || 0} Hari</span>
               <p className="text-[11px] text-amber-300 font-bold">Streak Semangat!</p>
             </div>
           </div>
 
           <div className="relative z-10 flex flex-wrap items-center gap-3 text-xs sm:text-sm font-bold pt-4 border-t border-teal-500/60">
             <span className="bg-teal-700/50 px-3 py-1.5 rounded-xl border border-teal-500">
-              💎 XP Terkumpul: <strong className="text-amber-300">1,240 XP</strong>
+              💎 XP Terkumpul: <strong className="text-amber-300">{progress?.xp || 0} XP</strong>
             </span>
             <span className="bg-teal-700/50 px-3 py-1.5 rounded-xl border border-teal-500">
-              🏆 Misi Tuntas: <strong className="text-emerald-300">12 Misi</strong>
+              🏆 Misi Tuntas: <strong className="text-emerald-300">{progress?.level ? progress.level * 2 : 0} Misi</strong>
             </span>
             <span className="bg-teal-700/50 px-3 py-1.5 rounded-xl border border-teal-500">
               🤖 Pendamping: <strong className="text-white">Robot Kiko</strong>
@@ -84,8 +99,16 @@ export default function StudentDashboardPage() {
 
           <div className="bg-teal-50/70 p-4 sm:p-5 rounded-xl border-2 border-teal-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-white border-2 border-teal-300 flex items-center justify-center text-3xl shadow-sm shrink-0">
-                🤖
+              <div className="w-16 h-16 rounded-2xl bg-white border-2 border-teal-300 flex items-center justify-center p-1.5 shadow-sm shrink-0">
+                <img
+                  src="/images/Robot.webp"
+                  alt="Robot Kiko Mascot"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/images/robot.webp";
+                  }}
+                  className="w-full h-full object-contain animate-bounce"
+                />
               </div>
               <div>
                 <span className="text-[11px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300">

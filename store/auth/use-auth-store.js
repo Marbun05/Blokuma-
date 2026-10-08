@@ -2,16 +2,8 @@ import { create } from 'zustand';
 import { loginUser, registerUser, logoutUser } from '../../services/auth/auth-service.js';
 
 export const useAuthStore = create((set) => ({
-  user: {
-    id: 'usr-kiko-123',
-    fullName: 'Kiko Pratama',
-    nickname: 'Kiko',
-    email: 'kiko@blokuma.id',
-    role: 'student',
-    grade: 4,
-    avatarUrl: '🧑‍🚀',
-  },
-  isAuthenticated: true,
+  user: null,
+  isAuthenticated: false,
   loading: false,
 
   setUserProfile: (profile) => set({ user: profile, isAuthenticated: true }),

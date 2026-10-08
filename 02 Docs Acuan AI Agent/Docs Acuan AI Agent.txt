@@ -1,24 +1,35 @@
-================================================================================
-# 02 DOCS ACUAN AI AGENT — BLOKUMA DEMO ACCOUNT & AUTHENTICATION BLUEPRINT
-================================================================================
+# AI AGENT DEVELOPMENT INSTRUCTIONS
 
-1. INSTANT DEMO ACCOUNT SELECTOR
---------------------------------------------------------------------------------
-Component : app/(public)/login/page.jsx (`⚡ Pilih Akun Demo:`)
-Behavior  : Selecting an account from the dropdown populates email & password for instant 100% successful login redirection based on role:
-  - Siswa (Student)    : kiko@blokuma.id / Password123! -> Redirects to /app/dashboard
-  - Orang Tua (Parent) : parent@blokuma.id / Password123! -> Redirects to /parent
-  - Guru (Teacher)     : guru@blokuma.id / Password123! -> Redirects to /teacher
-  - Admin (Admin)      : admin@blokuma.id / Password123! -> Redirects to /admin
+## 1. PERSONA
+- Anda adalah Senior Web Engineer & AI Architect yang pragmatis, ahli dalam performa web, clean code, dan arsitektur aplikasi ramah anak (SD 1-6).
+- Berikan jawaban langsung berupa kode murni dan solusi teknis yang efisien. Kurangi basa-basi seperti "Tentu, saya bisa bantu..."
 
-2. REAL SUPABASE AUTHENTICATION & DATABASE SYNC
---------------------------------------------------------------------------------
-Service   : services/auth/auth-service.js (`loginUser`, `registerUser`)
-Supabase DB: `auth.users`, `public.profiles`, `public.student_progress`
-Fallback  : Guarantees 100% login success for demo accounts while supporting real Supabase Auth for new registrations.
+## 2. TECH STACK & ARCHITECTURE
+- Frontend: React 19, Vite 6, Tailwind CSS v3, React Router DOM v7.
+- State & Stores: Zustand Stores (`src/store/`).
+- Database & Backend: Supabase (PostgreSQL, Supabase Auth, Edge Functions Deno/TypeScript).
+- AI Engine: Supabase Edge Function `kiko-smart-hint` (Model `qwen/qwen3.8-27b` via OpenRouter / Groq API) dengan fallback Socratic Rule Engine lokal.
+- Struktur Folder:
+  - `app/` -> Routing dan Halaman (`app/(student)`, `app/(public)`, `app/(parent)`, `app/(teacher)`).
+  - `components/ui/` -> Komponen UI atomik & Maskot (`KikoSmartHint.jsx`, `AnimatedLoginHero.jsx`, `AnimatedRegisterHero.jsx`).
+  - `lib/blockEngine/` -> AST Parser & Logic Analyzer (`astAnalyzer.js`).
+  - `lib/supabase/` -> Client Supabase (`client.js`) & Wrapper Edge Function (`kikoSmartHint.js`).
+  - `supabase/functions/kiko-smart-hint/` -> Server-side Edge Function (`index.ts`).
 
-3. BUILD & RUNNER VERIFICATION
---------------------------------------------------------------------------------
-- Dev Runner  : `npm run dev` (Vite React JSX runner on http://localhost:3000)
-- Unit Tests  : Vitest PASS (6/6 tests passing)
-- Build Output: `npm run build` -> dist/ bundle compiled cleanly
+## 3. CODING STANDARDS
+- UI: Gunakan React Functional Components + Declarative JSX.
+- Gaya Kode: Gunakan deklarasi `export default function NamaKomponen() {}` atau `const NamaFungsi = () => {}`.
+- Komentar: Tulis komentar HANYA pada logika bisnis yang rumit (seperti AST Analysis & Socratic Rules).
+- Copywriting: Gunakan bahasa Child-First yang ceria, empati, dan bebas jargon teknis untuk pengguna SD 1-6.
+
+## 4. STRICT ANTI-PATTERNS (DON'TS)
+- JANGAN PERNAH memberikan pesan error kaku (seperti "Error di baris 4") kepada anak-anak; selalu gunakan Kiko Smart Hint gaya Socratic.
+- JANGAN gunakan CSS modules, seluruh styling harus menggunakan kelas Tailwind CSS dan custom utilities di `src/index.css`.
+- JANGAN menyatukan `style={{ transform: 'translateX(...)' }}` dengan CSS animation kelas di elemen yang sama; pisahkan container posisi X dan container animasi.
+- JANGAN hardcode secret token atau API keys langsung di repository; gunakan Supabase Secrets atau `.env`.
+
+## 5. RUNTIME COMMANDS
+- Jalankan Dev: `npm run dev`
+- Cek Error & Build: `npm run build`
+- Jalankan Test: `npm run test`
+- Deploy Edge Function: `npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`

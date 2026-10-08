@@ -1,0 +1,4 @@
+project_id = "sjmnjoiqrtgxhknbnjyd"
+
+[functions.kiko-smart-hint]
+verify_jwt = false

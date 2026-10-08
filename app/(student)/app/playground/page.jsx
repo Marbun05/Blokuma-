@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
+import { KikoSmartHint } from '../../../../components/ui/KikoSmartHint.jsx';
 
 export default function StudentPlaygroundPage() {
   const [canvasBlocks, setCanvasBlocks] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
   const [robotPosition, setRobotPosition] = useState(0);
   const [robotJump, setRobotJump] = useState(false);
-  const [actionMessage, setActionMessage] = useState('Pilih blok lalu klik Jalankan Kode!');
+  const [actionMessage, setActionMessage] = useState('Pilih balok lalu klik Jalankan Kode!');
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [lastExecutionResult, setLastExecutionResult] = useState({ status: 'idle' });
 
   const availableBlocks = [
     { id: 'move', label: '➔ MAJU 1 LANGKAH', color: 'bg-teal-500 hover:bg-teal-600 text-white border-b-4 border-teal-700' },
@@ -26,6 +29,7 @@ export default function StudentPlaygroundPage() {
     setRobotPosition(0);
     setRobotJump(false);
     setActionMessage('Kanvas dikosongkan & Maskot kembali ke posisi awal!');
+    setAttemptCount(0);
   };
 
   const playPopSound = () => {
@@ -74,16 +78,19 @@ export default function StudentPlaygroundPage() {
     if (isRunning) return;
 
     if (canvasBlocks.length === 0) {
-      setActionMessage('⚠️ Kanvas masih kosong! Tambahkan blok terlebih dahulu.');
+      setActionMessage('⚠️ Kanvas masih kosong! Tambahkan balok terlebih dahulu.');
       return;
     }
 
     if (canvasBlocks[0].id === 'repeat') {
-      setActionMessage('⚠️ Masukkan perintah lain terlebih dahulu sebelum menambahkan blok Ulangi 3 Kali!');
+      setActionMessage('⚠️ Masukkan perintah lain terlebih dahulu sebelum menambahkan balok Ulangi 3 Kali!');
+      setAttemptCount((prev) => prev + 1);
+      setLastExecutionResult({ status: 'error', reason: 'orphan_loop' });
       return;
     }
 
     setIsRunning(true);
+    setAttemptCount((prev) => prev + 1);
 
     for (let i = 0; i < canvasBlocks.length; i++) {
       const currentBlock = canvasBlocks[i];
@@ -100,7 +107,7 @@ export default function StudentPlaygroundPage() {
             await executeSingleBlock(previousBlock.id);
           }
         } else {
-          setActionMessage('⚠️ Tidak ada perintah valid sebelum blok Ulangi!');
+          setActionMessage('⚠️ Tidak ada perintah valid sebelum balok Ulangi!');
           await sleep(1000);
         }
       } else {
@@ -109,6 +116,7 @@ export default function StudentPlaygroundPage() {
     }
 
     setActionMessage('✨ Horay! Seluruh instruksi di Kanvas berhasil dijalankan!');
+    setLastExecutionResult({ status: 'completed', stepsTaken: canvasBlocks.length });
     setIsRunning(false);
   };
 
@@ -117,16 +125,27 @@ export default function StudentPlaygroundPage() {
       <StudentSidebar />
 
       <main className="flex-1 p-5 sm:p-8 max-w-6xl">
-        <div className="mb-6">
-          <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-amber-300">
-            🧩 Meja Eksperimen Kode Bebas
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-amber-300">
+              🧩 Meja Eksperimen Kode Bebas
+            </div>
+            <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
+              Kanvas Coding Robot Kiko
+            </h1>
+            <p className="text-slate-600 text-sm sm:text-base font-medium">
+              Rakit perintah balok warna-warni dan lihat aksi Kiko melompat serta bergerak di panggung!
+            </p>
           </div>
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
-            Kanvas Coding Robot Kiko
-          </h1>
-          <p className="text-slate-600 text-sm sm:text-base font-medium">
-            Rakit perintah balok warna-warni dan lihat aksi Kiko melompat serta bergerak di panggung!
-          </p>
+
+          {/* Kiko Smart Hint Integration */}
+          <KikoSmartHint
+            canvasBlocks={canvasBlocks}
+            targetLevel={{ targetDistance: 4, riverWidth: 2, hasRiver: true }}
+            executionResult={lastExecutionResult}
+            attemptCount={attemptCount}
+            autoOpenOnFail={true}
+          />
         </div>
 
         <div className="bg-white p-5 sm:p-7 rounded-2xl border-2 border-slate-200 card-chunky shadow-sm">
@@ -206,23 +225,42 @@ export default function StudentPlaygroundPage() {
                 <span className="text-[11px] font-bold text-sky-800 bg-white/80 px-2.5 py-0.5 rounded-full border border-sky-200">
                   Panggung Kiko
                 </span>
-                <span className="text-xs">🌳 ☀️</span>
+                <span className="text-xs">🌳 🌊 ☀️</span>
               </div>
 
               <div className="my-auto w-full flex flex-col items-center gap-2">
+                {/* Outer Container: Pergerakan Horizontal (Posisi X) */}
                 <div
-                  className={`transition-all duration-300 ease-out transform ${
-                    robotJump ? '-translate-y-8 scale-110' : 'translate-y-0'
-                  }`}
+                  className="transition-all duration-300 ease-out flex flex-col items-center justify-center"
                   style={{
-                    transform: `translateX(${robotPosition}px) ${robotJump ? 'translateY(-30px)' : ''}`,
+                    transform: `translateX(${robotPosition}px)`,
                   }}
                 >
-                  <img
-                    src="/images/robot.webp"
-                    alt="Mascot Kiko"
-                    className="w-24 h-24 sm:w-28 sm:h-28 object-contain drop-shadow-md"
-                  />
+                  {/* Inner Container: Animasi Kiko (Melayang Idle / Jalan / Lompat) */}
+                  <div
+                    onClick={() => {
+                      playPopSound();
+                      setActionMessage('😄 Robot Kiko: Yey! Kamu menyapaku!');
+                    }}
+                    className={`cursor-pointer group transition-all duration-300 ${
+                      robotJump
+                        ? '-translate-y-12 scale-125 rotate-6 drop-shadow-2xl'
+                        : isRunning
+                        ? 'animate-kiko-walk'
+                        : 'animate-kiko-idle hover:scale-110'
+                    }`}
+                    title="Klik Robot Kiko untuk menyapa!"
+                  >
+                    <img
+                      src="/images/Robot.webp"
+                      alt="Mascot Kiko"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/images/robot.webp";
+                      }}
+                      className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-xl transition transform group-hover:rotate-6 filter"
+                    />
+                  </div>
                 </div>
 
                 <div className="bg-white/95 backdrop-blur-sm text-slate-800 px-3.5 py-1.5 rounded-xl border border-teal-200 shadow-sm text-xs font-bold min-h-[32px] flex items-center justify-center max-w-full">
@@ -230,8 +268,10 @@ export default function StudentPlaygroundPage() {
                 </div>
               </div>
 
-              {/* Garis Lantai Hijau */}
-              <div className="w-full h-3 bg-emerald-400 rounded-full border-t border-emerald-500 mb-3" />
+              {/* Garis Lantai Hijau & Visual Sungai */}
+              <div className="w-full h-3 bg-emerald-400 rounded-full border-t border-emerald-500 mb-3 relative overflow-hidden">
+                <div className="absolute right-1/4 top-0 bottom-0 w-12 bg-sky-500 animate-pulse" title="Sungai" />
+              </div>
 
               <button
                 onClick={handleRunCode}

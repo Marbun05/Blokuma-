@@ -1,53 +1,49 @@
+# JURNAL PROMPT (MAKS 5) & LOG MENTAH PENGEMBANGAN BLOKUMA
+
 ================================================================================
-# 03 JURNAL PROMPT (5 KATEGORI UTAMA) + LOG MENTAH DEVELOPMENT BLOKUMA
+SECTION 1: JURNAL PROMPT BERDASARKAN KATEGORI
 ================================================================================
 
-1. Ide/PRD (Prompt saat merancang konsep dan fitur):
---------------------------------------------------------------------------------
-Tanggal : 2026-10-05T13:35:51+07:00
-Scope   : Perancangan Arsitektur Master Blokuma Platform
-Prompt  : Build full Next.js + Vercel + Supabase architecture with clean code rules, visual block AST engine, adaptive grade system, student/parent/teacher dashboards.
-Status  : Success
+1. Ide/PRD:
+   Prompt:
+   "berikan pembaruan lengkap khusus fitur Kiko Smart Hint" (Bantuan Tanpa Memberi Bocoran)
+   • Target Usia: Semua Kelas (SD 1 - 6)
+   • Masalah yang Diselesaikan: Anak sering frustrasi, menangis, atau menyerah ketika error atau logika baloknya salah.
+   • Cara Kerja AI: Sistem membaca AST (Abstract Syntax Tree) / susunan balok logika yang salah milik anak. Alih-alih bilang "Error di baris 4", AI akan menganalisa dan berkata ceria: "Ups! Kiko cuma jalan 2 langkah, padahal sungainya lebar lho. Coba cek lagi balok angka birumu, butuh berapa lompatan ya?"
+   • Model yang Cocok: qwen/qwen3.8-27b (Cepat, pintar menganalisa JSON balok, dan bisa di-prompt untuk gaya Socratic). Dan agar dinamis dan di supabase tambahin saja di bagian Edge Functions untuk ai nyaa tanpa error perbarui automatis."
 
-2. Debugging (Prompt saat memperbaiki error atau bug):
---------------------------------------------------------------------------------
-Tanggal : 2026-10-06T16:48:00+07:00
-Scope   : Guarantee Instant Demo Account Login Success in Auth Service
-Prompt  : Fix demo account login failure on /login dropdown by updating services/auth/auth-service.js to handle demo profiles seamlessly and prevent auth failures.
-Status  : Success
+2. Debugging:
+   Prompt:
+   "di playground masih Mascot Kiko belum ada animasi seharus dari /images/robot.webp dan cek masalah dimana masih tidak tampil di Panggung Kiko hanya teks Mascot kiko tidak ada gambar dari images/robot.webp"
 
-3. Audit & optimasi (Prompt saat memeriksa kualitas dan memperbaiki performa):
---------------------------------------------------------------------------------
-Tanggal : 2026-10-06T14:28:24+07:00
-Scope   : Migrasi Codebase ke Pure React JSX & Vite 6 Development Runner
-Prompt  : Migrate codebase to pure React .jsx/.js, configure Vite 6 runner, react-router-dom SPA routing, and Vitest unit testing for fast HMR.
-Status  : Success
+3. Audit & optimasi:
+   Prompt:
+   "lakukan automatis dari terminal Cara Deploy Edge Function ke Supabase: npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt dan npx supabase secrets set OPENROUTER_API_KEY=... AI_MODEL=qwen/qwen3.8-27b sampai sukses"
 
-4. Finishing (Prompt saat merapikan hasil akhir):
---------------------------------------------------------------------------------
-Tanggal : 2026-10-06T16:34:15+07:00
-Scope   : Instant Demo Account Dropdown & Label Refinement
-Prompt  : Add instant demo account dropdown selector on /login page without vendor branding (⚡ Pilih Akun Demo:), update 02 Docs Acuan AI Agent & 03 Jurnal Prompt code-only files.
-Status  : Success
+4. Finishing:
+   Prompt:
+   "agar di seluruh halaman bagian Mascot Kiko pakai animasi di public/images/robot.webp"
 
-5. Bebas (Satu prompt pilihan peserta sendiri):
---------------------------------------------------------------------------------
-Tanggal : 2026-10-05T13:14:07+07:00
-Scope   : Konfigurasi Git Remote Repository & Environment Key
-Prompt  : Connect local project to https://github.com/Marbun05/Blokuma-.git with PAT token and configure .env variables.
-Status  : Success
+5. Bebas:
+   Prompt:
+   "pat token supabase sudah di .env deploy ke edge function lakukan"
 
---------------------------------------------------------------------------------
-LOG MENTAH
---------------------------------------------------------------------------------
-[2026-10-06 16:50]
-Scope: Demo Account Login Reliability Guarantee
-Files Updated:
-- services/auth/auth-service.js (Demo profile fallback handling)
-- app/(public)/login/page.jsx (Label "⚡ Pilih Akun Demo:")
-- 02 Docs Acuan AI Agent/Docs Acuan AI Agent.txt
-- 03 Jurnal Prompt (Maks 5) + Log Mentah/Jurnal Prompt + Log Mentah.txt
-Validation:
-- Tests: PASS (6/6 in Vitest)
-- Build: PASS (Vite React JSX build)
-- Git: Local commit only (Auto push disabled)
+================================================================================
+SECTION 2: LOG MENTAH PERUBAHAN KODE & COMMIT
+================================================================================
+
+[COMMIT 1] Implementasi Kiko Smart Hint (Socratic AI & AST Parser)
+- Added `lib/blockEngine/astAnalyzer.js`: Menerjemahkan balok visual ke struktur AST dan mendiagnosa gap logika (under-step, missing-jump, orphan loop) untuk anak SD 1-6.
+- Added `supabase/functions/kiko-smart-hint/index.ts`: Edge Function Deno/TypeScript yang mengeksekusi Socratic Prompting berbasis model `qwen/qwen3.8-27b` dengan fallback lokal otomatis tanpa error.
+- Added `lib/supabase/kikoSmartHint.js`: Wrapper client untuk memanggil Supabase Edge Function via `supabase.functions.invoke()`.
+- Added `components/ui/KikoSmartHint.jsx`: Komponen UI pop-up maskot Kiko dengan pemilih kelas (SD 1-2, SD 3-4, SD 5-6) dan Text-to-Speech audio (`🔊 Suara Kiko`).
+- Updated `app/(student)/app/playground/page.jsx`: Mengintegrasikan Kiko Smart Hint dan tracking percobaan gagal anak secara otomatis.
+
+[COMMIT 2] Terminal Deployment Edge Function & Supabase Secrets
+- Executed `npx supabase functions deploy kiko-smart-hint --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt` menggunakan PAT `[REDACTED_SUPABASE_PAT]`.
+- Executed `npx supabase secrets set GROQ_TOKEN="[REDACTED]" AI_MODEL="qwen/qwen3.8-27b"`.
+- Tested live HTTP 200 OK endpoint response di `https://sjmnjoiqrtgxhknbnjyd.supabase.co/functions/v1/kiko-smart-hint`.
+
+[COMMIT 3] Standarisasi Aset & Animasi Maskot Robot Kiko
+- Standardized image source path to `/images/Robot.webp` dengan handler `onError` fallback otomatis di seluruh komponen (`playground/page.jsx`, `public/page.jsx`, `KikoSmartHint.jsx`, `dashboard/page.jsx`, `learn/[lessonId]/page.jsx`, `AnimatedLoginHero.jsx`, `AnimatedRegisterHero.jsx`).
+- Fixed CSS animation conflict by separating outer horizontal movement `translateX` container and inner animated character container (`animate-kiko-idle`, `animate-kiko-walk`, `robotJump`).

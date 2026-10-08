@@ -22,17 +22,28 @@ export default function LessonDetailPage() {
             Desa Urutan: Langkah Pertama Kiko Menuju Gerbang
           </h1>
 
-          <div className="bg-amber-50/80 border-2 border-amber-300 p-5 rounded-xl mb-6 shadow-sm">
-            <h3 className="font-heading font-bold text-amber-900 text-sm mb-2 flex items-center gap-2">
-              <span>📖</span>
-              <span>Cerita Petualangan:</span>
-            </h3>
-            <p className="text-xs sm:text-sm text-amber-950 leading-relaxed font-medium mb-3">
-              Robot Kiko baru saja mendarat di Desa Urutan dan bingung mencari jalan keluar. Susun 2 balok <strong className="text-teal-700">"MAJU 1 LANGKAH"</strong> di kanvas untuk menuntun Kiko sampai ke gerbang desa!
-            </p>
-            <div className="bg-white/80 p-2.5 rounded-lg border border-amber-200 text-xs font-bold text-slate-700 flex items-center gap-2">
-              <span>🎯</span>
-              <span>Target Kemenangan: Hubungkan 2 balok MAJU lalu klik tombol Jalankan Kreasimu!</span>
+          <div className="bg-amber-50/80 border-2 border-amber-300 p-5 rounded-xl mb-6 shadow-sm flex flex-col sm:flex-row items-center gap-4">
+            <img
+              src="/images/Robot.webp"
+              alt="Mascot Robot Kiko"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/images/robot.webp";
+              }}
+              className="w-20 h-20 object-contain drop-shadow-md animate-bounce shrink-0"
+            />
+            <div className="flex-1">
+              <h3 className="font-heading font-bold text-amber-900 text-sm mb-2 flex items-center gap-2">
+                <span>📖</span>
+                <span>Cerita Petualangan:</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-amber-950 leading-relaxed font-medium mb-3">
+                Robot Kiko baru saja mendarat di Desa Urutan dan bingung mencari jalan keluar. Susun 2 balok <strong className="text-teal-700">"MAJU 1 LANGKAH"</strong> di kanvas untuk menuntun Kiko sampai ke gerbang desa!
+              </p>
+              <div className="bg-white/80 p-2.5 rounded-lg border border-amber-200 text-xs font-bold text-slate-700 flex items-center gap-2">
+                <span>🎯</span>
+                <span>Target Kemenangan: Hubungkan 2 balok MAJU lalu klik tombol Jalankan Kreasimu!</span>
+              </div>
             </div>
           </div>
 

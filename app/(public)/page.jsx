@@ -217,6 +217,10 @@ export default function LandingPage() {
                     <img
                       src="/images/Robot.webp"
                       alt="Robot Kiko Maskot Blokuma"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/images/robot.webp";
+                      }}
                       className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-md hover:scale-105 transition transform"
                     />
                   </div>
@@ -338,18 +342,30 @@ export default function LandingPage() {
               <div className="my-auto w-full flex flex-col items-center gap-2">
                 {/* Visual Karakter Robot Maskot Kiko */}
                 <div
-                  className={`transition-all duration-300 ease-out transform ${
-                    robotJump ? '-translate-y-8 scale-110' : 'translate-y-0'
-                  }`}
+                  className="transition-all duration-300 ease-out flex flex-col items-center justify-center"
                   style={{
-                    transform: `translateX(${robotPosition}px) ${robotJump ? 'translateY(-30px)' : ''}`,
+                    transform: `translateX(${robotPosition}px)`,
                   }}
                 >
-                  <img
-                    src="/images/Robot.webp"
-                    alt="Robot Kiko"
-                    className="w-24 h-24 sm:w-28 sm:h-28 object-contain drop-shadow-md"
-                  />
+                  <div
+                    className={`transition-all duration-300 ${
+                      robotJump
+                        ? '-translate-y-12 scale-125 rotate-6 drop-shadow-2xl'
+                        : isRunning
+                        ? 'animate-kiko-walk'
+                        : 'animate-kiko-idle'
+                    }`}
+                  >
+                    <img
+                      src="/images/Robot.webp"
+                      alt="Robot Kiko"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/images/robot.webp";
+                      }}
+                      className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-xl"
+                    />
+                  </div>
                 </div>
 
                 {/* Balon Pesan Responsif Kiko */}

@@ -110,6 +110,10 @@ export function AnimatedRegisterHero() {
             <img
               src="/images/Robot.webp"
               alt="Robot Kiko"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/images/robot.webp";
+              }}
               className="w-24 h-24 sm:w-28 sm:h-28 object-contain"
             />
           </div>

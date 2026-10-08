@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Home, Map, BookOpen, Puzzle, Gamepad2, Trophy, Image as ImageIcon, BarChart3, Settings, Bot } from 'lucide-react';
 
 const menuItems = [
-  { name: 'Beranda', href: '/app/dashboard', icon: '🏠' },
-  { name: 'Petualangan', href: '/app/adventure', icon: '🗺️' },
-  { name: 'Belajar', href: '/app/learn', icon: '📚' },
-  { name: 'Playground', href: '/app/playground', icon: '🧩' },
-  { name: 'Projects', href: '/app/projects', icon: '🎮' },
-  { name: 'Achievements', href: '/app/achievements', icon: '🏆' },
-  { name: 'Galeri', href: '/app/gallery', icon: '🖼️' },
-  { name: 'Progress', href: '/app/progress', icon: '📊' },
-  { name: 'Pengaturan', href: '/app/settings', icon: '⚙️' },
+  { name: 'Beranda', href: '/app/dashboard', icon: <Home className="w-5 h-5" /> },
+  { name: 'Petualangan', href: '/app/adventure', icon: <Map className="w-5 h-5" /> },
+  { name: 'Belajar', href: '/app/learn', icon: <BookOpen className="w-5 h-5" /> },
+  { name: 'Playground', href: '/app/playground', icon: <Puzzle className="w-5 h-5" /> },
+  { name: 'Projects', href: '/app/projects', icon: <Gamepad2 className="w-5 h-5" /> },
+  { name: 'Achievements', href: '/app/achievements', icon: <Trophy className="w-5 h-5" /> },
+  { name: 'Galeri', href: '/app/gallery', icon: <ImageIcon className="w-5 h-5" /> },
+  { name: 'Progress', href: '/app/progress', icon: <BarChart3 className="w-5 h-5" /> },
+  { name: 'Pengaturan', href: '/app/settings', icon: <Settings className="w-5 h-5" /> },
 ];
 
 export function StudentSidebar() {
@@ -63,11 +64,11 @@ export function StudentSidebar() {
   }, []);
 
   const mobileNavItems = [
-    { name: 'Beranda', href: '/app/dashboard', icon: '🏠' },
-    { name: 'Belajar', href: '/app/learn', icon: '📚' },
-    { name: 'Playground', href: '/app/playground', icon: '🧩' },
-    { name: 'Projects', href: '/app/projects', icon: '🎮' },
-    { name: 'Progress', href: '/app/progress', icon: '📊' },
+    { name: 'Beranda', href: '/app/dashboard', icon: <Home className="w-5 h-5" /> },
+    { name: 'Belajar', href: '/app/learn', icon: <BookOpen className="w-5 h-5" /> },
+    { name: 'Playground', href: '/app/playground', icon: <Puzzle className="w-5 h-5" /> },
+    { name: 'Projects', href: '/app/projects', icon: <Gamepad2 className="w-5 h-5" /> },
+    { name: 'Progress', href: '/app/progress', icon: <BarChart3 className="w-5 h-5" /> },
   ];
 
   return (
@@ -76,8 +77,8 @@ export function StudentSidebar() {
       <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col justify-between p-4 min-h-screen">
         <div>
           <div className="flex items-center gap-3 px-2 py-3 mb-4 border-b-2 border-slate-100">
-            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center text-xl shadow-toyTeal border-b-2 border-teal-700">
-              🧱
+            <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center shadow-toyTeal border-b-2 border-teal-700">
+              <Puzzle className="w-6 h-6" strokeWidth={2.5} />
             </div>
             <div>
               <span className="font-heading text-xl font-bold text-slate-800 block leading-tight">Blokuma</span>
@@ -110,12 +111,12 @@ export function StudentSidebar() {
 
         <div className="bg-amber-50/90 p-3.5 rounded-2xl border-2 border-amber-200 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white border border-amber-300 flex items-center justify-center text-2xl shadow-sm">
-              🧑‍🚀
+            <div className="w-10 h-10 rounded-xl bg-white border border-amber-300 flex items-center justify-center text-amber-500 shadow-sm">
+              <Bot className="w-6 h-6" strokeWidth={2.5} />
             </div>
             <div className="overflow-hidden">
               <p className="font-heading font-bold text-slate-900 text-sm truncate">{studentNickname}</p>
-              <p className="text-[11px] font-bold text-teal-700">Arsitek Kode Lv. 6 🎖️</p>
+              <p className="text-[11px] font-bold text-teal-700 flex items-center gap-1">Arsitek Kode Lv. 6 <Trophy className="w-3 h-3 text-amber-500" /></p>
             </div>
           </div>
         </div>
@@ -126,16 +127,16 @@ export function StudentSidebar() {
         {mobileNavItems.map((item) => {
           const isActive = location.pathname === item.href;
           return (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition ${
-                isActive ? 'text-teal-600 font-bold' : 'text-slate-500 font-medium'
-              }`}
-            >
-              <span className="text-xl">{item.icon}</span>
-              <span className="text-[10px] tracking-tight">{item.name}</span>
-            </Link>
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition ${
+                    isActive ? 'text-teal-600 font-bold' : 'text-slate-500 font-medium'
+                  }`}
+                >
+                  <span className="flex items-center justify-center">{item.icon}</span>
+                  <span className="text-[10px] tracking-tight">{item.name}</span>
+                </Link>
           );
         })}
       </nav>

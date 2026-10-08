@@ -1,56 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../../../../store/auth/use-auth-store.js';
+import { supabase } from '../../../../lib/supabase/client.js';
 
 export default function TeacherStudentsPage() {
+  const { user } = useAuthStore();
   const [filterClass, setFilterClass] = useState('Semua');
   const [search, setSearch] = useState('');
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const students = [
-    {
-      id: 'std-1',
-      name: 'Kiko Pratama',
-      grade: 'Kelas 4A',
-      avatar: '🦊',
-      progress: 90,
-      xp: 1450,
-      badge: 'Master Balok Labirin',
-      lastActive: '10 menit lalu',
-      status: 'Sedang Aktif',
-    },
-    {
-      id: 'std-2',
-      name: 'Nadia Putri',
-      grade: 'Kelas 4A',
-      avatar: '🐱',
-      progress: 75,
-      xp: 1120,
-      badge: 'Kreator Animasi',
-      lastActive: '1 jam lalu',
-      status: 'Tuntas Bab 3',
-    },
-    {
-      id: 'std-3',
-      name: 'Rian Dewantara',
-      grade: 'Kelas 4B',
-      avatar: '🦁',
-      progress: 60,
-      xp: 880,
-      badge: 'Penjelajah Loop',
-      lastActive: 'Kemarin',
-      status: 'Butuh Bimbingan',
-    },
-    {
-      id: 'std-4',
-      name: 'Siti Zahra',
-      grade: 'Kelas 4B',
-      avatar: '🐰',
-      progress: 95,
-      xp: 1600,
-      badge: 'Programmer Cilik',
-      lastActive: '5 menit lalu',
-      status: 'Sedang Aktif',
-    },
-  ];
+  useEffect(() => {
+    async function fetchStudents() {
+      if (!user) return;
+      try {
+        const { data: classrooms } = await supabase
+          .from('classrooms')
+          .select('id, name')
+          .eq('teacher_id', user.id);
+
+        if (!classrooms || classrooms.length === 0) {
+          setStudents([]);
+          return;
+        }
+
+        const classIds = classrooms.map(c => c.id);
+
+        const { data: classroomStudents } = await supabase
+          .from('classroom_students')
+          .select('classroom_id, student_id')
+          .in('classroom_id', classIds);
+
+        if (!classroomStudents || classroomStudents.length === 0) {
+          setStudents([]);
+          return;
+        }
+
+        const studentIds = classroomStudents.map(cs => cs.student_id);
+
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('*')
+          .in('id', studentIds);
+
+        const { data: progresses } = await supabase
+          .from('student_progress')
+          .select('*')
+          .in('student_id', studentIds);
+
+        const combined = profiles.map(profile => {
+          const progress = progresses?.find(p => p.student_id === profile.id) || {};
+          const classroomRel = classroomStudents.find(cs => cs.student_id === profile.id);
+          const classroom = classrooms.find(c => c.id === classroomRel?.classroom_id);
+
+          return {
+            id: profile.id,
+            name: profile.full_name,
+            grade: classroom?.name || `Kelas ${profile.grade}`,
+            avatar: profile.avatar_url || '🧑‍🚀',
+            progress: progress.level ? progress.level * 10 : 0,
+            xp: progress.xp || 0,
+            badge: 'Siswa Aktif',
+            lastActive: progress.last_active_date || 'Baru Saja',
+            status: progress.level > 1 ? 'Sedang Aktif' : 'Butuh Bimbingan',
+          };
+        });
+
+        setStudents(combined);
+      } catch (err) {
+        console.error('Error fetching students:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchStudents();
+  }, [user]);
 
   const filtered = students.filter((s) => {
     const matchClass = filterClass === 'Semua' || s.grade.includes(filterClass);
@@ -65,7 +90,7 @@ export default function TeacherStudentsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 text-teal-900 rounded-full text-xs font-bold border border-teal-300 mb-2">
-              <span>👩‍🏫</span> Ruang Kelas Bu Maya
+              <span>👩‍🏫</span> Ruang Kelas {user?.nickname || 'Guru'}
             </div>
             <h1 className="font-heading text-3xl font-bold text-slate-900">
               Daftar Penjelajah Cilik (Siswa)
@@ -112,9 +137,12 @@ export default function TeacherStudentsPage() {
         </div>
 
         {/* Student Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filtered.map((s) => (
-            <div key={s.id} className="card-chunky bg-white p-5 rounded-2xl space-y-4">
+        {loading ? (
+          <div className="text-center py-10 font-bold text-slate-500">Memuat data siswa...</div>
+        ) : filtered.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filtered.map((s) => (
+              <div key={s.id} className="card-chunky bg-white p-5 rounded-2xl space-y-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-2xl">
@@ -176,6 +204,9 @@ export default function TeacherStudentsPage() {
             </div>
           ))}
         </div>
+        ) : (
+          <div className="text-center py-10 font-bold text-slate-500">Tidak ada siswa yang ditemukan.</div>
+        )}
       </div>
     </div>
   );
