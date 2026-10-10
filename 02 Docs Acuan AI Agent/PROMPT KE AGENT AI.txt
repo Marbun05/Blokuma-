@@ -1,0 +1,48 @@
+PROMPT KE AGENT AI
+1. @gemini-code-Perubahan sidebar, petualangan, belajar, playground, galery.md 
+
+Fokus pada Bagian 2A: Sidebar Navigasi.
+Tolong perbarui komponen Sidebar pada proyek ini:
+1. Hapus menu "Belajar".
+2. Pastikan urutan menu sidebar hanya berisi:
+   - Beranda
+   - Petualangan
+   - Playground
+   - Projects
+   - Achievements
+   - Galeri
+   - Progress
+   - Pengaturan
+
+Cari file komponen sidebar dan lakukan perubahannya secara langsung tanpa mengubah bagian/komponen lain.
+
+2. @gemini-code-Perubahan sidebar, petualangan, belajar, playground, galery.md 
+
+Fokus pada Bagian 3: Redesain Antarmuka Menu Playground.
+Tolong perbarui komponen Playground dengan aturan berikut:
+
+1. Bagian Atas (3 Kolom):
+   - Pertahankan layout 3 kolom (Ambil Balok, Kanvas Rakit, Pratinjau Kiko).
+   - Di kolom 3 (Pratinjau Kiko), tambahkan animasi melayang perlahan (floating/hovering animation) pada karakter Kiko saat posisi idle.
+
+2. Bagian Bawah (Kiko Stage):
+   - Buat komponen Kiko Stage (full-width) di bawah layout 3 kolom.
+   - Sembunyikan Kiko Stage secara default, dan munculkan (slide-in/fade-in) hanya ketika tombol "Jalankan Kreasimu!" ditekan.
+   - Di Kiko Stage, buat efek latar belakang bergerak (parallax scrolling) dari kanan ke kiri, sementara Kiko berada di sisi kiri melakukan animasi aksi.
+
+Cari file komponen Playground (dan komponen terkait) lalu lakukan perubahan kodenya secara langsung.
+
+3. @gemini-code-Perubahan sidebar, petualangan, belajar, playground, galery.md 
+
+Tolong perbaiki 2 masalah berikut pada kode saat ini:
+
+1. Hapus Halaman Perantara "Pilih Materi & Misi Belajar":
+   - Ketika tombol "Ayo Masuk Pulau" di peta petualangan diklik, LANGSUNG arahkan (routing) pengguna ke halaman Playground (`/app/playground?island=X`) sesuai ID pulau yang dipilih.
+   - Hapus komponen/tampilan "Pilih Materi & Misi Belajar" (Kurikulum Petualangan) yang muncul di tengah alur.
+
+2. Perbaiki Animasi & Visual di Komponen Kiko Stage (Bagian Bawah Playground):
+   - Tambahkan elemen latar belakang yang bergerak dari kanan ke kiri (parallax animation), seperti awan, pohon, atau elemen pulau, saat status eksekusi aktif.
+   - Tambahkan animasi gerakan pada maskot Kiko (misalnya animasi kaki melangkah `animate-bounce` / CSS keyframe melangkah atau melompat) saat tombol "Jalankan Kreasimu!" ditekan.
+   - Pastikan visual latar belakang Kiko Stage berubah sesuai parameter pulau yang sedang dimainkan.
+
+Cari file routing petualangan dan komponen KikoStage, lalu perbarui kodenya secara langsung.
