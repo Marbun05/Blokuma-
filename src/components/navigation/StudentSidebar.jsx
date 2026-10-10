@@ -5,7 +5,6 @@ import { useLearningStore } from '../../store/learning/use-learning-store.js';
 const menuItems = [
   { name: 'Beranda', href: '/app/dashboard', icon: '🏠' },
   { name: 'Petualangan', href: '/app/adventure', icon: '🗺️' },
-  { name: 'Belajar', href: '/app/learn', icon: '📚' },
   { name: 'Playground', href: '/app/playground', icon: '🧩' },
   { name: 'Projects', href: '/app/projects', icon: '🎮' },
   { name: 'Achievements', href: '/app/achievements', icon: '🏆' },
@@ -20,7 +19,6 @@ export function StudentSidebar() {
 
   const mobileNavItems = [
     { name: 'Beranda', href: '/app/dashboard', icon: '🏠' },
-    { name: 'Belajar', href: '/app/learn', icon: '📚' },
     { name: 'Playground', href: '/app/playground', icon: '🧩' },
     { name: 'Projects', href: '/app/projects', icon: '🎮' },
     { name: 'Progress', href: '/app/progress', icon: '📊' },

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Map, BookOpen, Puzzle, Gamepad2, Trophy, Image as ImageIcon, BarChart3, Settings, Bot } from 'lucide-react';
+import { Home, Map, Puzzle, Gamepad2, Trophy, Image as ImageIcon, BarChart3, Settings, Bot } from 'lucide-react';
 
 const menuItems = [
   { name: 'Beranda', href: '/app/dashboard', icon: <Home className="w-5 h-5" /> },
   { name: 'Petualangan', href: '/app/adventure', icon: <Map className="w-5 h-5" /> },
-  { name: 'Belajar', href: '/app/learn', icon: <BookOpen className="w-5 h-5" /> },
   { name: 'Playground', href: '/app/playground', icon: <Puzzle className="w-5 h-5" /> },
   { name: 'Projects', href: '/app/projects', icon: <Gamepad2 className="w-5 h-5" /> },
   { name: 'Achievements', href: '/app/achievements', icon: <Trophy className="w-5 h-5" /> },
@@ -65,7 +64,6 @@ export function StudentSidebar() {
 
   const mobileNavItems = [
     { name: 'Beranda', href: '/app/dashboard', icon: <Home className="w-5 h-5" /> },
-    { name: 'Belajar', href: '/app/learn', icon: <BookOpen className="w-5 h-5" /> },
     { name: 'Playground', href: '/app/playground', icon: <Puzzle className="w-5 h-5" /> },
     { name: 'Projects', href: '/app/projects', icon: <Gamepad2 className="w-5 h-5" /> },
     { name: 'Progress', href: '/app/progress', icon: <BarChart3 className="w-5 h-5" /> },
