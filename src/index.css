@@ -92,6 +92,12 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: scale(1) rotate(0deg); }
 }
 
+/* Animasi Parallax Scrolling Background Kiko Stage */
+@keyframes parallaxScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: -1000px 0; }
+}
+
 .animate-kiko-idle {
   animation: floatKiko 2.4s ease-in-out infinite;
 }
@@ -104,10 +110,13 @@ h1, h2, h3, h4, h5, h6 {
   animation: happyKiko 0.8s ease-in-out;
 }
 
+.animate-parallax-slide {
+  animation: parallaxScroll 12s linear infinite;
+}
+
 /* Card Playful dengan aksen garis hangat */
 .card-chunky {
   border: 2px solid #E2E8F0;
   border-bottom: 4px solid #CBD5E1;
   border-radius: 1.25rem;
 }
-

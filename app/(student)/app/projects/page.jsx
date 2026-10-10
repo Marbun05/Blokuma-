@@ -8,6 +8,16 @@ export default function ProjectsPage() {
       <StudentSidebar />
 
       <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+        {/* Tombol Kembali */}
+        <div className="mb-4">
+          <Link
+            to="/app/dashboard"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-800 bg-white hover:bg-teal-50 px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-sm transition"
+          >
+            <span>← Kembali ke Beranda</span>
+          </Link>
+        </div>
+
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
             <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-amber-300">

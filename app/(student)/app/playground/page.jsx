@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 import { KikoSmartHint } from '../../../../components/ui/KikoSmartHint.jsx';
 import { KikoStoryGeneratorModal } from '../../../../components/ui/KikoStoryGeneratorModal.jsx';
+import { KikoMissionSuccessModal } from '../../../../components/ui/KikoMissionSuccessModal.jsx';
 
 const islandThemes = [
   { name: 'Desa Urutan', sky: 'from-sky-300 via-sky-100 to-amber-100', ground: 'bg-emerald-600', landmarks: ['🏡', '🌳', '🌼', '🌳'] },
@@ -28,6 +29,7 @@ export default function StudentPlaygroundPage() {
   const [attemptCount, setAttemptCount] = useState(0);
   const [lastExecutionResult, setLastExecutionResult] = useState({ status: 'idle' });
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const availableBlocks = [
     { id: 'move', label: '➔ MAJU 1 LANGKAH', color: 'bg-teal-500 hover:bg-teal-600 text-white border-b-4 border-teal-700' },
@@ -141,6 +143,8 @@ export default function StudentPlaygroundPage() {
     setActionMessage('✨ Horay! Seluruh instruksi di Kanvas berhasil dijalankan!');
     setLastExecutionResult({ status: 'completed', stepsTaken: canvasBlocks.length });
     setIsRunning(false);
+    await sleep(500);
+    setIsSuccessModalOpen(true);
   };
 
   return (
@@ -148,6 +152,16 @@ export default function StudentPlaygroundPage() {
       <StudentSidebar />
 
       <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+        {/* Tombol Kembali */}
+        <div className="mb-4">
+          <Link
+            to="/app/adventure"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-800 bg-white hover:bg-teal-50 px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-sm transition"
+          >
+            <span>← Kembali ke Petualangan</span>
+          </Link>
+        </div>
+
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-amber-300">
@@ -386,6 +400,19 @@ export default function StudentPlaygroundPage() {
             </div>
           </section>
         )}
+
+        {/* Modal Sukses Munasib */}
+        <KikoMissionSuccessModal
+          isOpen={isSuccessModalOpen}
+          onClose={() => setIsSuccessModalOpen(false)}
+          islandNumber={islandNumber}
+          islandTitle={islandTheme.name}
+          xpEarned={100}
+          onTryAgain={() => {
+            setIsSuccessModalOpen(false);
+            handleRunCode();
+          }}
+        />
       </main>
     </div>
   );

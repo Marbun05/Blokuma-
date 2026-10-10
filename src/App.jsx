@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useAuthStore } from '../store/auth/use-auth-store.js';
 
 // Public Pages
 import LandingPage from '../app/(public)/page.jsx';
@@ -17,6 +18,7 @@ import ProjectsPage from '../app/(student)/app/projects/page.jsx';
 import NewProjectPage from '../app/(student)/app/projects/new/page.jsx';
 import ProjectDetailPage from '../app/(student)/app/projects/[id]/page.jsx';
 import GalleryPage from '../app/(student)/app/gallery/page.jsx';
+import GalleryGamePlayPage from '../app/(student)/app/gallery/play/[gameId]/page.jsx';
 import AchievementsPage from '../app/(student)/app/achievements/page.jsx';
 import ProgressPage from '../app/(student)/app/progress/page.jsx';
 import SettingsPage from '../app/(student)/app/settings/page.jsx';
@@ -41,6 +43,13 @@ import TeacherSettingsPage from '../app/(teacher)/teacher/settings/page.jsx';
 import AdminDashboardPage from '../app/(admin)/admin/page.jsx';
 
 export default function App() {
+  const { initAuthSession } = useAuthStore();
+
+  useEffect(() => {
+    // Inisialisasi sesi auth saat halaman di-refresh agar tetap berada di halaman yang sama
+    initAuthSession();
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
@@ -59,6 +68,7 @@ export default function App() {
       <Route path="/app/projects/new" element={<NewProjectPage />} />
       <Route path="/app/projects/:id" element={<ProjectDetailPage />} />
       <Route path="/app/gallery" element={<GalleryPage />} />
+      <Route path="/app/gallery/play/:gameId" element={<GalleryGamePlayPage />} />
       <Route path="/app/achievements" element={<AchievementsPage />} />
       <Route path="/app/progress" element={<ProgressPage />} />
       <Route path="/app/settings" element={<SettingsPage />} />

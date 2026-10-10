@@ -15,11 +15,11 @@ SECTION 1: JURNAL PROMPT STRATEGIS (5 CATEGORY BENCHMARK)
 
 2. Debugging:
    Prompt:
-   "Lakukan investigasi dan perbaikan pada panggung koding Playground: Maskot Kiko tidak merender aset gambar dari /images/robot.webp dan animasi CSS-nya tidak berjalan. Analisis konflik antara inline style transform translateX dengan CSS Keyframe Animation, serta perbaiki kesalahan case-sensitivity path gambar di dev server Vite."
+   "Perbarui navigasi aplikasi agar saat browser di-refresh di halaman mana pun, pengguna tetap berada di halaman aktif tersebut tanpa terlempar atau kembali ke halaman lain. Serta tambahkan tombol '← Kembali' di setiap halaman agar pengguna mudah berpindah."
 
 3. Audit & Optimasi:
    Prompt:
-   "Lakukan otomatisasi pipeline deployment Supabase Edge Function kiko-story-generator langsung dari terminal CLI. Konfigurasikan project-ref sjmnjoiqrtgxhknbnjyd, suntikkan secret environment AI_STORY_MODEL=openai/gpt-oss-120b, serta jalankan verifikasi HTTP 200 OK endpoint secara teruji."
+   "Lakukan optimasi pada StudentSidebar: hapus menu Pengaturan dari daftar utama sidebar, lalu pindahkan menu Pengaturan Profil dan tombol Keluar (Logout) ke dalam Popover Card Profil Siswa yang dapat di-klik di bagian bawah sidebar."
 
 4. Finishing:
    Prompt:
@@ -46,7 +46,7 @@ SECTION 2: LOG MENTAH REKAPITULASI COMMIT & ARSITEKTUR KODE
 - Added `components/ui/KikoStoryGeneratorModal.jsx`: Pop-up modal storybook interaktif dengan Web Speech API (`id-ID`) untuk mendengarkan dongeng Kiko secara audio.
 - Updated `app/(student)/app/playground/page.jsx`: Menambahkan tombol `📖 Ubah Kode Jadi Dongeng!` pada header Playground.
 
-[COMMIT 3] Serverless CLI Deployment & Environment Secret Injection
-- Executed `npx supabase functions deploy kiko-story-generator --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt` via Supabase Personal Access Token.
-- Executed `npx supabase secrets set AI_STORY_MODEL="openai/gpt-oss-120b"`.
-- Performed end-to-end verification via cURL test, menghasilkan status `HTTP 200 OK` dan struktur payload Storyfication valid.
+[COMMIT 3] Enhancements: Route Persistence, Back Buttons & Profile Card Popover Menu
+- Updated `store/auth/use-auth-store.js` & `src/App.jsx`: Menambahkan `initAuthSession()` dengan LocalStorage & Supabase Auth session listener sehingga saat halaman di-refresh di rute mana pun, aplikasi tidak terlempar ke halaman lain.
+- Updated `components/navigation/StudentSidebar.jsx`: Menghapus menu Pengaturan dari daftar utama, serta menambahkan Popover Menu saat Card Profil di-klik (menampilkan ⚙️ Pengaturan Profil & 🚪 Keluar / Logout).
+- Standardized Back Buttons: Menambahkan tombol `← Kembali` di setiap halaman (Playground, Adventure, Projects, Achievements, Gallery, Progress, Settings, Teacher, Parent) untuk navigasi cepat.

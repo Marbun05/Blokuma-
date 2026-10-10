@@ -33,6 +33,11 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: scale(1) rotate(0deg); }
 }
 
+@keyframes parallaxScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: -1000px 0; }
+}
+
 .animate-kiko-idle {
   animation: floatKiko 2.4s ease-in-out infinite;
 }
@@ -45,123 +50,6 @@ h1, h2, h3, h4, h5, h6 {
   animation: happyKiko 0.8s ease-in-out;
 }
 
-@keyframes kikoStageScroll {
-  from { background-position-x: 0; }
-  to { background-position-x: -320px; }
-}
-
-@keyframes kikoStageLandmarkScroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-@keyframes kikoStageJump {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  45% { transform: translateY(-72px) rotate(-8deg); }
-  70% { transform: translateY(-64px) rotate(8deg); }
-}
-
-@keyframes kikoStageEnter {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.kiko-stage-clouds {
-  background-image:
-    radial-gradient(ellipse at 40px 50px, rgb(255 255 255 / 80%) 0 28px, transparent 29px),
-    radial-gradient(ellipse at 70px 48px, rgb(255 255 255 / 80%) 0 22px, transparent 23px),
-    radial-gradient(ellipse at 100px 52px, rgb(255 255 255 / 80%) 0 26px, transparent 27px);
-  background-repeat: repeat-x;
-  background-size: 320px 120px;
-}
-
-.kiko-stage-hills {
-  background-image:
-    radial-gradient(ellipse at 100px 100%, rgb(110 196 132 / 75%) 0 100px, transparent 101px),
-    radial-gradient(ellipse at 260px 105%, rgb(82 177 112 / 80%) 0 125px, transparent 126px),
-    radial-gradient(ellipse at 390px 100%, rgb(142 210 139 / 80%) 0 95px, transparent 96px);
-  background-repeat: repeat-x;
-  background-size: 480px 220px;
-}
-
-.kiko-stage-ground {
-  background-color: #34a86f;
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0 36px,
-    rgb(255 255 255 / 18%) 36px 58px,
-    transparent 58px 88px
-  );
-  background-size: 176px 100%;
-}
-
-.kiko-stage-parallax-active .kiko-stage-clouds {
-  animation: kikoStageScroll 18s linear infinite;
-}
-
-.kiko-stage-parallax-active .kiko-stage-hills {
-  animation: kikoStageScroll 10s linear infinite;
-}
-
-.kiko-stage-parallax-active .kiko-stage-ground {
-  animation: kikoStageScroll 3s linear infinite;
-}
-
-.kiko-stage-landmarks {
-  position: absolute;
-  inset: 0;
-  right: auto;
-  z-index: 1;
-  width: 200%;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.kiko-stage-landmarks.kiko-stage-parallax-active {
-  animation: kikoStageLandmarkScroll 16s linear infinite;
-}
-
-.kiko-stage-landmark-segment {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 50%;
-}
-
-.kiko-stage-landmark-segment + .kiko-stage-landmark-segment {
-  left: 50%;
-}
-
-.kiko-stage-landmark {
-  position: absolute;
-  bottom: 3.25rem;
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  line-height: 1;
-  filter: drop-shadow(0 4px 3px rgb(15 23 42 / 18%));
-}
-
-[data-island="5"] .kiko-stage-landmark,
-[data-island="6"] .kiko-stage-landmark {
-  bottom: auto;
-  top: 38%;
-  font-size: clamp(1.75rem, 4vw, 3rem);
-}
-
-.animate-kiko-stage-jump {
-  animation: kikoStageJump 0.7s ease-in-out;
-}
-
-.kiko-stage-enter {
-  animation: kikoStageEnter 0.55s ease-out both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .kiko-stage-parallax-active .kiko-stage-clouds,
-  .kiko-stage-parallax-active .kiko-stage-hills,
-  .kiko-stage-parallax-active .kiko-stage-ground,
-  .kiko-stage-landmarks.kiko-stage-parallax-active,
-  .animate-kiko-stage-jump,
-  .kiko-stage-enter {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-  }
+.animate-parallax-slide {
+  animation: parallaxScroll 12s linear infinite;
 }

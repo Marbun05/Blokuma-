@@ -6,23 +6,24 @@
 
 ## 2. TECH STACK & SYSTEM ARCHITECTURE
 - Frontend Core: React 19 Engine, Vite 6 Build System, Tailwind CSS v3 Utility Framework, React Router DOM v7 Routing Pipeline.
-- State Management: Zustand Reactive State Stores (`src/store/`).
+- State Management: Zustand Reactive State Stores (`src/store/use-auth-store.js`) dengan LocalStorage Route Persistence.
 - Database & Serverless Backend: Supabase Infrastructure (PostgreSQL, Row Level Security, Supabase Auth, Distributed Edge Runtime Deno/TypeScript).
 - AI Cognitive Engine Suite:
   - **Kiko Smart Hint Engine:** Supabase Edge Function `kiko-smart-hint` (Model `qwen/qwen3.8-27b`) untuk Socratic Guidance tanpa spoiler.
   - **Kiko Story Generator Engine:** Supabase Edge Function `kiko-story-generator` (Model `openai/gpt-oss-120b`) untuk Storyfication (menyulap balok koding anak SD 1-4 menjadi dongeng petualangan imajinatif).
 - Directory Hierarchy:
   - `app/` -> App Router & Multi-Role Page Views (`(student)`, `(public)`, `(parent)`, `(teacher)`).
-  - `components/ui/` -> Atomic Design System & Interactive Mascots (`KikoSmartHint.jsx`, `KikoStoryGeneratorModal.jsx`, `AnimatedLoginHero.jsx`, `AnimatedRegisterHero.jsx`).
+  - `components/ui/` -> Atomic Design System & Interactive Mascots (`KikoSmartHint.jsx`, `KikoStoryGeneratorModal.jsx`, `KikoMissionSuccessModal.jsx`).
+  - `components/navigation/` -> Navigasi Sidebar (`StudentSidebar.jsx`).
   - `lib/blockEngine/` -> AST (Abstract Syntax Tree) Static Code Analysis Engine (`astAnalyzer.js`).
-  - `lib/supabase/` -> Supabase Client Initializer (`client.js`), Smart Hint Wrapper (`kikoSmartHint.js`), & Story Generator Wrapper (`kikoStoryGenerator.js`).
+  - `lib/supabase/` -> Supabase Client (`client.js`), Curriculum Manager (`curriculum.js`), Smart Hint (`kikoSmartHint.js`), & Story Generator (`kikoStoryGenerator.js`).
   - `supabase/functions/` -> Serverless Edge Runtime Workers (`kiko-smart-hint/index.ts`, `kiko-story-generator/index.ts`).
 
 ## 3. CODING STANDARDS & DESIGN PATTERNS
 - Functional Architecture: React 19 Declarative Functional Components dengan Immutable Hooks Pattern.
-- Code Style Standard: Terapkan ES-Next `export default function ComponentName()` atau `const ArrowFunction = () => {}`.
-- Storyfication Pedagogy UX: Terapkan Child-First Empathetic Copywriting. Balasan AI Storyfication merubah konsep matematis (loop, jump, move) menjadi mantra ajaib dan petualangan pahlawan untuk merangsang kreativitas siswa SD 1-4.
-- Documentation & Comments: Berikan komentar teknis HANYA pada algoritma kompleks (AST Traversal, Edge Worker CORS Intercept, dan Fault-Tolerant Engine).
+- Page Persistence & Refresh Safety: Inisialisasi auth session via `initAuthSession()` pada root app mount (`src/App.jsx`) agar saat browser di-refresh, pengguna tetap berada di halaman aktif tanpa terlempar.
+- Back Button Standard: Setiap halaman wajib menyediakan tombol navigasi kembali ("← Kembali") yang eksplisit untuk pengalaman pengguna yang intuitif.
+- Sidebar Profile Menu Pattern: Menu Pengaturan diisolasi di dalam Popover Card Profil Siswa di bagian bawah sidebar, yang juga menyediakan aksi Keluar (Logout) langsung.
 
 ## 4. STRICT ANTI-PATTERNS (DON'TS)
 - STRICT PROHIBITION: Dilarang keras menampilkan error log kaku (seperti "SyntaxError line 4") pada antarmuka anak; wajib dialihkan ke Socratic AI Guidance dan Storyfication.

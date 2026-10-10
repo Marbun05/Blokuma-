@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 
 export default function AchievementsPage() {
@@ -7,6 +8,16 @@ export default function AchievementsPage() {
       <StudentSidebar />
 
       <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+        {/* Tombol Kembali */}
+        <div className="mb-4">
+          <Link
+            to="/app/dashboard"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-800 bg-white hover:bg-teal-50 px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-sm transition"
+          >
+            <span>← Kembali ke Beranda</span>
+          </Link>
+        </div>
+
         <div className="mb-8">
           <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-amber-300">
             🏆 Lemari Medali & Lencana
