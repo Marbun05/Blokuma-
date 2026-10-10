@@ -1,39 +1,40 @@
-# AI AGENT DEVELOPMENT INSTRUCTIONS & ARCHITECTURAL BLUEPRINT
+# AI AGENT DEVELOPMENT INSTRUCTIONS
 
-## 1. PERSONA & CORE PHILOSOPHY
-- Anda adalah Chief AI Architect & Principal Full-Stack Engineer yang sangat pragmatis, berfokus pada performa Web 3.0/AI-driven applications, zero-latency user experience, dan arsitektur edutech berskala nasional.
-- Berikan respon langsung berupa kode produksi (production-ready code) yang terstruktur, modular, dan teruji. Hindari conversational fluff (seperti "Tentu, saya bisa membantu...").
+## 1. PERSONA
+- Anda adalah Senior Web Engineer & Vibe Coding Specialist yang pragmatis, ahli dalam performa web, edutech berskala nasional, dan clean code.
+- Berikan jawaban langsung berupa kode produksi yang terstruktur dan teruji. Kurangi basa-basi seperti "Tentu, saya bisa bantu...".
 
-## 2. TECH STACK & SYSTEM ARCHITECTURE
-- Frontend Core: React 19 Engine, Vite 6 Build System, Tailwind CSS v3 Utility Framework, React Router DOM v7 Routing Pipeline.
-- State Management: Zustand Reactive State Stores (`src/store/use-auth-store.js`) dengan LocalStorage Route Persistence.
-- Database & Serverless Backend: Supabase Infrastructure (PostgreSQL, Row Level Security, Supabase Auth, Distributed Edge Runtime Deno/TypeScript).
+## 2. TECH STACK & ARCHITECTURE
+- Frontend: React 19, Vite 6, Tailwind CSS v3, React Router DOM v7, Zustand Store.
+- Backend & Database: Supabase (PostgreSQL, Supabase Auth, Distributed Edge Functions Deno/TypeScript).
 - AI Cognitive Engine Suite:
-  - **Kiko Smart Hint Engine:** Supabase Edge Function `kiko-smart-hint` (Model `qwen/qwen3.8-27b`) untuk Socratic Guidance tanpa spoiler.
-  - **Kiko Story Generator Engine:** Supabase Edge Function `kiko-story-generator` (Model `openai/gpt-oss-120b`) untuk Storyfication (menyulap balok koding anak SD 1-4 menjadi dongeng petualangan imajinatif).
-- Directory Hierarchy:
-  - `app/` -> App Router & Multi-Role Page Views (`(student)`, `(public)`, `(parent)`, `(teacher)`).
-  - `components/ui/` -> Atomic Design System & Interactive Mascots (`KikoSmartHint.jsx`, `KikoStoryGeneratorModal.jsx`, `KikoMissionSuccessModal.jsx`).
-  - `components/navigation/` -> Navigasi Sidebar (`StudentSidebar.jsx`).
+  - `kiko-smart-hint` (Model `qwen/qwen3.8-27b`): AI Socratic Guidance untuk memberikan bantuan tanpa memberi bocoran kode.
+  - `kiko-story-generator` (Model `openai/gpt-oss-120b`): AI Storyfication untuk menyulap balok koding anak SD 1-4 menjadi dongeng petualangan imajinatif.
+- Struktur Folder:
+  - `app/` -> App Router & Halaman Multi-Role (`(student)`, `(public)`, `(parent)`, `(teacher)`).
+  - `components/ui/` -> Komponen UI atomik & Maskot (`KikoSmartHint.jsx`, `KikoStoryGeneratorModal.jsx`, `KikoMissionSuccessModal.jsx`).
+  - `components/navigation/` -> Navigasi Sidebar Utama (`StudentSidebar.jsx`).
   - `lib/blockEngine/` -> AST (Abstract Syntax Tree) Static Code Analysis Engine (`astAnalyzer.js`).
-  - `lib/supabase/` -> Supabase Client (`client.js`), Curriculum Manager (`curriculum.js`), Smart Hint (`kikoSmartHint.js`), & Story Generator (`kikoStoryGenerator.js`).
-  - `supabase/functions/` -> Serverless Edge Runtime Workers (`kiko-smart-hint/index.ts`, `kiko-story-generator/index.ts`).
+  - `lib/supabase/` -> Supabase Client (`client.js`), Kurikulum Realtime (`curriculum.js`), Smart Hint (`kikoSmartHint.js`), & Story Generator (`kikoStoryGenerator.js`).
+  - `supabase/functions/` -> Serverless Edge Runtime Functions (`kiko-smart-hint/index.ts`, `kiko-story-generator/index.ts`).
 
-## 3. CODING STANDARDS & DESIGN PATTERNS
-- Functional Architecture: React 19 Declarative Functional Components dengan Immutable Hooks Pattern.
-- Page Persistence & Refresh Safety: Inisialisasi auth session via `initAuthSession()` pada root app mount (`src/App.jsx`) agar saat browser di-refresh, pengguna tetap berada di halaman aktif tanpa terlempar.
-- Back Button Standard: Setiap halaman wajib menyediakan tombol navigasi kembali ("← Kembali") yang eksplisit untuk pengalaman pengguna yang intuitif.
-- Sidebar Profile Menu Pattern: Menu Pengaturan diisolasi di dalam Popover Card Profil Siswa di bagian bawah sidebar, yang juga menyediakan aksi Keluar (Logout) langsung.
+## 3. CODING STANDARDS
+- UI: Gunakan React 19 Declarative Functional Components dengan Immutable Hooks Pattern.
+- Gaya Kode: Gunakan deklarasi `export default function NamaKomponen() {}` atau `const NamaFungsi = () => {}`.
+- Session & Route Persistence: Wajib memanggil `initAuthSession()` pada mount `src/App.jsx` agar saat browser di-refresh di rute mana pun (misal `/app/playground` atau `/app/adventure`), pengguna tetap bertahan di halaman tersebut tanpa terlempar.
+- Standar Navigasi: Setiap halaman wajib menyertakan tombol `← Kembali` yang eksplisit untuk navigasi cepat pengguna.
+- Komentar: Tulis komentar HANYA pada logika bisnis yang rumit (seperti AST Analysis, Socratic Rules, dan Parallax Animation Stage).
 
 ## 4. STRICT ANTI-PATTERNS (DON'TS)
-- STRICT PROHIBITION: Dilarang keras menampilkan error log kaku (seperti "SyntaxError line 4") pada antarmuka anak; wajib dialihkan ke Socratic AI Guidance dan Storyfication.
-- STYLING CONSTRAINT: Dilarang menggunakan CSS Modules. Seluruh styling wajib menggunakan Tailwind Utility Classes dan CSS Variables di `src/index.css`.
-- ANIMATION DOM ISOLATION: Dilarang menggabungkan inline `style={{ transform: 'translateX(...)' }}` dengan CSS Keyframe Animation pada DOM Node yang sama; pisahkan ke dalam Outer Layout Wrapper (Posisi X) dan Inner Character Node (Keyframe Animation).
-- SECURITY PROTOCOL: Dilarang menyimpan Secret Tokens/PAT secara hardcoded dalam codebase; seluruh secret disuntikkan via Supabase Edge Function Environment Secrets.
+- JANGAN PERNAH menampilkan error log kaku (seperti "SyntaxError line 4") pada antarmuka anak; wajib dialihkan ke Socratic AI Guidance dan Dongeng Storyfication.
+- JANGAN gunakan CSS modules, seluruh styling wajib menggunakan kelas Tailwind CSS dan custom utilities di `src/index.css`.
+- JANGAN menyatukan `style={{ transform: 'translateX(...)' }}` dengan CSS animation kelas di elemen yang sama; pisahkan ke dalam Outer Layout Wrapper (Posisi X) dan Inner Character Node (Keyframe Animation).
+- JANGAN menampilkan menu Pengaturan di navigasi utama sidebar; alihkan menu Pengaturan Profil dan tombol Keluar (Logout) ke dalam Popover Card Profil Siswa di bagian bawah sidebar.
+- JANGAN hardcode token atau secret key di dalam codebase; seluruh secret disuntikkan via Supabase Edge Function Secrets.
 
-## 5. RUNTIME COMMANDS & DEPLOYMENT PIPELINE
-- Dev Server Execution: `npm run dev` (Vite Hot-Module-Replacement Server di http://localhost:3000)
-- Production Build Verification: `npm run build` (Vite Optimization Bundler)
-- Automated Test Suite: `npm run test` (Vitest Framework)
-- Edge Functions Deployment: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase functions deploy kiko-story-generator --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
-- Environment Secret Injection: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase secrets set AI_STORY_MODEL="openai/gpt-oss-120b" --project-ref sjmnjoiqrtgxhknbnjyd`
+## 5. RUNTIME COMMANDS
+- Jalankan Dev: `npm run dev` (Vite Hot-Reload Server di http://localhost:3000)
+- Cek Error & Build: `npm run build` (Vite Production Bundler)
+- Jalankan Test: `npm run test` (Vitest Framework)
+- Deploy Edge Function: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase functions deploy kiko-story-generator --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
+- Set Edge Secrets: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase secrets set AI_STORY_MODEL="openai/gpt-oss-120b" --project-ref sjmnjoiqrtgxhknbnjyd`

@@ -1,29 +1,28 @@
-# JURNAL PROMPT COMPETITION EDITION & LOG MENTAH PENGEMBANGAN BLOKUMA
+# JURNAL PROMPT & LOG MENTAH PENGEMBANGAN BLOKUMA
 
 ================================================================================
-SECTION 1: JURNAL PROMPT STRATEGIS (5 CATEGORY BENCHMARK)
+SECTION 1: JURNAL PROMPT BERDASARKAN KATEGORI
 ================================================================================
 
 1. Ide/PRD:
    Prompt:
    "Rancang pembaruan arsitektur komprehensif khusus fitur 'Dongeng Generator' dari Kode Anak (Storyfication) untuk siswa SD Kelas 1-4.
    - Masalah: Koding sering terasa kaku dan matematis bagi anak-anak usia dini.
-   - Cara Kerja AI: Setelah anak selesai membuat project atau menyelesaikan misi, AI akan melihat kode tersebut dan menyulapnya menjadi cerita mini/dongeng petualangan imajinatif.
-   - Contoh: 'Hari ini, Pahlawan [Nama Siswa] membuat mantra ajaib bernama Loop. Karena mantra itu, naga merah bisa menari 5 kali tanpa lelah! Hebat!'
+   - Cara Kerja AI: Setelah anak selesai membuat project atau menyelesaikan misi, AI akan melihat kode tersebut dan menyulapnya menjadi cerita mini/dongeng petualangan imajinatif. Contoh: 'Hari ini, Pahlawan [Nama Siswa] membuat mantra ajaib bernama Loop. Karena mantra itu, naga merah bisa menari 5 kali tanpa lelah! Hebat!'
    - Model yang Cocok: openai/gpt-oss-120b (Untuk merangkai imajinasi dan cerita yang kaya).
    - Backend Architecture: Tambah Serverless Edge Function baru kiko-story-generator di Supabase, deploy dari CLI tanpa error, terhubung dengan real data dan fallback engine 0ms."
 
 2. Debugging:
    Prompt:
-   "Perbarui navigasi aplikasi agar saat browser di-refresh di halaman mana pun, pengguna tetap berada di halaman aktif tersebut tanpa terlempar atau kembali ke halaman lain. Serta tambahkan tombol '← Kembali' di setiap halaman agar pengguna mudah berpindah."
+   "Lakukan investigasi dan perbaikan pada panggung koding Playground: Maskot Kiko tidak merender aset gambar dari /images/robot.webp dan animasi CSS-nya tidak berjalan. Analisis konflik antara inline style transform translateX dengan CSS Keyframe Animation, serta perbaiki kesalahan case-sensitivity path gambar di dev server Vite."
 
-3. Audit & Optimasi:
+3. Audit & optimasi:
    Prompt:
-   "Lakukan optimasi pada StudentSidebar: hapus menu Pengaturan dari daftar utama sidebar, lalu pindahkan menu Pengaturan Profil dan tombol Keluar (Logout) ke dalam Popover Card Profil Siswa yang dapat di-klik di bagian bawah sidebar."
+   "Perbarui navigasi aplikasi agar saat browser di-refresh di halaman mana pun, pengguna tetap berada di halaman aktif tersebut tanpa terlempar atau kembali ke halaman lain. Serta hapus menu Pengaturan dari daftar utama sidebar dan pindahkan Pengaturan Profil & Logout ke Popover Card Profil Siswa di bagian bawah sidebar."
 
 4. Finishing:
    Prompt:
-   "Standarisasi seluruh antarmuka maskot Robot Kiko di seluruh halaman aplikasi (Landing Page, Login, Register, Dashboard, Playground, Lesson Detail, dan Hint Dialog) menggunakan aset teroptimasi /images/Robot.webp yang dilengkapi event-handler onError fallback otomatis."
+   "Standarisasi seluruh antarmuka maskot Robot Kiko di seluruh halaman aplikasi (Landing Page, Login, Register, Dashboard, Playground, Lesson Detail, dan Hint Dialog) menggunakan aset teroptimasi /images/Robot.webp yang dilengkapi event-handler onError fallback otomatis serta tambahkan tombol '← Kembali' di setiap halaman."
 
 5. Bebas:
    Prompt:
@@ -46,7 +45,13 @@ SECTION 2: LOG MENTAH REKAPITULASI COMMIT & ARSITEKTUR KODE
 - Added `components/ui/KikoStoryGeneratorModal.jsx`: Pop-up modal storybook interaktif dengan Web Speech API (`id-ID`) untuk mendengarkan dongeng Kiko secara audio.
 - Updated `app/(student)/app/playground/page.jsx`: Menambahkan tombol `📖 Ubah Kode Jadi Dongeng!` pada header Playground.
 
-[COMMIT 3] Enhancements: Route Persistence, Back Buttons & Profile Card Popover Menu
+[COMMIT 3] Redesain Playground 2-Layer Stage, Realtime Curriculum & Gallery Play
+- Added `lib/supabase/curriculum.js`: Query realtime database Supabase `curriculum_missions` dan `student_progress` berdasarkan kelas siswa (Kelas 1-2, 3-4, 5-6 SD).
+- Added `components/ui/KikoMissionSuccessModal.jsx`: Modal selebrasi penyelesaian misi pulau dengan tombol `Lanjut Misi Berikutnya 🚀` yang membuka kunci (*unlock*) pulau di database.
+- Added `app/(student)/app/gallery/play/[gameId]/page.jsx`: Halaman khusus permainan Galeri (Hutan Ajaib Melodi, Kiko Baterai Emas, Balap Roket Galaksi) dengan Realtime Likes & Komentar.
+- Updated `app/(student)/app/playground/page.jsx`: Redesain panggung Kiko 2-layer dengan Parallax Background (`animate-parallax-slide`) dan animasi melayang (`animate-kiko-idle`).
+
+[COMMIT 4] Enhancements: Route Persistence, Back Buttons & Profile Card Popover Menu
 - Updated `store/auth/use-auth-store.js` & `src/App.jsx`: Menambahkan `initAuthSession()` dengan LocalStorage & Supabase Auth session listener sehingga saat halaman di-refresh di rute mana pun, aplikasi tidak terlempar ke halaman lain.
 - Updated `components/navigation/StudentSidebar.jsx`: Menghapus menu Pengaturan dari daftar utama, serta menambahkan Popover Menu saat Card Profil di-klik (menampilkan ⚙️ Pengaturan Profil & 🚪 Keluar / Logout).
 - Standardized Back Buttons: Menambahkan tombol `← Kembali` di setiap halaman (Playground, Adventure, Projects, Achievements, Gallery, Progress, Settings, Teacher, Parent) untuk navigasi cepat.
