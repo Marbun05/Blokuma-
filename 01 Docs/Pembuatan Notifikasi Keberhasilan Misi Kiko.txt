@@ -1,0 +1,735 @@
+﻿Pembuatan Notifikasi Keberhasilan Misi Kiko
+https://gemini.google.com/app/c3b940cbff292389
+
+
+User prompt: saat masuk di menu petualangan, dan memilih masuk ke pulau 1:desa urutan,tampilan menu belajar malah muncul. saya belum menemukan konsep materi kurikulum pembelajaran yang tepat untuk anak SD saat ini. Saat ini saya memiliki ide untuk menghapus menu Belajar, lalu mempertahankan menu yang lain di sidebar. Khusus pada menu petualangan, hanya terdapat 6 pulau petualangan kode, ini yang akan menggantikan tujuan dari menu belajar yang sudah dihapus. Lalu di dalam menu petualangan tersebut, pengguna bisa masuk pulau 1 sampai 6 namun harus menyelesaikan misi pulau sebelumnya agar misi selanjutnya yang terkunci bisa terbuka. berikut konsep permainan di dalam menu petualangan, misalnya pada pulau pertama: desa urutan. Langkah pertama kiko adalah pelajari urutan intruksi dasar agar robot bisa berjalan lurus. saat pemain menekan tombol ayo masuk pulau, maka tampilan menu playgorund terbuka. pemain diarahkan untuk menekan blok maju 1 langkah, lalu saat pemain menekan tombol jalankan kreasimu, maka latar belakang di panggung kiko bergerak seolah kiko sedang bergerak maju padahal gambar maskot diam di tempat. lalu saat masuk misi pulau 2: bantu kiko melewati rintangan pohon lebat menggunakan kekuatan balok loop 3 kali, maka latar belakang kiko ada gambar pohon, dan kiko harus melompati pohon tersebut dengan bantuan loop 3 kali melompat. sehingga misinya selesai.
+Response: Ide perampingan menu dan alur petualangan ini sudah sangat tepat dan jauh lebih fokus untuk anak SD. Menghapus menu Belajar dan mengalihkannya sepenuhnya ke 6 Pulau Petualangan membuat struktur aplikasi lebih bersih, tidak membingungkan, dan gamifikasi belajarnya terasa nyata.
+Langkah-langkah untuk merombak navigasi dan menerapkannya pada kode saat ini:
+1. Perbarui Sidebar (Hapus Menu Belajar)
+Buka file tata letak sidebar (misalnya Sidebar.jsx atau Navbar.jsx), lalu hapus tautan ke menu Belajar agar navigasi tinggal menyisakan Beranda, Petualangan, Playground, Projects, Achievements, Galeri, Progress, dan Pengaturan.
+2. Arahkan Tombol Pulau ke Playground Spesifik
+Di halaman Peta Petualangan (/app/adventure), ubah tautan pada tombol "Ayo Masuk Pulau!" agar mengarah langsung ke halaman Playground dengan membawa parameter pulau atau levelnya. Contoh:
+// Mengarahkan ke playground sesuai pulau yang dipilih
+router.push(`/app/playground?island=${islandId}`);
+
+3. Logika Latar Belakang & Gerak Sesuai Konsep Pulau
+Di halaman Playground (Playground.jsx), tangkap parameter pulau tersebut untuk mengatur latar belakang dan kondisi misi:
+* Pulau 1 (Desa Urutan):
+   * Latar belakang panggung berupa jalur lurus desa.
+   * Karakter Kiko diam di tempat, sementara elemen latar belakang digeser (parallax scrolling / animasi CSS) saat tombol "Jalankan Kreasimu!" ditekan menggunakan balok Maju 1 Langkah.
+* Pulau 2 (Hutan Perulangan):
+   * Latar belakang panggung berganti menjadi hutan dengan rintangan pohon.
+   * Validasi kode memastikan pemain menyusun balok Loop (3 Kali) untuk instruksi melompat, sehingga animasi lompat dan latar belakang berjalan selaras.
+Dengan sistem penguncian pulau (locked/unlocked) yang sudah terlihat di antarmuka, pemain wajib menuntaskan tantangan secara berurutan sebelum bisa membuka pulau berikutnya.
+________________
+
+
+User prompt: saya ingin pada menu playground itu tampil seperti game dinosaurus yang ada pada browser chrome ini. Ketika pengguna menekan tombol jalankan kreasimu, maka tampilan panggung kiko akan berubah seperti permainan dinosaurus tersebut, namun bedanya maskot robot kiko bergerak sesuai perintah yang diberikan pengguna melalui balok perintah. karena ada 6 petualangan kode, maka ada 6 tampilan latar belakang yang disesuaikan dengan misi setiap pulau. misalnya pada pulau 1, maka cukup latar belakang yang bergerak, ada awan yang bergerak juga, dan kaki kiko seperti berjalan namun posisi maskot tetap berada di tempatnya hanya latar belakang yang bergerak. lalu pada pulau 2, pengguna harus memasukkan blok melompat dan loop 3 kali, maka saat pengguna jalankan kreasi, latar belakangnya ada pohon, maskotnya melompati pohon tersebut lalu melakukannya 3 kali kali. begitu juga dengan pulau 3 sampai 6
+Response: Konsep ala game dinosaurus Chrome ini ide yang brilian dan sangat cocok untuk anak SD! Tampilan visual yang bersih (gaya retro dua dimensi), latar belakang yang bergerak (parallax), dan aksi maskot Kiko yang merespons balok perintah akan membuat belajar logika coding terasa seperti bermain game arcade sungguhan.
+Berikut adalah rancangan implementasi untuk 6 latar belakang pulau di halaman Playground:
+1. Desain Panggung Retro ala Game Dinosaurus
+* Gaya Visual: Latar belakang menggunakan skema warna kontras (misal: nuansa monokrom atau warna bumi yang cerah ramah anak), dengan garis tanah mendatar di bagian bawah tempat Kiko berpijak.
+* Elemen Bergerak (Background & Awan): Saat tombol "Jalankan Kreasimu!" ditekan, elemen latar belakang (seperti awan, bukit, atau lanskap pulau) bergerak dari kanan ke kiri secara konstan, menciptakan ilusi bahwa Kiko sedang berlari maju meskipun posisi maskot tetap berada di sisi kiri layar.
+* Animasi Kaki Kiko: Kaki robot Kiko berganti frame dengan cepat seolah-olah sedang melangkah atau berlari di tempat.
+2. Variasi 6 Latar Belakang dan Misi per Pulau
+Setiap pulau akan memuat rintangan dan latar belakang unik yang disesuaikan dengan materi pembelajarannya:
+* Pulau 1: Desa Urutan
+   * Latar Belakang: Jalur jalan desa yang datar dengan latar rumah-rumah kecil dan awan yang perlahan lewat.
+   * Misi / Perintah: Pemain menyusun balok Maju 1 Langkah.
+   * Aksi Kiko: Kiko berjalan di tempat dengan latar desa yang bergeser ke kiri hingga durasi perintah selesai.
+* Pulau 2: Hutan Perulangan
+   * Latar Belakang: Suasana hutan lebat dengan pepohonan hijau di sepanjang jalur lari.
+   * Misi / Perintah: Pemain menyusun balok Loop 3 Kali dipadu dengan balok Melompat.
+   * Aksi Kiko: Saat rintangan pohon mendekat, Kiko melompat ke udara sebanyak 3 kali secara berurutan sesuai jumlah perulangan (loop).
+* Pulau 3: Gunung Kondisi
+   * Latar Belakang: Jalur pendakian berbatu dengan latar pegunungan terjal.
+   * Misi / Perintah: Menggunakan logika If / Else (Jika ada batu karang besar, maka melompat; jika jalur kosong, maka terus berjalan).
+   * Aksi Kiko: Kiko membaca kondisi di depannya, lalu otomatis melompati batu tajam dan berlari kembali di jalan biasa.
+* Pulau 4: Kota Variabel
+   * Latar Belakang: Lanskap perkotaan modern dengan deretan koin emas melayang di udara.
+   * Misi / Perintah: Menggunakan variabel penghitung skor untuk menangkap koin.
+   * Aksi Kiko: Kiko melompat untuk mengumpulkan koin emas, dan angka skor di pojok kanan atas layar bertambah secara real-time.
+* Pulau 5: Arena Game Seru
+   * Latar Belakang: Arena sirkuit arcade dengan berbagai rintangan acak yang lebih dinamis.
+   * Misi / Perintah: Menggabungkan kontrol logika interaktif tombol panah.
+   * Aksi Kiko: Pemain mengontrol pergerakan Kiko secara langsung untuk menghindari rintangan yang datang silih berganti.
+* Pulau 6: Laboratorium Algoritma
+   * Latar Belakang: Lab futuristik bernuansa sirkuit digital dan laser pengaman.
+   * Misi / Perintah: Menyusun algoritma kompleks untuk melewati labirin akhir.
+   * Aksi Kiko: Kiko menembus sistem keamanan laboratorium dengan kombinasi gerakan melompat, merunduk, dan melaju cepat.
+Contoh Struktur Kode Panggung (DinoStage.jsx)
+Komponen panggung ini bisa diatur berdasarkan ID pulau yang dikirimkan dari peta petualangan:
+import React, { useState, useEffect } from 'react';
+
+export default function DinoStage({ islandId, isRunning, onMissionComplete }) {
+ const [animating, setAnimating] = useState(false);
+
+ // Konfigurasi latar belakang berdasarkan pulau
+ const islandThemes = {
+   1: { bg: 'bg-amber-50', obstacle: 'rumah desa', title: 'Desa Urutan' },
+   2: { bg: 'bg-emerald-50', obstacle: 'pohon lebat', title: 'Hutan Perulangan' },
+   3: { bg: 'bg-slate-100', obstacle: 'batu gunung', title: 'Gunung Kondisi' },
+   4: { bg: 'bg-sky-50', obstacle: 'koin emas', title: 'Kota Variabel' },
+   5: { bg: 'bg-indigo-50', obstacle: 'rintangan arcade', title: 'Arena Game' },
+   6: { bg: 'bg-zinc-900 text-white', obstacle: 'laser lab', title: 'Laboratorium' },
+ };
+
+ const currentTheme = islandThemes[islandId] || islandThemes[1];
+
+ useEffect(() => {
+   if (isRunning) {
+     setAnimating(true);
+     // Simulasi durasi animasi berjalan sebelum misi dinyatakan selesai
+     const timer = setTimeout(() => {
+       setAnimating(false);
+       if (onMissionComplete) onMissionComplete();
+     }, 3000);
+     return () => clearTimeout(timer);
+   }
+ }, [isRunning]);
+
+ return (
+   <div className={`relative h-64 w-full overflow-hidden rounded-2xl border-4 border-gray-700 ${currentTheme.bg} flex items-end p-6 shadow-inner`}>
+     {/* Indikator Skor / Info Misi ala Game Dinosaurus */}
+     <div className="absolute top-4 right-6 font-mono text-sm font-bold tracking-wider opacity-70">
+       PULAU {islandId} • {currentTheme.title.toUpperCase()}
+     </div>
+
+     {/* Latar Belakang Bergerak (Parallax Effect) */}
+     <div className={`absolute inset-0 flex items-center justify-around opacity-20 ${animating ? 'animate-pulse' : ''}`}>
+       {/* Contoh elemen latar belakang */}
+       <span className="text-4xl">☁️</span>
+       <span className="text-4xl">🌲</span>
+       <span className="text-4xl">☁️</span>
+     </div>
+
+     {/* Area Arena Bermain */}
+     <div className="relative z-10 flex w-full items-end justify-between border-b-4 border-dashed border-gray-600 pb-2">
+       {/* Maskot Kiko */}
+       <div className={`text-6xl transition-transform duration-300 ${animating && islandId === 2 ? '-translate-y-20' : 'translate-y-0'}`}>
+         🤖
+       </div>
+
+       {/* Rintangan yang Mendekat */}
+       <div className={`text-4xl transition-all duration-1000 ${animating ? '-translate-x-96 opacity-100' : 'translate-x-0 opacity-80'}`}>
+         {islandId === 2 ? '🌲' : '🌵'}
+       </div>
+     </div>
+   </div>
+ );
+}
+
+Dengan pendekatan ini, anak-anak tidak hanya belajar menyusun balok kode, tetapi juga merasakan kepuasan visual instan layaknya bermain game petualangan favorit mereka!
+________________
+
+
+User prompt: Pada tampilan awal website, terdapat 3 kurikulum yang dibedakan berdasarkan kelas siswa. ada dunia ikon dan suara, ada dunia blok dan logika, dan ada dunia algoritma dan game. dan pada saat pengguna login dan sudah masuk beranda, terdapat menu petualangan dan lainnya, tetapi fokus pada menu petualangan saja. Buat menu petualangan untuk setiap kelas siswa sesuai dengan kurikulum yang ada. Berikan ide menu petualangan, serta konsep tampilan di menu playground saat pengguna menekan tombol jalankan kreasimu.
+Response: Berikut adalah struktur menu Petualangan yang disesuaikan dengan 3 kurikulum tingkat kelas SD, lengkap dengan ide 6 pulau untuk masing-masing kelas serta konsep tampilan panggung playground bergaya game dinosaurus Chrome.
+1. Kurikulum Kelas 1–2 SD: Dunia Ikon & Suara
+* Target Pembelajaran: Pengenalan urutan visual dasar, pola audio/visual, serta arah (panah).
+* Bentuk Balok Kode: Berupa gambar/ikon besar (Panah Maju, Panah Lompat, Ikon Musik/Suara, Bintang).
+🏝️ 6 Pulau Petualangan
+1. Pulau 1: Taman Suara (Urutan Ikon Musik)
+2. Pulau 2: Hutan Langkah (Arah & Urutan Sederhana)
+3. Pulau 3: Danau Warna (Mencocokkan Pola Warna)
+4. Pulau 4: Buah Gemas (Perulangan Gambar Sederhana)
+5. Pulau 5: Pesta Hewan (Perpaduan Suara & Gerak)
+6. Pulau 6: Istana Bintang (Tantangan Jalur Akhir)
+🎮 Konsep Visual Panggung di Playground (Game Dinosaurus)
+* Latar Belakang: Gaya doodle kartun yang cerah dengan awan-awan lucu berwajah senyum.
+* Mekanisme Gerak: Saat tombol Jalankan Kreasimu! ditekan:
+   * Latar belakang berjalan pelan di tempat (parallax scrolling).
+   * Karakter Kiko menggerakkan kakinya seperti berjalan.
+   * Setiap kali melewati rintangan atau mencapai sasaran, keluar efek suara lucu (pop/chime) dan efek animasi bintang-bintang kecil di atas kepala Kiko.
+2. Kurikulum Kelas 3–4 SD: Dunia Blok & Logika
+* Target Pembelajaran: Pemahaman sequence (urutan perintah), loop (perulangan), dan kondisi dasar (if-else).
+* Bentuk Balok Kode: Balok warna-warni berteks pendek (misal: MAJU 1 LANGKAH, MELOMPAT TINGGI, ULANGI 3 KALI).
+🏝️ 6 Pulau Petualangan
+1. Pulau 1: Desa Urutan (Langkah dasar menuju gerbang)
+2. Pulau 2: Hutan Perulangan (Melewati rintangan pohon lebat dengan loop)
+3. Pulau 3: Gunung Kondisi (Memilih jalur aman dengan balok If)
+4. Pulau 4: Rawa Rintangan (Kombinasi Loop + If)
+5. Pulau 5: Goa Misteri (Navigasi dalam gelap menggunakan sensor)
+6. Pulau 6: Benteng Kiko (Menyusun algoritma lengkap untuk membakar obor)
+🎮 Konsep Visual Panggung di Playground (Game Dinosaurus)
+* Latar Belakang: Tema piksel 2D retro ala game dinosaurus Chrome, namun penuh warna (tanah cokelat, rumput hijau, awan piksel).
+* Mekanisme Gerak: Saat tombol Jalankan Kreasimu! ditekan:
+   * Latar belakang bergerak horizontal dari kanan ke kiri.
+   * Kiko berada di posisi tetap (sisi kiri layar) dengan animasi kaki melangkah.
+   * Interaksi Rintangan (Pulau 2): Rintangan pohon lebat bergerak mendekati Kiko. Saat balok ULANGI 3 KALI + MELOMPAT berjalan, Kiko akan melompati pohon tersebut sebanyak 3 kali berturut-turut di udara hingga rintangan lewat.
+3. Kurikulum Kelas 5–6 SD: Dunia Algoritma & Game
+* Target Pembelajaran: Variabel, kondisi majemuk, pembuatan logika game, serta penyelesaian masalah kompleks.
+* Bentuk Balok Kode: Balok logika tingkat lanjut (misal: SET SKOR = SKOR + 1, JIKA MENYENTUH MUSUH, REPEAT UNTIL).
+🏝️ 6 Pulau Petualangan
+1. Pulau 1: Kota Variabel (Mengumpulkan koin & menghitung skor)
+2. Pulau 2: Arena Tembak Skor (Perhitungan variabel waktu & poin)
+3. Pulau 3: Labirin Algoritma (Penyelesaian rute kompleks)
+4. Pulau 4: Cyber City (Deteksi tabrakan/collision detection)
+5. Pulau 5: Boss Battle Logic (Penggunaan timer & kondisi berlapis)
+6. Pulau 6: Antariksa Kode (Membangun game mini lengkap)
+🎮 Konsep Visual Panggung di Playground (Game Dinosaurus)
+* Latar Belakang: Tema futuristik / cyberpunk piksel dengan neon, papan skor digital di pojok kanan atas, dan latar gedung-gedung bernuansa sci-fi.
+* Mekanisme Gerak: Saat tombol Jalankan Kreasimu! ditekan:
+   * Latar belakang bergerak cepat.
+   * Interaksi Variabel (Pulau 1): Koin-koin bergerak dari kanan. Ketika Kiko melompat dan menyentuh koin, koin menghilang dan papan HUD Skor di atas panggung bertambah secara otomatis (+10 Poin) secara real-time.
+Ringkasan Alur Navigasi Baru
+1. Dashboard Utama: Pengguna memilih profil kelas (Kelas 1–2 / 3–4 / 5–6).
+2. Menu Petualangan: Menampilkan Peta 6 Pulau yang terkunci secara berurutan sesuai kurikulum kelas yang dipilih.
+3. Klik "Ayo Masuk Pulau!": Langsung membuka Playground dengan tema panggung, rintangan, serta set balok perintah yang sudah disesuaikan secara khusus untuk pulau tersebut.
+________________
+
+
+User prompt: tambahan ide dari saya adalah panggung kiko letaknya dibawah tabel 1 "ambil balok perintah" dab tabel 2 "kanvas rakit kode" sehingga tabel panggung kiko bisa lebih lebar dan siswa bisa lebih tertarik melihatnya
+Response: Ide yang sangat tepat! Dengan memindahkan Panggung Kiko ke posisi di bawah tabel 1. Ambil Balok Perintah dan 2. Kanvas Rakit Kode, lebar panggung bisa dibuat memenuhi bagian bawah secara penuh (full-width). Tampilan ini membuat area bermain menjadi jauh lebih luas, leluasa, dan pastinya lebih seru serta menarik perhatian anak-anak saat maskot Kiko bergerak dan melompati rintangan.
+Tata letak tata letak baru untuk halaman Playground tersebut dapat disusun dengan struktur kode berikut:
+export default function PlaygroundLayout() {
+ return (
+   <div className="flex flex-col gap-6 p-6">
+     {/* Bagian Atas: Kotak Pilihan & Kanvas Rakit Kode (Berjejer Menyamping) */}
+     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+       {/* Kolom 1: Ambil Balok Perintah */}
+       <div className="rounded-2xl border-2 border-gray-200 bg-white p-5 shadow-sm">
+         <h3 className="font-bold text-gray-700 mb-3">📋 1. Ambil Balok Perintah</h3>
+         <div className="flex flex-col gap-2">
+           {/* Daftar balok kode */}
+           <button className="rounded-xl bg-emerald-500 p-3 text-white font-semibold text-left">
+             ➔ MAJU 1 LANGKAH +
+           </button>
+           <button className="rounded-xl bg-indigo-500 p-3 text-white font-semibold text-left">
+             🦘 MELOMPAT TINGGI +
+           </button>
+         </div>
+       </div>
+
+       {/* Kolom 2: Kanvas Rakit Kode */}
+       <div className="rounded-2xl border-2 border-dashed border-yellow-400 bg-yellow-50/50 p-5 shadow-sm flex flex-col justify-between">
+         <div>
+           <h3 className="font-bold text-gray-700 mb-3">🧩 2. Kanvas Rakit Kode</h3>
+           <div className="flex h-32 items-center justify-center text-gray-400 text-sm">
+             Kanvas masih kosong nih! Klik balok di sebelah kiri.
+           </div>
+         </div>
+         <span className="text-xs text-gray-500 font-medium">0 balok terpasang</span>
+       </div>
+     </div>
+
+     {/* Bagian Bawah: Panggung Kiko Full-Width (Lebar Menyeluruh) */}
+     <div className="w-full rounded-2xl border-4 border-gray-700 bg-emerald-50 p-6 shadow-inner relative overflow-hidden">
+       <div className="flex justify-between items-center mb-4">
+         <h3 className="font-bold text-gray-800 text-lg">🎬 Panggung Kiko & Arena Aksi</h3>
+         <div className="text-xl">🌳 🌊 ☀️</div>
+       </div>
+
+       {/* Area Animasi Game Dinosaurus */}
+       <div className="relative h-48 w-full flex items-end justify-between border-b-4 border-dashed border-gray-600 pb-2">
+         {/* Maskot Kiko di Kiri */}
+         <div className="text-6xl animate-bounce">
+           🤖
+         </div>
+
+         {/* Rintangan di Kanan yang Bergeser */}
+         <div className="text-4xl animate-pulse">
+           🌵
+         </div>
+       </div>
+
+       {/* Tombol Eksekusi di Bawah Panggung */}
+       <div className="mt-4 flex items-center justify-between">
+         <span className="text-sm font-medium text-gray-600">
+           Pilih balok lalu klik Jalankan Kode!
+         </span>
+         <button className="rounded-xl bg-emerald-600 px-6 py-3 font-bold text-white shadow-md hover:bg-emerald-700">
+           ▶ Jalankan Kreasimu! 🚀
+         </button>
+       </div>
+     </div>
+   </div>
+ );
+}
+
+Dengan desain layar yang melebar ke bawah ini, area visual panggung Kiko jadi jauh lebih optimal untuk menampilkan animasi latar belakang bergerak (scrolling) dan rintangan ala game dinosaurus!
+________________
+
+
+User prompt: tambahan ide dari saya, tampilan kanvas coding di menu playground tetap seperti ini, namun ketika pengguna tekan tombol jalankan kreasimu maka akan muncul di bagian bawah animasi robot kiko yang menjalankan perintah dan konsep visual sesuai dengan 6 pulau petualangan.
+Response: Konsep ini sangat responsif dan efisien. Layout 3 kolom pada kanvas coding tetap terjaga bersih saat siswa merakit kode, lalu Panggung Aksi (Dino Stage) akan muncul secara dinamik di bawahnya begitu tombol "Jalankan Kreasimu!" ditekan.
+Berikut adalah gambaran alur dan struktur teknis untuk mewujudkannya:
+Alur Interaksi Pengguna
+1. Kondisi Awal (Merakit Kode):
+   * Tampilan kanvas tetap presisi dengan 3 kolom: Ambil Balok Perintah, Kanvas Rakit Kode, dan Panggung Kiko (Pratinjau Status).
+   * Di panggung sebelah kanan, Kiko hanya berupa preview/karakter diam yang menunggu instruksi.
+2. Saat Tombol "Jalankan Kreasimu!" Ditekan:
+   * Di bagian bawah (di bawah ketiga kolom tersebut), komponen Panggung Aksi Petualangan (Full-Width Dino Stage) langsung slide-in atau muncul dengan animasi smooth.
+   * Panggung bawah ini otomatis memuat visual latar belakang, rintangan, dan mekanika gerakan sesuai pulau yang sedang dimainkan.
+   * Setelah aksi selesai, modal/pop-up keberhasilan (Success Modal) muncul di tengah layar.
+Struktur Kode React/Next.js (Playground.jsx)
+Kamu bisa menambahkan state isExecuting untuk memicu munculnya panggung animasi di bagian bawah:
+import React, { useState } from 'react';
+
+export default function Playground({ islandId = 1 }) {
+ const [blocks, setBlocks] = useState([]);
+ const [isExecuting, setIsExecuting] = useState(false);
+ const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+ // Data Konfigurasi Visual 6 Pulau
+ const islandConfigs = {
+   1: { name: 'Desa Urutan', bg: 'bg-amber-100', obstacle: '🏘️', goalText: 'Sampai di Gerbang Desa!' },
+   2: { bg: 'bg-emerald-100', obstacle: '🌲', goalText: 'Melompati Pohon Lebat!' },
+   3: { name: 'Gunung Kondisi', bg: 'bg-slate-200', obstacle: '🪨', goalText: 'Melewati Batu Karang!' },
+   4: { name: 'Kota Variabel', bg: 'bg-sky-100', obstacle: '🪙', goalText: 'Mengumpulkan Koin!' },
+   5: { name: 'Arena Game', bg: 'bg-indigo-100', obstacle: '👾', goalText: 'Menghindari Musuh!' },
+   6: { name: 'Laboratorium', bg: 'bg-zinc-800 text-white', obstacle: '⚡', goalText: 'Menerobos Laser!' },
+ };
+
+ const currentIsland = islandConfigs[islandId] || islandConfigs[1];
+
+ const handleRunCode = () => {
+   if (blocks.length === 0) return alert("Rakit balok perintah dulu ya!");
+   
+   setIsExecuting(true);
+
+   // Simulasi waktu eksekusi gerakan Kiko (misal 3,5 detik)
+   setTimeout(() => {
+     setIsExecuting(false);
+     setShowSuccessModal(true);
+   }, 3500);
+ };
+
+ return (
+   <div className="flex flex-col gap-6 p-6">
+     {/* --- BAGIAN ATAS: TAMPILAN KANVAS 3 KOLOM SEPERTI GAMBAR --- */}
+     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+       {/* Kolom 1: Ambil Balok */}
+       <div className="rounded-2xl border bg-white p-4">
+         <h3 className="font-bold text-gray-700">📋 1. Ambil Balok Perintah</h3>
+         {/* Daftar Tombol Balok */}
+       </div>
+
+       {/* Kolom 2: Kanvas Rakit */}
+       <div className="rounded-2xl border-2 border-dashed border-yellow-400 bg-yellow-50/40 p-4">
+         <h3 className="font-bold text-gray-700">🧩 2. Kanvas Rakit Kode</h3>
+         {/* Item Balok Terpasang */}
+       </div>
+
+       {/* Kolom 3: Panggung Kiko (Pratinjau) */}
+       <div className="rounded-2xl bg-sky-100 p-4 flex flex-col justify-between items-center text-center">
+         <div className="w-full flex justify-between text-xs text-gray-500">
+           <span>Panggung Kiko</span>
+           <span>🌳 🌊 ☀️</span>
+         </div>
+         <div className="text-6xl my-4">🤖</div>
+         <button 
+           onClick={handleRunCode}
+           className="w-full rounded-xl bg-emerald-600 py-3 font-bold text-white shadow-md hover:bg-emerald-700"
+         >
+           ▶ Jalankan Kreasimu! 🚀
+         </button>
+       </div>
+     </div>
+
+     {/* --- BAGIAN BAWAH: PANGGUNG AKSI DINO STAGE (MUNTAH SAAT DIJALANKAN) --- */}
+     {isExecuting && (
+       <div className="w-full rounded-2xl border-4 border-gray-700 p-6 shadow-2xl animate-fade-in transition-all relative overflow-hidden bg-white">
+         <div className="flex justify-between items-center mb-2">
+           <span className="font-bold text-gray-700 text-sm">
+             🎬 EKSEKUSI MISI: {currentIsland.name?.toUpperCase()}
+           </span>
+           <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold animate-pulse">
+             ● Kiko Sedang Bergerak...
+           </span>
+         </div>
+
+         {/* Area Animasi Game Dinosaurus */}
+         <div className={`relative h-44 w-full rounded-xl ${currentIsland.bg} overflow-hidden border-b-4 border-dashed border-gray-600 flex items-end justify-between px-10 pb-2`}>
+           {/* Latar Belakang Awan Bergerak */}
+           <div className="absolute top-2 inset-x-0 flex justify-between opacity-30 animate-pulse">
+             <span className="text-2xl">☁️</span>
+             <span className="text-2xl">☁️</span>
+           </div>
+
+           {/* Maskot Kiko (Kiri) */}
+           <div className={`text-6xl z-10 transition-transform duration-500 ${islandId === 2 ? 'animate-bounce' : ''}`}>
+             🤖
+           </div>
+
+           {/* Rintangan/Objek Pulau (Bergerak dari kanan ke kiri) */}
+           <div className="text-5xl z-10 animate-slide-left">
+             {currentIsland.obstacle}
+           </div>
+         </div>
+       </div>
+     )}
+   </div>
+ );
+}
+
+Keunggulan Pendekatan Ini:
+1. Tata Letak Tetap Familiar: Area kerja utama (kanvas 3 kolom) tidak bergeser atau berubah bentuk, sehingga pengguna tidak bingung.
+2. Fokus Visual: Saat tombol diklik, perhatian anak langsung tertuju ke arena aksi bawah yang lebar dengan animasi game arcade.
+3. Fleksibilitas Latar Belakang: Tema latar belakang pulau (bg-amber-100, bg-emerald-100, dll.) dan rintangan bisa berganti secara otomatis mengikuti islandId yang dipilih pengguna dari menu Petualangan.
+________________
+
+
+User prompt: panggung aksi tersebut bukan dino stage namun bernama kiko stage. di panggung sebelah kanan, kiko berupa preview yang bergerak mengambang ke atas dan ke bawah secara perlahan. komponen panggung aksi petualangan (full width Kiko tage bukan dino stage). jangan buat kode, buat saja konsep perbaikan yang kita bahas mulai dari menghapus menu belajar hingga menambahkan panggung bawah ini ke dalam file markdown (.md).
+Response: Berikut adalah rancangan dokumen konsep perbaikan sistem navigasi dan antarmuka Blokuma dalam format Markdown (.md) yang siap digunakan sebagai acuan pengembangan:
+# Dokumen Konsep Perbaikan Navigasi & Antarmuka Playground Blokuma
+
+## 1. Ringkasan Perubahan Utama
+* **Penyederhanaan Navigasi:** Menghapus menu **Belajar** dari sidebar. Seluruh alur pembelajaran dan materi dialihkan secara utuh ke menu **Petualangan** yang berbasis kurikulum kelas.
+* **Redesain Antarmuka Playground:**
+ * Mempertahankan tata letak 3 kolom di bagian atas untuk merakit kode.
+ * Memperbarui panel pratinjau Kiko di sebelah kanan dengan animasi melayang (*floating animation*).
+ * Menambahkan komponen **Kiko Stage** (*full-width*) di bagian bawah yang hanya muncul saat tombol "Jalankan Kreasimu!" ditekan.
+
+---
+
+## 2. Struktur Menu & Kurikulum Pembelajaran
+
+### A. Perubahan Sidebar Navigasi
+Menu sidebar yang aktif:
+1. Beranda
+2. Petualangan *(Pusat Pembelajaran Utama)*
+3. Playground
+4. Projects
+5. Achievements
+6. Galeri
+7. Progress
+8. Pengaturan
+
+---
+
+### B. Pemetaan Menu Petualangan Berdasarkan Kelas
+
+#### 1. Kelas 1–2 SD: Dunia Ikon & Suara
+* **Fokus:** Pengenalan urutan visual, pola audio/gambar, dan arah sederhana.
+* **6 Pulau Petualangan:**
+ 1. **Pulau 1:** Taman Suara (Urutan Ikon Musik)
+ 2. **Pulau 2:** Hutan Langkah (Arah & Urutan Sederhana)
+ 3. **Pulau 3:** Danau Warna (Mencocokkan Pola Warna)
+ 4. **Pulau 4:** Buah Gemas (Perulangan Gambar Sederhana)
+ 5. **Pulau 5:** Pesta Hewan (Perpaduan Suara & Gerak)
+ 6. **Pulau 6:** Istana Bintang (Tantangan Jalur Akhir)
+
+#### 2. Kelas 3–4 SD: Dunia Blok & Logika
+* **Fokus:** Urutan instruksi (*sequence*), perulangan (*loop*), dan percabangan sederhana (*if*).
+* **6 Pulau Petualangan:**
+ 1. **Pulau 1:** Desa Urutan (Langkah pertama Kiko menuju gerbang desa)
+ 2. **Pulau 2:** Hutan Perulangan (Bantu Kiko melompati pohon lebat dengan *loop* 3 kali)
+ 3. **Pulau 3:** Gunung Kondisi (Memilih jalur aman dengan balok *If*)
+ 4. **Pulau 4:** Rawa Rintangan (Kombinasi *Loop* + *If*)
+ 5. **Pulau 5:** Goa Misteri (Navigasi sensor di tempat gelap)
+ 6. **Pulau 6:** Benteng Kiko (Menyusun algoritma lengkap)
+
+#### 3. Kelas 5–6 SD: Dunia Algoritma & Game
+* **Fokus:** Variabel, kondisi majemuk, dan mekanika game interaktif.
+* **6 Pulau Petualangan:**
+ 1. **Pulau 1:** Kota Variabel (Pengumpulan koin & penghitung skor)
+ 2. **Pulau 2:** Arena Tembak Skor (Perhitungan waktu & poin)
+ 3. **Pulau 3:** Labirin Algoritma (Penyelesaian rute kompleks)
+ 4. **Pulau 4:** Cyber City (Deteksi benturan/collision)
+ 5. **Pulau 5:** Boss Battle Logic (Timer & logika berlapis)
+ 6. **Pulau 6:** Antariksa Kode (Membuat game mini)
+
+---
+
+## 3. Konsep Antarmuka Menu Playground
+
+### A. Bagian Atas (Kanvas 3 Kolom)
+Tampilan tetap menjaga kerapian tata letak 3 kolom:
+1. **Kolom 1 - Ambil Balok Perintah:** Daftar balok instruksi yang bisa diklik/diseret.
+2. **Kolom 2 - Kanvas Rakit Kode:** Area untuk menyusun urutan balok perintah.
+3. **Kolom 3 - Pratinjau Panggung Kiko:**
+  * Menampilkan karakter robot Kiko dengan gerakan idle **mengambang ke atas dan ke bawah secara perlahan** (*floating/hovering animation*).
+  * Berisi status ketersediaan balok dan tombol utama **"▶ Jalankan Kreasimu! 🚀"**.
+
+---
+
+### B. Bagian Bawah: Kiko Stage (Full-Width Action Stage)
+
+#### 1. Mekanisme Kemunculan
+* Secara bawaan (*default*), area **Kiko Stage** di bawah 3 kolom tidak terlihat atau tersembunyi.
+* Saat siswa menekan tombol **"Jalankan Kreasimu!"**, komponen **Kiko Stage** akan muncul meluncur (*slide-in / fade-in*) memenuhi lebar bawah layar secara penuh (*full-width*).
+
+#### 2. Visual & Perilaku Karakter di Kiko Stage
+* **Sistem Latar Belakang Parallax:** Latar belakang bergerak secara kontinu dari kanan ke kiri, menciptakan ilusi visual seolah Kiko sedang bergerak maju.
+* **Perilaku Maskot Kiko:** Posisi maskot Kiko tetap berada di sisi kiri panggung, namun melakukan aksi sesuai urutan balok perintah yang disusun (misalnya melangkah, melompat, atau memutar).
+* **Adaptasi Visual 6 Pulau:** Tema latar belakang dan objek rintangan di Kiko Stage menyesuaikan pulau yang sedang dimainkan:
+ * **Pulau 1 (Desa Urutan):** Latar desa, jalan datar, awan bergeser, Kiko melakukan animasi melangkah.
+ * **Pulau 2 (Hutan Perulangan):** Latar hutan, rintangan pohon mendekat, Kiko melakukan gerakan melompat tinggi sebanyak 3 kali saat instruksi *loop* berjalan.
+ * **Pulau 3–6:** Menyesuaikan objek khas pulau (batu gunung, koin variabel, laser lab, dsb.).
+
+---
+
+## 4. Indikator Keberhasilan (Notifikasi Tengah Layar)
+Setelah animasi di **Kiko Stage** selesai dieksekusi dan kondisi misi terpenuhi:
+1. Muncul **Success Modal** tepat di tengah layar dengan latar belakang *overlay/backdrop-blur*.
+2. Memuat pesan ucapan selamat, jumlah reward XP yang diperoleh, tombol **"Coba Lagi"**, serta tombol **"Lanjut Misi Berikutnya 🚀"**.
+3. Tombol **"Lanjut Misi Berikutnya"** otomatis membuka kunci (*unlock*) untuk pulau selanjutnya di menu Petualangan.
+
+________________
+
+
+User prompt: bagaimana agar file .md ini bisa dilakukan oleh agent ai di dalam visual code tanpa menghabiskan banyak token? ketika saya lampirkan file .md ke dalam VScode lalu promptnya seperti apa?
+Response: Agar AI di dalam VS Code (seperti GitHub Copilot, Cursor, atau Roo Code) bisa mengeksekusi rencana dari file .md dengan akurat tanpa boros token, kuncinya adalah memberikan instruksi yang spesifik, membatasi konteks file yang dibaca, dan memecah tugas secara bertahap.
+Berikut adalah strategi dan contoh prompt efisien yang bisa digunakan:
+1. Cara Melampirkan File Tanpa Boros Token
+* Jangan lampirkan seluruh workspace atau folder besar jika tidak diperlukan. Cukup mention file .md tersebut secara spesifik di kolom chat menggunakan tanda @ (misal: @konsep-perbaikan.md) atau seret (drag-and-drop) file .md itu saja ke dalam kotak chat AI.
+* Gunakan instruksi mode baca cepat agar AI hanya membaca poin pentingnya saja tanpa memproses ulang file kode lain yang belum waktunya diubah.
+2. Contoh Template Prompt di VS Code
+Gunakan struktur prompt di bawah ini agar AI langsung paham konteks, tahu batasannya, dan tidak membuang token untuk analisis yang tidak perlu:
+"Halo! Berdasarkan file dokumentasi @konsep-perbaikan.md, fokus kita saat ini hanya pada tugas pertama, yaitu: Menghapus menu Belajar dari sidebar navigasi.
+Tolong cari file komponen sidebar proyek ini, lalu lakukan perubahan kodenya saja secara spesifik tanpa mengubah bagian lain. Berikan hasil kodenya secara ringkas."
+3. Tips Tambahan Agar Hemat Token & Hasil Maksimal
+1. Pecah Tugas Per Bagian (Iteratif): Jangan minta AI merombak seluruh 6 pulau dan halaman sekaligus dalam satu prompt. Selesaikan per modul (Contoh: Sesi 1 khusus hapus menu Belajar & atur rute sidebar, Sesi 2 khusus update tampilan Playground, Sesi 3 khusus komponen Kiko Stage bawah).
+2. Gunakan Mode Inline Edit (Ctrl + I atau Cmd + I): Jika Anda sudah berada di dalam file kode tertentu (misal Sidebar.jsx), cukup blok kode yang ingin diubah, lalu berikan perintah singkat yang merujuk ke .md tersebut. Cara ini jauh lebih hemat token ketimbang chat umum dari panel samping.
+________________
+
+
+User prompt: bagaimana kalau saya melampirkan file md tersebut lalu langsung meminta agent ai untuk membuat perubahan sesuai dengan file md tersebut secara seluruhnya?
+Response: Melampirkan file .md lalu meminta agen AI di VS Code untuk mengeksekusi perubahan secara menyeluruh sekaligus memang praktis, tetapi cara ini memiliki beberapa risiko yang sering terjadi:
+1. AI Cepat Lupa atau Mengabaikan Detail (Hallucination/Omission): Karena perubahan yang diminta cukup banyak (dari menghapus menu Belajar, merombak struktur pulau, hingga membuat Kiko Stage baru di bawah), AI cenderung melewatkan beberapa bagian kecil atau membuat asumsi kode sendiri yang tidak sesuai.
+2. Perubahan Terlalu Besar (Broken Code): Jika AI mencoba mengubah banyak file sekaligus dalam satu prompt, hasilnya sering kali ada bagian kode yang terpotong (// ... kode selanjutnya ...), membuat aplikasi error, atau merusak file lain yang tidak seharusnya disentuh.
+3. Boros Token & Lambat: Memproses file dokumen besar sekaligus membaca seluruh struktur direktori proyek membuat penggunaan token melonjak drastis dan respons AI menjadi lebih lambat.
+Cara Terbaik Menjalankannya di VS Code
+Agar hasilnya rapi dan aman, jauh lebih efektif jika Anda menggunakan pendekatan bertahap per komponen (Iteratif) menggunakan instruksi yang merujuk ke file .md tersebut. Contoh urutan prompt yang bisa digunakan di VS Code:
+* Tahap 1: "Baca file @konsep-perbaikan.md. Tolong lakukan tugas pertama saja: hapus menu Belajar dari komponen Sidebar navigasi proyek ini."
+* Tahap 2: "Berdasarkan @konsep-perbaikan.md, sekarang perbarui halaman Playground di bagian pratinjau kanan agar maskot Kiko memiliki animasi mengambang (floating/hovering)."
+* Tahap 3: "Terakhir, tambahkan komponen Kiko Stage full-width di bagian bawah halaman Playground yang hanya muncul ketika tombol 'Jalankan Kreasimu!' ditekan."
+Dengan cara ini, agen AI dapat fokus penuh menyelesaikan satu bagian kode dengan akurat tanpa merusak bagian lainnya.
+________________
+
+
+User prompt: dari file markdown tersebut, saya juga ingin merencanakan bahwa isi dari materi kurikulum akan disimpan di database, dan akan difilter berdasarkan kelas siswa. Pada menu galeri hanya terdapat 3 permainan yang bisa dilihat dari foto yang dilampirkan. Namun pada saat pengguna menekan tombol mainkan, belum ada respon, seharusnya saat pengguna menekan tombol mainkan, pengguna bisa masuk ke sebuah permainan sesuai dengan judul permainannnay misalnya kiko mencari baterai emas maka ketika pengguna menekan tombol mainkan, akan muncul permainan sesuai tema game tersebut.
+Response: Rencana dan konsep perbaikan tersebut sudah sangat matang dan terstruktur dengan baik. Penambahan penyimpanan materi kurikulum di database serta perbaikan fungsi tombol pada menu Galeri akan membuat aplikasi jauh lebih dinamis dan interaktif.
+Berikut adalah ringkasan konsep perbaikan dan alur kerjanya untuk melengkapi dokumen yang sudah ada:
+1. Penyimpanan Materi Kurikulum Berbasis Database
+* Struktur Database (Tabel Kurikulum/Pulau):
+   * Setiap data pulau, misi, dan level akan disimpan di dalam database (misalnya menggunakan PostgreSQL/Supabase) agar mudah diperbarui tanpa harus mengubah kode program secara manual.
+   * Setiap data materi atau misi akan diberi atribut kolom kelas (target_class: misal 1, 2, 3, 4, 5, 6).
+* Sistem Filter Berdasarkan Kelas:
+   * Ketika siswa login, sistem membaca tingkat kelas siswa yang tersimpan di profil akun mereka.
+   * Menu Petualangan akan melakukan query ke database dan menyaring daftar 6 pulau serta misi khusus yang hanya sesuai dengan kelas siswa tersebut.
+2. Perbaikan Interaksi Tombol "Mainkan" di Menu Galeri
+Berdasarkan tampilan pameran karya sahabat pada Galeri Karya Sahabat Blokuma, tombol [Mainkan 🎮] pada masing-masing kartu karya saat ini belum memberikan respons. Perbaikan yang akan diterapkan:
+* Penerapan Event Listener & Parameter ID Karya:
+   * Setiap tombol [Mainkan 🎮] dihubungkan dengan fungsi navigasi yang membawa ID atau kategori karya yang dipilih (contoh: id: "kiko-baterai-emas").
+* Mekanisme Pengalihan Halaman Permainan:
+   * Saat tombol diklik, aplikasi akan mengarahkan pengguna ke halaman Playground khusus atau mode Mini-Game Preview yang temanya disesuaikan dengan judul karya tersebut:
+      1. Hutan Ajaib Melodi: Membuka area panggung interaktif dengan tema balok musik dan suara ceria.
+      2. Kiko Mencari Baterai Emas: Membuka panggung khusus labirin di mana Kiko harus bergerak mencari objek baterai emas menggunakan logika perintah.
+      3. Balop Roket Galaksi: Membuka panggung bertema antariksa dengan kecepatan roket dan rintangan galaksi.
+________________
+
+
+User prompt: mekanisme pengalihan halaman permainan harus muncul halaman baru khusus untuk permainan tersebut. susun semua rencana perbaikan ini dan gabungkan dengan file .md sebelumnya, jadikan file .md
+Response: Berikut adalah dokumen lengkap Rencana Perbaikan Antarmuka, Navigasi, & Arsitektur Sistem Blokuma dalam format Markdown (.md) yang telah disusun secara rapi dan menyeluruh:
+# Dokumen Rencana Perbaikan Antarmuka, Navigasi, & Arsitektur Blokuma
+
+## 1. Ringkasan Perubahan Utama
+* **Penyederhanaan Navigasi:** Menghapus menu **Belajar** dari sidebar. Seluruh alur pembelajaran dan materi dialihkan secara utuh ke menu **Petualangan**.
+* **Manajemen Kurikulum Berbasis Database:** Materi dan misi di menu Petualangan disimpan di database dan disaring (*filter*) secara dinamis berdasarkan tingkat kelas siswa.
+* **Redesain Antarmuka Playground:**
+ * Mempertahankan tata letak 3 kolom di bagian atas untuk merakit kode.
+ * Memperbarui panel pratinjau Kiko di sebelah kanan dengan animasi melayang (*floating/hovering animation*).
+ * Menambahkan komponen **Kiko Stage** (*full-width*) di bagian bawah yang hanya muncul saat tombol "Jalankan Kreasimu!" ditekan.
+* **Navigasi Halaman Permainan Galeri:** Memperbaiki fungsi tombol **Mainkan 🎮** di menu Galeri agar mengarahkan pengguna ke halaman baru (*dedicated game page*) yang terpisah sesuai judul permainan yang dipilih.
+
+---
+
+## 2. Struktur Sidebar & Integrasi Database Kurikulum
+
+### A. Perubahan Sidebar Navigasi
+Menu sidebar aktif (Menu **Belajar** resmi dihapus):
+1. Beranda
+2. Petualangan *(Pusat Pembelajaran Utama)*
+3. Playground
+4. Projects
+5. Achievements
+6. Galeri
+7. Progress
+8. Pengaturan
+
+---
+
+### B. Arsitektur Database Kurikulum & Filter Kelas
+* **Skema Tabel Database (`curriculum_missions`):**
+ * `id`: Primary Key
+ * `target_class`: Integer (Tingkat Kelas 1 - 6)
+ * `island_number`: Integer (Pulau 1 - 6)
+ * `island_title`: String
+ * `mission_description`: Text
+ * `required_blocks`: JSON / Array (Jenis balok yang dibutuhkan)
+ * `is_locked`: Boolean
+* **Logika Pemfilteran:**
+ Saat pengguna membuka menu **Petualangan**, sistem membaca data tingkat kelas siswa dari profil akun (misal: *Kelas 3 SD*), lalu mengambil 6 data pulau dari database yang memiliki `target_class = 3`.
+
+---
+
+### C. Pemetaan 6 Pulau Petualangan Berdasarkan Kelas
+
+#### 1. Kurikulum Kelas 1–2 SD: Dunia Ikon & Suara
+* **Fokus:** Pengenalan urutan visual, pola audio/gambar, dan arah sederhana.
+* **Daftar Pulau:**
+ 1. **Pulau 1:** Taman Suara (Urutan Ikon Musik)
+ 2. **Pulau 2:** Hutan Langkah (Arah & Urutan Sederhana)
+ 3. **Pulau 3:** Danau Warna (Mencocokkan Pola Warna)
+ 4. **Pulau 4:** Buah Gemas (Perulangan Gambar Sederhana)
+ 5. **Pulau 5:** Pesta Hewan (Perpaduan Suara & Gerak)
+ 6. **Pulau 6:** Istana Bintang (Tantangan Jalur Akhir)
+
+#### 2. Kurikulum Kelas 3–4 SD: Dunia Blok & Logika
+* **Fokus:** Urutan instruksi (*sequence*), perulangan (*loop*), dan percabangan sederhana (*if*).
+* **Daftar Pulau:**
+ 1. **Pulau 1:** Desa Urutan (Langkah pertama Kiko menuju gerbang desa)
+ 2. **Pulau 2:** Hutan Perulangan (Bantu Kiko melompati pohon lebat dengan *loop* 3 kali)
+ 3. **Pulau 3:** Gunung Kondisi (Memilih jalur aman dengan balok *If*)
+ 4. **Pulau 4:** Rawa Rintangan (Kombinasi *Loop* + *If*)
+ 5. **Pulau 5:** Goa Misteri (Navigasi sensor di tempat gelap)
+ 6. **Pulau 6:** Benteng Kiko (Menyusun algoritma lengkap)
+
+#### 3. Kurikulum Kelas 5–6 SD: Dunia Algoritma & Game
+* **Fokus:** Variabel, kondisi majemuk, dan mekanika game interaktif.
+* **Daftar Pulau:**
+ 1. **Pulau 1:** Kota Variabel (Pengumpulan koin & penghitung skor)
+ 2. **Pulau 2:** Arena Tembak Skor (Perhitungan waktu & poin)
+ 3. **Pulau 3:** Labirin Algoritma (Penyelesaian rute kompleks)
+ 4. **Pulau 4:** Cyber City (Deteksi benturan/collision)
+ 5. **Pulau 5:** Boss Battle Logic (Timer & logika berlapis)
+ 6. **Pulau 6:** Antariksa Kode (Membuat game mini)
+
+---
+
+## 3. Redesain Antarmuka Menu Playground
+
+### A. Bagian Atas (Kanvas 3 Kolom)
+Tampilan tetap menjaga kerapian tata letak 3 kolom:
+1. **Kolom 1 - Ambil Balok Perintah:** Daftar balok instruksi yang bisa diklik/diseret.
+2. **Kolom 2 - Kanvas Rakit Kode:** Area untuk menyusun urutan balok perintah.
+3. **Kolom 3 - Pratinjau Panggung Kiko:**
+  * Menampilkan karakter robot Kiko dengan gerakan idle **mengambang ke atas dan ke bawah secara perlahan** (*floating/hovering animation*).
+  * Berisi status ketersediaan balok dan tombol utama **"▶ Jalankan Kreasimu! 🚀"**.
+
+---
+
+### B. Bagian Bawah: Kiko Stage (Full-Width Action Stage)
+
+#### 1. Mekanisme Kemunculan
+* Secara bawaan (*default*), area **Kiko Stage** di bawah 3 kolom tidak terlihat atau tersembunyi.
+* Saat siswa menekan tombol **"Jalankan Kreasimu!"**, komponen **Kiko Stage** akan muncul meluncur (*slide-in / fade-in*) memenuhi lebar bawah layar secara penuh (*full-width*).
+
+#### 2. Visual & Perilaku Karakter di Kiko Stage
+* **Sistem Latar Belakang Parallax:** Latar belakang bergerak secara kontinu dari kanan ke kiri, menciptakan ilusi visual seolah Kiko sedang bergerak maju.
+* **Perilaku Maskot Kiko:** Posisi maskot Kiko tetap berada di sisi kiri panggung, namun melakukan aksi sesuai urutan balok perintah yang disusun (misalnya melangkah, melompat, atau memutar).
+* **Adaptasi Visual 6 Pulau:** Tema latar belakang dan objek rintangan di Kiko Stage menyesuaikan pulau yang sedang dimainkan:
+ * **Pulau 1 (Desa Urutan):** Latar desa, jalan datar, awan bergeser, Kiko melakukan animasi melangkah.
+ * **Pulau 2 (Hutan Perulangan):** Latar hutan, rintangan pohon mendekat, Kiko melakukan gerakan melompat tinggi sebanyak 3 kali saat instruksi *loop* berjalan.
+ * **Pulau 3–6:** Menyesuaikan objek khas pulau (batu gunung, koin variabel, laser lab, dsb.).
+
+---
+
+## 4. Mekanisme Permainan Baru pada Menu Galeri
+
+### A. Pengalihan Halaman Khusus Permainan
+Saat pengguna menekan tombol **Mainkan 🎮** pada salah satu kartu di menu Galeri, sistem tidak lagi sekadar merespons di halaman yang sama, melainkan mengarahkan (*routing*) ke **halaman permainan baru khusus** (`/app/gallery/play/[game-id]`):
+
+* **Kartu "Hutan Ajaib Melodi":**
+ * Route: `/app/gallery/play/hutan-ajaib-melodi`
+ * Tampilan Halaman Baru: Panggung penuh bertema musik interaktif lengkap dengan kontrol instrumen audio dan balok nada.
+* **Kartu "Kiko Mencari Baterai Emas":**
+ * Route: `/app/gallery/play/kiko-baterai-emas`
+ * Tampilan Halaman Baru: Arena permainan petualangan labirin penuh di mana pemain mengontrol Kiko untuk mengumpulkan baterai emas.
+* **Kartu "Balap Roket Galaksi":**
+ * Route: `/app/gallery/play/balap-roket-galaksi`
+ * Tampilan Halaman Baru: Game arcade antariksa dengan roket melaju dan papan skor interaktif.
+
+### B. Fitur Tambahan pada Halaman Permainan Khusus
+1. **Header Game:** Menampilkan judul permainan, pembuat karya, kelas, serta tombol "Kembali ke Galeri".
+2. **Area Layar Game Utama:** Tampilan permainan luas (*full canvas/stage*) dengan tombol kontrol interaktif.
+3. **Panel Apresiasi:** Tombol "Beri Suka ❤️" dan kolom komentar apresiasi dari teman-teman.
+
+---
+
+## 5. Indikator Keberhasilan Misi (Success Modal)
+Setelah animasi di **Kiko Stage** selesai dieksekusi dan kondisi misi pulau terpenuhi:
+1. Muncul **Success Modal** tepat di tengah layar dengan latar belakang *overlay/backdrop-blur*.
+2. Memuat pesan ucapan selamat, jumlah reward XP yang diperoleh, tombol **"Coba Lagi"**, serta tombol **"Lanjut Misi Berikutnya 🚀"**.
+3. Tombol **"Lanjut Misi Berikutnya"** otomatis memperbarui status di database untuk membuka kunci (*unlock*) pulau selanjutnya di menu Petualangan.
+
+________________
+
+
+User prompt: saya ingin membuat prompt di agent ai pada aplikasi VScode berdasarkan file .md tersebut. saya ingin menerapkan perubahan sidebar navigasi. buatkan prompt yang tepat dan hemat token agent ai
+Response: Berikut adalah prompt yang singkat, spesifik, dan hemat token untuk Agen AI di VS Code (seperti GitHub Copilot, Cursor, atau Roo Code) khusus untuk menerapkan perubahan sidebar navigasi:
+@rencana-perbaikan.md 
+
+Fokus pada Bagian 2A: Sidebar Navigasi.
+Tolong perbarui komponen Sidebar pada proyek ini:
+1. Hapus menu "Belajar".
+2. Pastikan urutan menu sidebar hanya berisi:
+  - Beranda
+  - Petualangan
+  - Playground
+  - Projects
+  - Achievements
+  - Galeri
+  - Progress
+  - Pengaturan
+
+Cari file komponen sidebar dan lakukan perubahannya secara langsung tanpa mengubah bagian/komponen lain.
+
+💡 Tips Penggunaan di VS Code:
+1. Ganti @rencana-perbaikan.md dengan nama file .md Kamu jika berbeda.
+2. Gunakan shortcut Ctrl + I (atau Cmd + I di Mac) saat membuka file komponen sidebar agar AI langsung melakukan inline edit tepat pada file tersebut tanpa perlu mencari file secara umum.
+________________
+
+
+User prompt: sekarang buatkan prompt untuk agent ai tersebut agar melakukan redesain antarmuka menu playground bagian atas dan bagian bawah
+Response: Berikut adalah prompt yang spesifik dan hemat token khusus untuk bagian redesain antarmuka Playground (bagian atas dan bawah):
+@rencana-perbaikan.md
+
+Fokus pada Bagian 3: Redesain Antarmuka Menu Playground.
+Tolong perbarui komponen Playground dengan aturan berikut:
+
+1. Bagian Atas (3 Kolom):
+  - Pertahankan layout 3 kolom (Ambil Balok, Kanvas Rakit, Pratinjau Kiko).
+  - Di kolom 3 (Pratinjau Kiko), tambahkan animasi melayang perlahan (floating/hovering animation) pada karakter Kiko saat posisi idle.
+
+2. Bagian Bawah (Kiko Stage):
+  - Buat komponen Kiko Stage (full-width) di bawah layout 3 kolom.
+  - Sembunyikan Kiko Stage secara default, dan munculkan (slide-in/fade-in) hanya ketika tombol "Jalankan Kreasimu!" ditekan.
+  - Di Kiko Stage, buat efek latar belakang bergerak (parallax scrolling) dari kanan ke kiri, sementara Kiko berada di sisi kiri melakukan animasi aksi.
+
+Cari file komponen Playground (dan komponen terkait) lalu lakukan perubahan kodenya secara langsung.
+
+💡 Tips Penggunaan di VS Code:
+* Pastikan Kamu sudah membuka file utama Playground (misal Playground.jsx atau PlaygroundLayout.jsx) saat menjalankan prompt ini.
+* Menggunakan Ctrl + I / Cmd + I langsung di dalam file Playground akan membuat proses pengerjaan AI jauh lebih presisi dan menghemat kuota token.
+________________
+
+
+User prompt: ini tampilan hasil perbaikan dari agent ai VScode. Tampilan bagian bawah belum sesuai dengan yang saya inginkan, belum ada latar belakang yang bergerak, belum ada animasi kiko kaki yang bergerak. pada saat pengguna menekan tombol ayo masuk pulau, muncul tampilan seperti pada foto nomor 2, seharusnya itu tidak perlu ditampilkan, hapus bagian tersebut karena ketika tombol ditekan, maka tampil menu playground sesuai dengan misinya
+Response: Berikut adalah evaluasi perbaikan dan prompt yang tepat untuk diberikan ke agent AI di VS Code agar masalah tersebut langsung teratasi:
+Masalah Utama pada Hasil Perbaikan Saat Ini:
+1. Kiko Stage Masih Polos: Latar belakang belum memiliki efek bergerak (parallax scrolling seperti awan/pohon) dan animasi gerakan Kiko (misalnya langkah kaki atau lompatan) belum berjalan.
+2. Halaman Perantara Belajar Masih Ada (Gambar 2): Saat tombol "Ayo Masuk Pulau" diklik, sistem masih menampilkan kartu perantara ("Pilih Materi & Misi Belajar"). Bagian ini harus dihapus agar pengguna langsung masuk ke menu Playground sesuai misi pulau tersebut.
+Prompt Perbaikan untuk Agent AI di VS Code
+Salin dan berikan prompt spesifik ini ke agent AI di VS Code:
+@rencana-perbaikan.md
+
+Tolong perbaiki 2 masalah berikut pada kode saat ini:
+
+1. Hapus Halaman Perantara "Pilih Materi & Misi Belajar":
+  - Ketika tombol "Ayo Masuk Pulau" di peta petualangan diklik, LANGSUNG arahkan (routing) pengguna ke halaman Playground (`/app/playground?island=X`) sesuai ID pulau yang dipilih.
+  - Hapus komponen/tampilan "Pilih Materi & Misi Belajar" (Kurikulum Petualangan) yang muncul di tengah alur.
+
+2. Perbaiki Animasi & Visual di Komponen Kiko Stage (Bagian Bawah Playground):
+  - Tambahkan elemen latar belakang yang bergerak dari kanan ke kiri (parallax animation), seperti awan, pohon, atau elemen pulau, saat status eksekusi aktif.
+  - Tambahkan animasi gerakan pada maskot Kiko (misalnya animasi kaki melangkah `animate-bounce` / CSS keyframe melangkah atau melompat) saat tombol "Jalankan Kreasimu!" ditekan.
+  - Pastikan visual latar belakang Kiko Stage berubah sesuai parameter pulau yang sedang dimainkan.
+
+Cari file routing petualangan dan komponen KikoStage, lalu perbarui kodenya secara langsung.
+
+💡 Tips Eksekusi Hemat Token:
+* Buka file tempat tombol "Ayo Masuk Pulau" berada (misal AdventureMap.jsx atau AdventurePage.jsx), lalu gunakan Ctrl + I / Cmd + I untuk memperbaiki alur navigasinya terlebih dahulu.
+* Selanjutnya, buka file komponen KikoStage.jsx atau Playground.jsx untuk memperbaiki animasi latar belakang dan gerakan Kiko secara terpisah.
+________________

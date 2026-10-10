@@ -126,7 +126,7 @@ export default function AdventurePage() {
               <div>
                 {w.unlocked ? (
                   <Link
-                    to="/app/learn"
+                    to={`/app/playground?island=${w.id}`}
                     className="toy-btn-teal w-full py-3 px-4 font-bold text-xs rounded-xl shadow-toyTeal flex items-center justify-center gap-1.5"
                   >
                     <span>Ayo Masuk Pulau!</span>

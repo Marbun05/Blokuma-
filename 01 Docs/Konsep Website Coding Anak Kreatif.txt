@@ -1,0 +1,378 @@
+﻿Konsep Website Coding Anak Kreatif
+https://gemini.google.com/app/315ae9200b0ac041
+
+
+User prompt: jadi bagaimana alur pengerjaannya? apakah pengaturan dari branch yang sudah saya buat sebelumnya jadi tidak terpakai? atau bisakah ini khusus untuk menu pembelajaran saja yang dirubah tanpa mempengaruhi perbaikan yang sudah saya buat sebelumnya?
+Response: Perbaikan di branch Pengaturan yang sudah kamu buat 100% tetap terpakai.
+Kamu tidak perlu membuang atau mengulang perbaikan tersebut. Halaman Pengaturan yang sudah menyimpan student_class ke localStorage serta memicu event student_profile_updated justru menjadi fondasi utama (pemicu) agar menu modul lainnya bisa membaca tingkatan kelas pengguna secara otomatis.
+Mengapa Perbaikan Pengaturan Sebelumnya Sangat Penting?
+1. Pengaturan Sebagai Sumber Utama (Pemicu):
+Ketika pengguna memilih kelas (misal: "Kelas 1 SD") lalu menekan Simpan Perubahan, halaman Pengaturan menyimpan nilai tersebut ke localStorage (student_class) dan mengirimkan signal (student_profile_updated).
+2. Modul Pembelajaran Sebagai Penerima (Adaptif):
+Modul Petualangan, Belajar, Playground, dan Project tinggal mendengarkan signal tersebut dan menyesuaikan daftar materi/komponen yang ditampilkan secara real-time tanpa perlu berpindah URL atau merusak alur navigasi.
+Alur Pengerjaan Tahap Selanjutnya (Tanpa Merusak Kode Sebelumnya)
+Kamu hanya perlu menambah logika filter komponen di masing-masing menu tanpa merubah struktur navigasi utama:
+   1. Menu Petualangan (/app/adventure):
+Filter array ALL_WORLDS berdasarkan angka kelas (student_class). Jika Kelas 1–2 SD, tampilkan World 1 & 2. Jika Kelas 3–4 SD, tampilkan World 1–4. Jika Kelas 5–6 SD, tampilkan World 1–6.
+   2. Menu Belajar (/app/learn):
+Sesuaikan tampilan tipe soal koding (Ikon & Suara untuk Kelas 1–2 SD, Blok Teks untuk Kelas 3–4 SD, serta tombol "Intip Kode Asli" untuk Kelas 5–6 SD).
+   3. Menu Playground (/app/playground):
+Fitur playground yang sudah ada tetap dipertahankan penuh sebagai materi inti Kelas 3–4 SD. Sembunyikan/tampilkan panel blok tertentu sesuai jenjang kelas.
+   4. Menu Project (/app/projects):
+Tampilkan template karya yang relevan (Soundboard untuk Kelas 1–2 SD, Canvas Visual untuk Kelas 3–4 SD, dan Mini Game Creator untuk Kelas 5–6 SD).
+Strategi Git Branch
+Untuk menjaga kualitas teknis proyek sesuai kriteria penilaian Kualitas Teknis (15 Poin):
+      1. Buat branch fitur baru khusus untuk pengerjaan kurikulum adaptif ini:
+feature/adaptive-curriculum
+
+      2. Kerjakan logika filter di menu Petualangan, Belajar, Playground, dan Project secara bertahap.
+      3. Setelah seluruh menu berhasil memfilter materi dengan mulus, lakukan commit dan merge ke branch main.
+________________
+
+
+User prompt: kapan saya harus memperbaiki dan menganalisi isi materi yang perlu disampaikan ke anak sekolah dasar? karena menurut saya isi materi pembelajarannya masih kurang dan tidak sesuai kurikulum yang ada pada foto sebelumnya.
+Response: Kamu bisa mulai menganalisis dan memperbarui isi materi sekarang juga sebelum melangkah lebih jauh ke pengodean modul-modul lainnya.
+Mumpung fondasi halaman Pengaturan dan pemicu data kelas (student_class) di localStorage sudah berjalan lancar, ini waktu yang sangat pas untuk menyusun data materi yang presisi agar sesuai dengan indikator Fungsionalitas & Relevansi Tema (25 Poin) serta kriteria kurikulum adaptif.
+Strategi Pengerjaan & Analisis Materi
+1. Tahap 1: Pembaruan Dokumen Referensi (Docs) — Poin Vibe Coding (25 Poin) Sebelum mengubah kode React, perbarui dokumen acuan AI/Project di folder Docs kamu (seperti file Architecture.md atau PRD.md). Tuliskan daftar materi lengkap untuk tiap jenjang agar proses prompting ke depan menjadi runtut dan terarah.
+2. Tahap 2: Buat File Master Data Kurikulum (curriculumData.js) Buat satu file data khusus (misalnya src/data/curriculumData.js) yang menampung daftar World, Misi, dan Deskripsi Materi berdasarkan 3 kelompok jenjang kelas.
+Rekomendasi Struktur Isi Materi Adaptif (Sesuai Kurikulum Lomba)
+A. Jenjang Kelas 1–2 SD (Dunia Ikon & Suara) Fokus: Tanpa teks rumit, serba visual, tombol besar, dan respons suara (Web Speech API).
+         * World 1: Desa Urutan
+         * Misi 1: Mengarahkan Kiko mengambil bintang menggunakan ikon panah [➔] [➔].
+         * Misi 2: Menghubungkan ikon [Lampu] ➔ [Sakelar] ➔ Suara Ting!.
+         * World 2: Hutan Perulangan
+         * Misi 1: Pola ritme musik [Tombol POP] + [Putar 2x].
+         * Misi 2: Gerakan melompat [Ikon Kelinci] x3 untuk menyeberangi sungai.
+B. Jenjang Kelas 3–4 SD (Dunia Blok & Logika) Fokus: Penyusunan blok teks drag-and-drop, perulangan (loop), dan percabangan (if/else) dasar.
+         * World 1 & 2: Akses materi dasar urutan dan pola perulangan.
+         * World 3: Gunung Kondisi
+         * Misi 1: Logika JIKA (Ada Batu) ➔ [Melompat], JIKA TIDAK ➔ [Maju].
+         * Misi 2: Menembus labirin dengan sensor dinding sederhana.
+         * World 4: Kota Variabel
+         * Misi 1: Mengumpulkan koin dengan rumus Skor = Skor + 1.
+         * Misi 2: Mengelola Nyawa karakter saat menabrak rintangan.
+C. Jenjang Kelas 5–6 SD (Dunia Algoritma & Game) Fokus: Logika game kompleks, variabel tingkat lanjut, dan fitur konversi ke kode asli.
+         * World 1 s.d. 4: Akses penuh seluruh materi jenjang bawah.
+         * World 5: Arena Game
+         * Misi 1: Mengontrol koordinat posisi (X,Y) karakter menggunakan tombol panah keyboard.
+         * Misi 2: Waktu mundur (Timer) 30 detik & mekanisme Game Over.
+         * World 6: Laboratorium Algoritma
+         * Misi 1: Fitur "Intip Kode Asli" (melihat hasil konversi blok ke bahasa JavaScript/Python).
+         * Misi 2: Debugging (memperbaiki urutan blok yang salah/rusak).
+Langkah Selanjutnya
+Buat branch Git baru khusus untuk pengerjaan kurikulum ini:
+feature/adaptive-curriculum
+
+Setelah branch dibuat, kita bisa langsung menerapkan struktur data materi di atas ke dalam komponen modul Petualangan, Belajar, dan Playground!
+________________
+
+
+User prompt: jadi langkah yang harus dilakukan adalah pembaruan dokumen referensi, buat file master data kurikulum, lalu membuat pengaturan filter materi sesuai dengan jenjang kelas tanpa melakukan page reload.
+Response: Tepat sekali! Tiga langkah utama tersebut sudah sangat terstruktur dan sesuai dengan alur pengembangan aplikasi yang profesional.
+Langkah ini juga langsung memenuhi kriteria Proses Vibe Coding (25 Poin) dan Fungsionalitas & Relevansi Tema (25 Poin) pada M-One Telkomsel Coding Competition.
+Alur Kerja Rinci yang Bisa Langsung Kamu Jalankan
+Langkah 1: Perbarui Dokumen Referensi (Docs)
+         * Buka file acuan di folder Docs kamu (misal: Architecture.md atau PRD.md).
+         * Tambahkan ringkasan struktur kurikulum adaptif 3 jenjang (Kelas 1–2, Kelas 3–4, dan Kelas 5–6 SD) agar AI Agent dapat membacanya sebagai pedoman pengembangan selanjutnya.
+Langkah 2: Buat Master Data Kurikulum (src/data/curriculumData.js) Buat file data pusat agar seluruh komponen (Adventure, Learn, Playground, Projects) dapat mengambil materi dari satu tempat yang sama:
+export const CURRICULUM_DATA = {
+ '1-2': {
+   title: 'Dunia Ikon & Suara',
+   badge: 'Kelas 1-2 SD',
+   worlds: [
+     { id: 'w1', name: 'World 1: Desa Urutan', icon: '🏠', desc: 'Instruksi dasar urutan panah & audio feedback' },
+     { id: 'w2', name: 'World 2: Hutan Perulangan', icon: '🌲', desc: 'Pola ritme musik & lompatan berulang' },
+   ],
+ },
+ '3-4': {
+   title: 'Dunia Blok & Logika',
+   badge: 'Kelas 3-4 SD',
+   worlds: [
+     { id: 'w1', name: 'World 1: Desa Urutan', icon: '🏠', desc: 'Instruksi dasar urutan' },
+     { id: 'w2', name: 'World 2: Hutan Perulangan', icon: '🌲', desc: 'Loop perulangan langkah' },
+     { id: 'w3', name: 'World 3: Gunung Kondisi', icon: '⛰️', desc: 'Percabangan logika If-Else' },
+     { id: 'w4', name: 'World 4: Kota Variabel', icon: '🏙️', desc: 'Penyimpanan koin & nyawa' },
+   ],
+ },
+ '5-6': {
+   title: 'Dunia Algoritma & Game',
+   badge: 'Kelas 5-6 SD',
+   worlds: [
+     { id: 'w1', name: 'World 1: Desa Urutan', icon: '🏠', desc: 'Instruksi dasar urutan' },
+     { id: 'w2', name: 'World 2: Hutan Perulangan', icon: '🌲', desc: 'Loop perulangan langkah' },
+     { id: 'w3', name: 'World 3: Gunung Kondisi', icon: '⛰️', desc: 'Percabangan logika' },
+     { id: 'w4', name: 'World 4: Kota Variabel', icon: '🏙️', desc: 'Penyimpanan data & skor' },
+     { id: 'w5', name: 'World 5: Arena Game', icon: '🎮', desc: 'Koordinat X/Y & Timer' },
+     { id: 'w6', name: 'World 6: Laboratorium Algoritma', icon: '🔬', desc: 'Intip Kode Asli JavaScript/Python' },
+   ],
+ },
+};
+
+Langkah 3: Terapkan Filter Adaptif di Komponen React Di komponen halaman (misalnya halaman /app/adventure atau /app/learn), baca data student_class dan filter tampilannya:
+import React, { useState, useEffect } from 'react';
+import { CURRICULUM_DATA } from '../../../data/curriculumData';
+
+export default function AdventurePage() {
+ const [gradeLevel, setGradeLevel] = useState('3-4'); // Default
+
+ const getLevelFromClass = (className) => {
+   if (!className) return '3-4';
+   if (className.includes('1') || className.includes('2')) return '1-2';
+   if (className.includes('5') || className.includes('6')) return '5-6';
+   return '3-4';
+ };
+
+ const loadStudentData = () => {
+   const savedClass = localStorage.getItem('student_class');
+   setGradeLevel(getLevelFromClass(savedClass));
+ };
+
+ useEffect(() => {
+   loadStudentData();
+   window.addEventListener('student_profile_updated', loadStudentData);
+   return () => window.removeEventListener('student_profile_updated', loadStudentData);
+ }, []);
+
+ const activeCurriculum = CURRICULUM_DATA[gradeLevel];
+
+ return (
+   <div>
+     <h2>{activeCurriculum.title} ({activeCurriculum.badge})</h2>
+     {/* Tampilkan daftar worlds dari activeCurriculum.worlds */}
+   </div>
+ );
+}
+
+Langkah Git Sebelum Memulai
+Buat branch baru di GitHub Desktop:
+         * Nama branch: feature/adaptive-curriculum
+         * Kerjakan pembaruan dokumen referensi dan buat file master data kurikulum terlebih dahulu!
+________________
+
+
+User prompt: Saya ingin menambahkan fitur ai di dalam website ini. Dimana saran letak fitur AI tersebut dan apa saja fungnsinya?
+Response: Integrasi fitur AI pada platform web edukasi anak (Web Education for Kids) sangat berpotensi mendongkrak skor kompetisi pada indikator Inovasi & Kreativitas (15 Poin) serta Fungsionalitas & Relevansi Tema (25 Poin).
+Penempatan dan fungsi fitur AI berikut dapat meminimalkan distraksi bagi anak SD:
+1. Kiko AI Tutor (Widget Floating Chatbot)
+         * Saran Letak: Diposisikan di pojok kanan bawah layar (Floating Floating Action Button / Pop-up Widget) yang selalu ada di halaman /app/learn, /app/adventure, dan /app/playground.
+         * Fungsi Utama:
+         * Interactive Hint (Petunjuk Pintar): Saat anak kebingungan menyelesaikan misi koding, AI memberikan petunjuk secara bertahap tanpa langsung memberi tahu jawaban akhir.
+         * Audio Support (Web Speech API): Menyediakan fitur text-to-speech dan speech-to-text agar anak kelas 1–2 SD dapat berinteraksi hanya menggunakan suara tanpa perlu mengetik.
+         * Penyesuaian Bahasa: Bahasa AI diset dengan gaya bahasa yang ramah, memotivasi, dan mudah dipahami anak SD.
+2. AI Code Explanation (Modul Playground & Belajar)
+         * Saran Letak: Ditempatkan di bagian samping/bawah kanvas penyusunan blok pada halaman /app/playground dan /app/learn.
+         * Fungsi Utama:
+         * Penerjemah Logika Blok: Membaca susunan blok yang ditarik oleh siswa, lalu menjelaskannya dalam kalimat sehari-hari.
+(Contoh: "Jika tombol ditekan, Kiko akan melompat 2 kali lalu mengeluarkan suara POP!")
+         * Rekomendasi Algoritma (Khusus Kelas 5–6 SD): Memberikan ide perbaikan jika susunan blok koding yang dibuat siswa belum efisien atau mengalami error (bug).
+3. AI Project Generator / Idea Helper (Modul Project)
+            * Saran Letak: Ditempatkan di halaman awal saat memilih template proyek (/app/projects).
+            * Fungsi Utama:
+            * Pembuat Ide Cerita/Game: Anak tinggal memilih topik kesukaan (misal: "Hutan", "Luar Angkasa", "Hewan"), lalu AI secara otomatis merekomendasikan draf skenario proyek dan susunan blok dasar yang bisa digunakan anak untuk memulai karyanya.
+Dampak Pada Kriteria Penilaian M-One Competition
+            * Inovasi & Kreativitas (15 Poin): Menampilkan fitur AI bernilai guna tinggi yang belum banyak ada di platform koding anak konvensional.
+            * Fungsionalitas & Relevansi Tema (25 Poin): Membantu menyelesaikan tantangan nyata anak SD yang sering terkendala literasi membaca saat belajar koding secara mandiri.
+________________
+
+
+User prompt: ini adalah tampilan penyimpanan database di supabase milik saya untuk website ini. jika saya melakukan integrasi AI, apakah penyimpanan database saya cukup?
+Response: Kapasitas penyimpanan Supabase Free Tier kamu pada gambar tersebut sangat jauh dari cukup dan masih sangat lapang untuk integrasi fitur AI.
+Analisis Kapasitas Supabase Kamu
+            * Database Size: Baru terpakai 27 MB dari 500 MB (baru 5.4%). Masih tersisa 473 MB.
+            * File Storage: Baru terpakai 0 MB dari 1 GB.
+            * Monthly Active Users: Baru 2 dari 50.000 pengguna.
+            * Egress (Data Transfer): Baru 0 MB dari 5 GB.
+Mengapa Integrasi AI Tidak Akan Membebani Database Supabase?
+            1. Pemrosesan AI Berada di Server AI (Cloud API):
+Saat pengguna mengirim pesan ke Kiko AI Tutor, riwayat pesan hanya dikirim ke API provider AI (seperti Gemini API atau OpenAI API). Supabase hanya menyimpan teks riwayat percakapan singkat (jika kamu ingin menyimpannya), yang ukurannya sangat kecil (dalam hitungan Kilobyte/KB).
+            2. Kebutuhan Tabel AI Sangat Ringan:
+Jika kamu membuat tabel ai_chat_logs atau ai_hints di Supabase untuk menyimpan riwayat tanya-jawab siswa, 1.000 pesan teks hanya memakan ruang sekitar 1–2 MB. Dengan sisa kuota 473 MB, kamu bisa menyimpan hingga ratusan ribu pesan percakapan.
+Strategi Optimasi Penyimpanan AI di Supabase
+               * Simpan Riwayat AI Lokal (localStorage):
+Untuk menghemat kuota Egress dan Database secara maksimal, kamu bisa menyimpan riwayat percakapan floating chatbot AI langsung di browser siswa (localStorage).
+               * Simpan Hanya Ringkasan di Supabase:
+Di Supabase, kamu cukup menyimpan statistik ringkas seperti kolom total_ai_questions_asked atau last_hint_used pada tabel profil siswa.
+________________
+
+
+User prompt: apakah cukup untuk menyimpan data materi kurikulum siswa?
+Response: Kapasitas penyimpanan Supabase Free Tier kamu sangat lebih dari cukup untuk menyimpan seluruh data materi kurikulum siswa.
+Estimasi Kebutuhan Penyimpanan Data Kurikulum
+                  1. Format Teks JSON/Database (Sangat Ringan):
+Data struktur kurikulum (seperti nama World, deskripsi misi, urutan blok, dan badge kelas) berupa teks biasa. 100 bab/materi pembelajaran penuh hanya memakan ruang sekitar 500 KB – 2 MB.
+                  2. Kapasitas Supabase Tersedia:
+                     * Database Size: Saat ini baru terpakai 27 MB dari 500 MB. Kamu masih punya sisa ruang 473 MB.
+                     * File Storage: Masih utuh 0 MB / 1 GB. Jika kamu mengunggah gambar/aset pendukung materi ke Supabase Storage, ruangnya masih sangat luas.
+Opsi Penyimpanan Terbaik untuk Website Kamu
+                     * Opsi 1: File Lokal Web (src/data/curriculumData.js) — Sangat Direkomendasikan
+Karena isi materi kurikulum bersifat statis dan sama untuk semua siswa berdasarkan jenjang kelasnya, menyimpan kurikulum dalam file .js / .json lokal di dalam kodingan React adalah pilihan paling ideal.
+                        * Keuntungan: Bebas kuota database, performa akses materi instan tanpa loading ke server, serta mendukung indikator penilaian Kualitas Teknis (Performa & Lazy Load) pada panduan lomba.
+                        * Opsi 2: Disimpan di Supabase Database
+Digunakan jika kamu ingin membuat Admin Dashboard untuk mengubah isi materi secara dinamis tanpa perlu melakukan push ulang kodingan ke GitHub. Kuota 473 MB kamu mampu menampung puluhan ribu baris data materi tanpa masalah.
+Catatan Penting Penilaian M-One Competition
+Sesuai kriteria penilaian Fungsionalitas & Relevansi Tema (25 Poin), yang terpenting adalah materi kurikulum dapat terhubung secara responsif dengan input kelas siswa dan berjalan tanpa error di server hosting.
+________________
+
+
+User prompt: sepertinya lebih baik menggunakan database dari supabase untuk menyimpan data materi kurikulum, agar datanya bisa diperbarui untuk ke depannya tanpa harus melakukan coding lagi
+Response: Pilihan yang sangat tepat! Menggunakan database Supabase untuk materi kurikulum membuat sistem website menjadi dinamis, skalabel, dan memudahkan pengelolaan konten di masa mendatang tanpa perlu deploy ulang kodingan.
+Rancangan Skema Tabel Supabase (curriculum_worlds)
+Buka menu SQL Editor atau Table Editor di Supabase Dashboard kamu, lalu buat tabel baru bernama curriculum_worlds dengan struktur berikut:
+CREATE TABLE curriculum_worlds (
+ id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+ world_id VARCHAR(10) NOT NULL,            -- Contoh: 'w1', 'w2', 'w3'
+ title VARCHAR(255) NOT NULL,             -- Contoh: 'World 1: Desa Urutan'
+ description TEXT,                         -- Deskripsi singkat materi
+ icon VARCHAR(50),                         -- Emoji / URL Ikon (contoh: '🏠')
+ min_grade INT NOT NULL,                   -- Kelas minimal (1, 3, atau 5)
+ max_grade INT NOT NULL,                   -- Kelas maksimal (2, 4, atau 6)
+ subtheme_category VARCHAR(100),           -- Contoh: 'Dunia Ikon & Suara'
+ learn_href VARCHAR(255),                  -- Link materi (contoh: '/app/learn/l1')
+ created_at TIMESTAMP WITH TIMEZONE DEFAULT NOW()
+);
+
+Contoh Data Awal (Isi Tabel curriculum_worlds)
+Kamu bisa langsung memasukkan data materi kurikulum adaptif 3 jenjang ke dalam tabel tersebut:
+INSERT INTO curriculum_worlds (world_id, title, description, icon, min_grade, max_grade, subtheme_category, learn_href) VALUES
+('w1', 'World 1: Desa Urutan', 'Instruksi dasar sequence & audio feedback.', '🏠', 1, 6, 'Dunia Ikon & Suara', '/app/learn/l1'),
+('w2', 'World 2: Hutan Perulangan', 'Pola ritme musik & lompatan berulang.', '🌲', 1, 6, 'Dunia Ikon & Suara', '/app/learn/l2'),
+('w3', 'World 3: Gunung Kondisi', 'Percabangan logika (If-Else) sederhana.', '⛰️', 3, 6, 'Dunia Blok & Logika', '/app/learn/l3'),
+('w4', 'World 4: Kota Variabel', 'Penyimpanan data, koin, dan nyawa.', '🏙️', 3, 6, 'Dunia Blok & Logika', '/app/learn/l4'),
+('w5', 'World 5: Arena Game', 'Koordinat X/Y, timer, dan mekanik game.', '🎮', 5, 6, 'Dunia Algoritma & Game', '/app/learn/l5'),
+('w6', 'World 6: Laboratorium Algoritma', 'Algoritma kompleks & fitur Intip Kode Asli.', '🔬', 5, 6, 'Dunia Algoritma & Game', '/app/learn/l6');
+
+Kode Fetching Dinamis di Frontend React (app/adventure/page.jsx)
+Di modul Petualangan, kamu tinggal mengambil data dari Supabase berdasarkan angka kelas siswa (student_class):
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../../../lib/supabaseClient'; // Sesuaikan lokasi client supabase kamu
+
+export default function StudentAdventurePage() {
+ const [worlds, setWorlds] = useState([]);
+ const [loading, setLoading] = useState(true);
+ const [studentClass, setStudentClass] = useState('Kelas 1 SD');
+
+ const extractGradeNumber = (className) => {
+   if (!className) return 1;
+   const match = className.match(/\d+/);
+   return match ? parseInt(match[0], 10) : 1;
+ };
+
+ const fetchCurriculumData = async () => {
+   setLoading(true);
+   const savedClass = localStorage.getItem('student_class') || 'Kelas 1 SD';
+   const gradeNum = extractGradeNumber(savedClass);
+   setStudentClass(savedClass);
+
+   // Fetch data Supabase filter berdasarkan min_grade
+   const { data, error } = await supabase
+     .from('curriculum_worlds')
+     .select('*')
+     .lte('min_grade', gradeNum) // Ambil materi yang min_grade <= kelas siswa
+     .order('min_grade', { ascending: true });
+
+   if (!error && data) {
+     setWorlds(data);
+   }
+   setLoading(false);
+ };
+
+ useEffect(() => {
+   fetchCurriculumData();
+
+   window.addEventListener('student_profile_updated', fetchCurriculumData);
+   return () => window.removeEventListener('student_profile_updated', fetchCurriculumData);
+ }, []);
+
+ return (
+   <div>
+     {/* Render Kartu Worlds dari state `worlds` */}
+   </div>
+ );
+}
+
+Nilai Tambah Penggunaan Supabase
+                           1. Fleksibilitas Masa Depan: Kamu bisa menambah World baru (misal World 7) langsung dari dashboard Supabase tanpa menyentuh kodingan lagi.
+                           2. Kapasitas Tetap Aman: Kuota 473 MB database Supabase kamu hanya akan terpakai < 1 MB untuk seluruh materi ini.
+________________
+
+
+User prompt: saya sudah memasukkan data folder blokuma ke dalam ai agent di antigravity IDE. buatkan prompt untuk diberikan ke ai agent. tujuannya untuk BUANG CIRI-CIRI AI: Tinjau website Blokuma secara khusus untuk menghilangkan pola visual generik khas AI. Cari dan temukan: - Tata letak kartu (card layouts) yang monoton dan berulang-ulang. - Penggunaan sudut melengkung (rounded corners) pada container yang terlalu berlebihan/tidak natural. - Komposisi hero section yang terlalu standar (teks kiri, gambar kanan ala SaaS bisnis). - Penggunaan gradien warna yang tidak perlu atau terlalu futuristik-kaku. - Elemen dekoratif kosmetik tanpa tujuan edukasi yang jelas. - Bahasa tombol (CTA) yang terlalu kaku atau formal (misal: "Mulai Transformasi Digital Anda"). - Kesan website seperti template murahan/stock-template. - Inkonsistensi dengan kepribadian brand yang harusnya ceria dan ramah anak. Jangan menulis ulang seluruh kode dari nol. Rekomendasikan perubahan sekecil mungkin namun memberikan dampak besar agar produk terasa lebih otentik, humanis, dan sengaja didesain khusus untuk anak-anak.
+Response: Berikut adalah draf prompt siap pakai yang bisa kamu salin (copy-paste) langsung ke chat AI Agent (Gemini 3.8 Flash High) pada Antigravity IDE kamu:
+Tinjau seluruh basis kode website Blokuma ini secara komprehensif dengan fokus utama menghilangkan pola visual generik khas AI ("AI slop") agar memenuhi kriteria penilaian UI/UX & Responsivitas (20 Poin) M-One Competition.
+
+Tugas Audit & Refactoring Visual:
+1. Audit Seluruh Komponen Visual:
+  - Identifikasi tata letak kartu (card layouts) yang monoton dan berulang. Ubah ritme visualnya (gunakan variasi ukuran, aksen kustom, atau border playful).
+  - Perbaiki sudut melengkung (rounded corners) pada container yang tidak natural/terlalu berlebihan (misal: ganti rounded-3xl berulang yang kaku dengan pembatas yang lebih proporsional).
+  - Rombak komposisi hero section yang terlalu standar (layout teks kiri, gambar kanan ala SaaS bisnis) menjadi antarmuka yang lebih dinamis, eksploratif, dan playful.
+  - Hilangkan penggunaan gradien warna kaku/futuristik yang tidak perlu. Gunakan palet warna solid, hangat, dan ceria yang ramah anak.
+  - Hapus elemen dekoratif kosmetik yang tidak memiliki fungsi edukasi jelas.
+
+2. Audit Bahasa & Microcopy:
+  - Ganti semua teks/bahasa tombol (CTA) yang kaku atau bernada corporate (contoh: "Mulai Transformasi Digital Anda") menjadi kalimat percakapan seru yang menyapa anak SD (contoh: "Yuk, Mulai Petualangan!", "Buka Kode Secret!", "Ayo Coba!").
+
+3. Panduan Pelaksanaan:
+  - JANGAN menulis ulang seluruh kode dari nol.
+  - Lakukan perubahan sekecil dan seefisien mungkin pada komponen CSS/Tailwind dan JSX, namun memberikan dampak visual yang besar.
+  - Pastikan kepribadian brand Blokuma terasa otentik, humanis, hangat, dan sengaja didesain khusus untuk anak-anak sekolah dasar.
+
+Mengapa Prompt Ini Sangat Tepat untuk Lomba M-One?
+                           1. Memaksimalkan Bobot UI/UX & Responsivitas (20 Poin): Indikator resmi lomba secara eksplisit memeriksa bahwa warna dan tipografi tidak generik AI, serta memiliki efek visual yang relevan.
+                           2. Kesesuaian Tema Subtema Kids: Mengubah tone situs dari gaya SaaS Business menjadi Web Education for Kids memastikan karya terhindar dari kesan template murah dan meningkatkan estetika secara instan.
+________________
+
+
+User prompt: saya ingin membuat tampilan latar belakang website saya (pada foto ke 2) memiliki tampilan latar belakang yang sama seperti website pada foto pertama. Latar belakang pada website di foto pertama ada di website : https://antigravity.google/. Latar belakang tersebut seperti animasi titik titik warna warni yang mengikuti arah gerakan kursor. Bantu saya menyusun ide tersebut dan dijadikan prompt untuk AI agent
+Response: Efek animasi titik-titik interaktif (interactive particle field) yang merespons kursor mouse seperti pada antigravity.google dapat dibuat dengan komponen HTML5 Canvas di React/Vite.
+Efek ini dapat dibungkus menjadi komponen pembungkus latar belakang (Background Wrapper) bernama ParticleBackground.jsx yang ringan dan tidak membebani performa (FPS) website.
+Prompt Siap Pakai untuk AI Agent (Antigravity IDE)
+Salin kode prompt di bawah ini dan berikan langsung ke AI Agent di Antigravity IDE kamu:
+Buatkan komponen background interaktif dalam React (Vite) untuk halaman landing/hero website Blokuma, yang terinspirasi dari animasi titik-titik interaktif seperti pada situs https://antigravity.google.
+
+Spesifikasi & Kebutuhan Teknis:
+1. Nama Komponen & Lokasi:
+  - Buat komponen bernama `ParticleBackground.jsx` di dalam folder `components/ui/` atau `components/dekorasi/`.
+  - Gunakan elemen <canvas> HTML5 yang bersifat fixed/absolute di layer paling belakang (z-index rendah/negative) agar tidak mengganggu interaksi tombol atau teks di depannya.
+
+2. Efek Visual & Interaktivitas (Particle Physics):
+  - Generasi Titik-titik (Particles): Buat sebaran partikel titik/dots acak di seluruh layar.
+  - Variasi Warna: Gunakan warna-warna ceria khas Blokuma/anak-anak (seperti Teal `#14b8a6`, Amber `#f59e0b`, Emerald `#10b981`, Purple `#8b5cf6`, dan Rose `#f43f5e`).
+  - Interaksi Kursor Mouse: Saat kursor mouse bergerak di atas canvas, partikel di sekitar radius mouse akan merespons (misal: terdorong menjauh dari kursor atau tertarik mengikuti gerakan mouse secara halus/gravity effect).
+  - Animasi Smooth: Gunakan `requestAnimationFrame` untuk render canvas yang mulus (smooth 60FPS) serta tangani penyesuaian ukuran layar secara otomatis (`window.addEventListener('resize')`).
+
+3. Keamanan & Performa (Optimalisasi M-One Competition):
+  - Pastikan ada pembersihan listener (cleanup function di useEffect) agar tidak memicu memory leak.
+  - Batasi jumlah partikel (misal 80–120 partikel) agar performa website tetap ringan pada perangkat seluler maupun laptop spesifikasi rendah.
+  - Bungkus section Hero atau Landing Page utama Blokuma menggunakan komponen `ParticleBackground` ini.
+
+Mengapa Integrasi Efek Ini Sangat Menguntungkan untuk Lomba?
+                           1. Meningkatkan Bobot UI/UX & Responsivitas (20 Poin): Memberikan sentuhan interaktif yang modern, estetik, dan menyenangkan bagi anak-anak saat menggerakkan kursor.
+                           2. Kualitas Teknis (15 Poin): Menggunakan HTML5 Canvas native dengan requestAnimationFrame membuktikan kemampuan teknis koding yang efisien dan tidak memperlambat load time website.
+________________
+
+
+User prompt: perbaiki plain text tersebut, saat kursor bergerak di atas canvas maka partikel merespon tertarik mengikuti arah kursor
+Response: Berikut adalah perbaikan prompt yang sudah disesuaikan agar partikel bergerak tertarik mengikuti kursor mouse (efek gravitasi/magnet):
+Buatkan komponen background interaktif dalam React (Vite) untuk halaman landing/hero website Blokuma, yang terinspirasi dari animasi titik-titik interaktif seperti pada situs https://antigravity.google.
+
+Spesifikasi & Kebutuhan Teknis:
+1. Nama Komponen & Lokasi:
+  - Buat komponen bernama `ParticleBackground.jsx` di dalam folder `components/ui/` atau `components/dekorasi/`.
+  - Gunakan elemen <canvas> HTML5 yang bersifat fixed/absolute di layer paling belakang (z-index rendah/negative) agar tidak mengganggu interaksi tombol atau teks di depannya.
+
+2. Efek Visual & Interaktivitas (Particle Physics):
+  - Generasi Titik-titik (Particles): Buat sebaran partikel titik/dots acak di seluruh layar.
+  - Variasi Warna: Gunakan warna-warna ceria khas Blokuma/anak-anak (seperti Teal `#14b8a6`, Amber `#f59e0b`, Emerald `#10b981`, Purple `#8b5cf6`, dan Rose `#f43f5e`).
+  - Interaksi Kursor Mouse (Gravitasi/Magnet): Saat kursor mouse bergerak di atas canvas, partikel dalam radius tertentu akan merespons dengan terdorong/tertarik perlahan mendekati dan mengikuti arah posisi kursor mouse secara halus (attraction effect).
+  - Animasi Smooth: Gunakan `requestAnimationFrame` untuk render canvas yang mulus (smooth 60FPS) serta tangani penyesuaian ukuran layar secara otomatis (`window.addEventListener('resize')`).
+
+3. Keamanan & Performa (Optimalisasi M-One Competition):
+  - Pastikan ada pembersihan listener (cleanup function di useEffect) agar tidak memicu memory leak.
+  - Batasi jumlah partikel (misal 80–120 partikel) agar performa website tetap ringan pada perangkat seluler maupun laptop spesifikasi rendah.
+  - Bungkus section Hero atau Landing Page utama Blokuma menggunakan komponen `ParticleBackground` ini.
+
+Perubahan Utama pada Prompt
+                           * Sifat Interaksi Ditegaskan: Kata "terdorong menjauh" telah diganti secara eksplisit menjadi "tertarik perlahan mendekati dan mengikuti arah posisi kursor mouse secara halus (attraction effect)".
+                           * AI Agent kini akan menghitung jarak Euclidean (dx,dy) antara tiap partikel dan kursor mouse, lalu menerapkan gaya tarik (magnetic/attraction force) alih-alih gaya dorong (repulsion).
+________________

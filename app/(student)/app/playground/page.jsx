@@ -1,13 +1,29 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 import { KikoSmartHint } from '../../../../components/ui/KikoSmartHint.jsx';
 import { KikoStoryGeneratorModal } from '../../../../components/ui/KikoStoryGeneratorModal.jsx';
 
+const islandThemes = [
+  { name: 'Desa Urutan', sky: 'from-sky-300 via-sky-100 to-amber-100', ground: 'bg-emerald-600', landmarks: ['🏡', '🌳', '🌼', '🌳'] },
+  { name: 'Hutan Perulangan', sky: 'from-cyan-300 via-emerald-100 to-lime-100', ground: 'bg-green-800', landmarks: ['🌲', '🌲', '🍄', '🌳'] },
+  { name: 'Gunung Kondisi', sky: 'from-indigo-300 via-slate-100 to-slate-300', ground: 'bg-slate-600', landmarks: ['⛰️', '🌲', '🪨', '⛰️'] },
+  { name: 'Kota Variabel', sky: 'from-orange-300 via-amber-100 to-cyan-100', ground: 'bg-teal-700', landmarks: ['🏙️', '🏢', '🌳', '🏙️'] },
+  { name: 'Arena Game Seru', sky: 'from-indigo-950 via-violet-800 to-fuchsia-700', ground: 'bg-violet-950', landmarks: ['⭐', '🪐', '🎮', '✨'] },
+  { name: 'Laboratorium Algoritma', sky: 'from-violet-900 via-cyan-800 to-teal-500', ground: 'bg-slate-900', landmarks: ['🧪', '⚙️', '🔬', '🧪'] },
+];
+
 export default function StudentPlaygroundPage() {
+  const [searchParams] = useSearchParams();
+  const requestedIsland = Number(searchParams.get('island'));
+  const islandNumber = Number.isInteger(requestedIsland) && requestedIsland >= 1 && requestedIsland <= islandThemes.length
+    ? requestedIsland
+    : 1;
+  const islandTheme = islandThemes[islandNumber - 1];
   const [canvasBlocks, setCanvasBlocks] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
-  const [robotPosition, setRobotPosition] = useState(0);
-  const [robotJump, setRobotJump] = useState(false);
+  const [isKikoStageVisible, setIsKikoStageVisible] = useState(false);
+  const [stageAction, setStageAction] = useState('idle');
   const [actionMessage, setActionMessage] = useState('Pilih balok lalu klik Jalankan Kode!');
   const [attemptCount, setAttemptCount] = useState(0);
   const [lastExecutionResult, setLastExecutionResult] = useState({ status: 'idle' });
@@ -28,8 +44,8 @@ export default function StudentPlaygroundPage() {
   const handleClearCanvas = () => {
     if (isRunning) return;
     setCanvasBlocks([]);
-    setRobotPosition(0);
-    setRobotJump(false);
+    setIsKikoStageVisible(false);
+    setStageAction('idle');
     setActionMessage('Kanvas dikosongkan & Maskot kembali ke posisi awal!');
     setAttemptCount(0);
   };
@@ -61,23 +77,28 @@ export default function StudentPlaygroundPage() {
   const executeSingleBlock = async (blockId) => {
     if (blockId === 'move') {
       setActionMessage('🚀 Robot Kiko: Maju 1 Langkah!');
-      setRobotPosition((prev) => Math.min(prev + 25, 140));
+      setStageAction('walking');
       await sleep(600);
     } else if (blockId === 'jump') {
       setActionMessage('🦘 Robot Kiko: Melompat!');
-      setRobotJump(true);
+      setStageAction('jumping');
       await sleep(400);
-      setRobotJump(false);
+      setStageAction('idle');
       await sleep(300);
     } else if (blockId === 'sound') {
       setActionMessage('🎵 Robot Kiko: Memainkan Suara POP!');
+      setStageAction('celebrating');
       playPopSound();
       await sleep(600);
     }
+    setStageAction('idle');
   };
 
   const handleRunCode = async () => {
     if (isRunning) return;
+
+    setIsKikoStageVisible(true);
+    setStageAction('idle');
 
     if (canvasBlocks.length === 0) {
       setActionMessage('⚠️ Kanvas masih kosong! Tambahkan balok terlebih dahulu.');
@@ -252,38 +273,23 @@ export default function StudentPlaygroundPage() {
               </div>
 
               <div className="my-auto w-full flex flex-col items-center gap-2">
-                {/* Outer Container: Pergerakan Horizontal (Posisi X) */}
                 <div
-                  className="transition-all duration-300 ease-out flex flex-col items-center justify-center"
-                  style={{
-                    transform: `translateX(${robotPosition}px)`,
+                  onClick={() => {
+                    playPopSound();
+                    setActionMessage('😄 Robot Kiko: Yey! Kamu menyapaku!');
                   }}
+                  className="cursor-pointer group animate-kiko-idle transition-transform hover:scale-110"
+                  title="Klik Robot Kiko untuk menyapa!"
                 >
-                  {/* Inner Container: Animasi Kiko (Melayang Idle / Jalan / Lompat) */}
-                  <div
-                    onClick={() => {
-                      playPopSound();
-                      setActionMessage('😄 Robot Kiko: Yey! Kamu menyapaku!');
+                  <img
+                    src="/images/Robot.webp"
+                    alt="Mascot Kiko"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/images/robot.webp";
                     }}
-                    className={`cursor-pointer group transition-all duration-300 ${
-                      robotJump
-                        ? '-translate-y-12 scale-125 rotate-6 drop-shadow-2xl'
-                        : isRunning
-                        ? 'animate-kiko-walk'
-                        : 'animate-kiko-idle hover:scale-110'
-                    }`}
-                    title="Klik Robot Kiko untuk menyapa!"
-                  >
-                    <img
-                      src="/images/Robot.webp"
-                      alt="Mascot Kiko"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = "/images/robot.webp";
-                      }}
-                      className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-xl transition transform group-hover:rotate-6 filter"
-                    />
-                  </div>
+                    className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-xl transition transform group-hover:rotate-6 filter"
+                  />
                 </div>
 
                 <div className="bg-white/95 backdrop-blur-sm text-slate-800 px-3.5 py-1.5 rounded-xl border border-teal-200 shadow-sm text-xs font-bold min-h-[32px] flex items-center justify-center max-w-full">
@@ -321,6 +327,65 @@ export default function StudentPlaygroundPage() {
 
           </div>
         </div>
+
+        {isKikoStageVisible && (
+          <section
+            aria-label="Panggung aksi Kiko"
+            aria-live="polite"
+            data-island={islandNumber}
+            className={`kiko-stage-enter relative isolate mt-6 min-h-[280px] w-full overflow-hidden rounded-2xl border-2 border-white/70 bg-gradient-to-b ${islandTheme.sky} shadow-lg sm:min-h-[340px] ${isRunning ? 'kiko-stage-parallax-active' : ''}`}
+          >
+            <div className="kiko-stage-clouds absolute inset-x-0 top-0 h-2/3" aria-hidden="true" />
+            <div className="kiko-stage-hills absolute inset-x-0 bottom-12 h-2/3" aria-hidden="true" />
+            <div className={`kiko-stage-ground absolute inset-x-0 bottom-0 h-14 border-t-4 border-white/30 ${islandTheme.ground}`} aria-hidden="true" />
+            <div className={`kiko-stage-landmarks ${isRunning ? 'kiko-stage-parallax-active' : ''}`} aria-hidden="true">
+              {[0, 1].map((copy) => (
+                <div className="kiko-stage-landmark-segment" key={copy}>
+                  {islandTheme.landmarks.map((landmark, index) => (
+                    <span
+                      className="kiko-stage-landmark"
+                      key={`${copy}-${index}`}
+                      style={{ left: `${index * 27 + 4}%` }}
+                    >
+                      {landmark}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <div className="absolute left-4 right-4 top-4 z-10 flex items-center justify-between gap-3 sm:left-6 sm:right-6">
+              <span className="rounded-full border border-white/80 bg-white/85 px-3 py-1 text-xs font-bold text-sky-900 shadow-sm">
+                🚀 Pulau {islandNumber}: {islandTheme.name}
+              </span>
+              <span className="rounded-full border border-white/80 bg-white/85 px-3 py-1 text-xs font-bold text-slate-700 shadow-sm">
+                {isRunning ? 'Kiko sedang beraksi!' : 'Kreasimu selesai dijalankan!'}
+              </span>
+            </div>
+
+            <div
+              className={`absolute bottom-9 left-[8%] z-10 ${
+                stageAction === 'walking'
+                  ? 'animate-kiko-walk'
+                  : stageAction === 'jumping'
+                  ? 'animate-kiko-stage-jump'
+                  : stageAction === 'celebrating'
+                  ? 'animate-kiko-happy'
+                  : 'animate-kiko-idle'
+              }`}
+            >
+              <img
+                src="/images/Robot.webp"
+                alt="Kiko sedang beraksi di panggung"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/images/robot.webp";
+                }}
+                className="h-28 w-28 object-contain drop-shadow-xl sm:h-36 sm:w-36"
+              />
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
