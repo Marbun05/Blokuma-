@@ -42,7 +42,7 @@ export default function TeacherDashboardPage() {
         // Fetch total projects by students in their classes
         // For simplicity right now, just total projects across the platform by students, or we can leave it general
         const { count: projectCount } = await supabase
-          .from('projects')
+          .from('student_projects')
           .select('id', { count: 'exact', head: true });
 
         setStats({

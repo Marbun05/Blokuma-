@@ -1,13 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
+import { supabase } from '../../../../lib/supabase/client';
+import { useAuthStore } from '../../../../store/auth/use-auth-store';
 
 export default function AchievementsPage() {
+  const { user } = useAuthStore();
+  const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAchievements = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('master_achievements')
+          .select('*')
+          .order('target_value', { ascending: true });
+
+        if (error) throw error;
+
+        // Simulasikan status unlocked (Dalam produksi ini ditarik dari tabel student_achievements join master_achievements)
+        // Disini kita set first_step kebuka, loop_master progress, game_architect kekunci
+        const processed = (data || []).map(a => {
+          if (a.id === 'first_step') return { ...a, status: 'unlocked', progress: 100 };
+          if (a.id === 'loop_master') return { ...a, status: 'progress', progress: 70 };
+          return { ...a, status: 'locked', progress: 0 };
+        });
+
+        setAchievements(processed);
+      } catch (err) {
+        console.error('Error fetching achievements:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAchievements();
+  }, [user]);
+
   return (
     <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+      <main className="flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-6xl w-full mx-auto">
         {/* Tombol Kembali */}
         <div className="mb-4">
           <Link
@@ -30,59 +64,57 @@ export default function AchievementsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {/* Lencana 1 */}
-          <div className="bg-amber-50/80 rounded-2xl p-6 border-2 border-amber-300 card-chunky text-center shadow-sm hover:-translate-y-1 transition duration-200 relative">
-            <div className="w-20 h-20 mx-auto rounded-full bg-amber-200 border-4 border-amber-400 flex items-center justify-center text-4xl shadow-md mb-3">
-              🚀
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-900 bg-amber-200 px-2.5 py-0.5 rounded-full border border-amber-400 inline-block mb-1">
-              Medali Emas
-            </span>
-            <h3 className="font-heading font-bold text-xl text-slate-900">Langkah Pertama</h3>
-            <p className="text-xs text-slate-600 font-medium mt-1 mb-4">
-              Berhasil mengeksekusi instruksi balok pertamamu di kanvas!
-            </p>
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full border border-emerald-300 shadow-sm">
-              <span>✓</span> Sudah Terbuka
-            </span>
-          </div>
+        {loading ? (
+           <div className="py-12 flex flex-col items-center justify-center text-teal-800 gap-3">
+             <div className="w-10 h-10 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
+             <span className="text-sm font-bold animate-pulse">Memuat medali dan lencana...</span>
+           </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {achievements.map((item) => {
+              const isLocked = item.status === 'locked';
+              const isProgress = item.status === 'progress';
+              const isUnlocked = item.status === 'unlocked';
 
-          {/* Lencana 2 */}
-          <div className="bg-teal-50/80 rounded-2xl p-6 border-2 border-teal-300 card-chunky text-center shadow-sm hover:-translate-y-1 transition duration-200 relative">
-            <div className="w-20 h-20 mx-auto rounded-full bg-teal-200 border-4 border-teal-400 flex items-center justify-center text-4xl shadow-md mb-3">
-              🔁
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-teal-900 bg-teal-200 px-2.5 py-0.5 rounded-full border border-teal-400 inline-block mb-1">
-              Medali Perak
-            </span>
-            <h3 className="font-heading font-bold text-xl text-slate-900">Mantra Perulangan</h3>
-            <p className="text-xs text-slate-600 font-medium mt-1 mb-3">
-              Gunakan balok loop sebanyak 10 kali untuk menghemat instruksi.
-            </p>
-            <div className="w-full bg-teal-100 rounded-full h-2.5 mb-2 overflow-hidden border border-teal-200">
-              <div className="bg-teal-600 h-2.5 rounded-full" style={{ width: '70%' }} />
-            </div>
-            <span className="text-[11px] font-bold text-teal-700">7 / 10 Digunakan (70%)</span>
-          </div>
+              return (
+                <div
+                  key={item.id}
+                  className={`${item.bg_color} bg-opacity-80 rounded-2xl p-6 border-2 ${item.border_color} card-chunky text-center shadow-sm hover:-translate-y-1 transition duration-200 relative ${isLocked ? 'opacity-85' : ''}`}
+                >
+                  <div className={`w-20 h-20 mx-auto rounded-full ${item.bg_color.replace('200','300')} border-4 ${item.border_color} flex items-center justify-center text-4xl shadow-md mb-3 ${isLocked ? 'grayscale opacity-80' : ''}`}>
+                    {item.icon}
+                  </div>
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${item.text_color} ${item.bg_color} px-2.5 py-0.5 rounded-full border ${item.border_color} inline-block mb-1`}>
+                    {item.medal_type}
+                  </span>
+                  <h3 className="font-heading font-bold text-xl text-slate-900">{item.title}</h3>
+                  <p className="text-xs text-slate-600 font-medium mt-1 mb-4">
+                    {item.description}
+                  </p>
 
-          {/* Lencana 3 */}
-          <div className="bg-purple-50/70 rounded-2xl p-6 border-2 border-purple-300 card-chunky text-center shadow-sm hover:-translate-y-1 transition duration-200 relative opacity-85">
-            <div className="w-20 h-20 mx-auto rounded-full bg-purple-200 border-4 border-purple-300 flex items-center justify-center text-4xl shadow-md mb-3 grayscale opacity-80">
-              🎮
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-purple-900 bg-purple-200 px-2.5 py-0.5 rounded-full border border-purple-400 inline-block mb-1">
-              Medali Perunggu
-            </span>
-            <h3 className="font-heading font-bold text-xl text-slate-900">Arsitek Game Cilik</h3>
-            <p className="text-xs text-slate-600 font-medium mt-1 mb-4">
-              Rancang game interaktif pertamamu dengan skor & timer.
-            </p>
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-slate-200 text-slate-700 text-xs font-bold rounded-full border border-slate-300">
-              <span>🔒</span> Terkunci di Pulau 5
-            </span>
+                  {isUnlocked && (
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full border border-emerald-300 shadow-sm">
+                      <span>✓</span> Sudah Terbuka
+                    </span>
+                  )}
+                  {isProgress && (
+                    <>
+                      <div className="w-full bg-white/50 rounded-full h-2.5 mb-2 overflow-hidden border border-black/10">
+                        <div className="bg-black/40 h-2.5 rounded-full" style={{ width: `${item.progress}%` }} />
+                      </div>
+                      <span className={`text-[11px] font-bold ${item.text_color}`}>{item.progress}% Selesai</span>
+                    </>
+                  )}
+                  {isLocked && (
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-slate-200 text-slate-700 text-xs font-bold rounded-full border border-slate-300">
+                      <span>🔒</span> Terkunci
+                    </span>
+                  )}
+                </div>
+              );
+            })}
           </div>
-        </div>
+        )}
       </main>
     </div>
   );

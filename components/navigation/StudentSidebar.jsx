@@ -97,7 +97,7 @@ export function StudentSidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col justify-between p-4 min-h-screen relative shrink-0">
+      <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col justify-between p-4 h-screen sticky top-0 shrink-0 overflow-y-auto">
         <div>
           <div className="flex items-center gap-3 px-2 py-3 mb-4 border-b-2 border-slate-100">
             <div className="w-10 h-10 rounded-xl bg-teal-500 text-white font-bold flex items-center justify-center shadow-toyTeal border-b-2 border-teal-700">

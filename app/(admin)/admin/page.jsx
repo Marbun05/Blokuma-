@@ -29,7 +29,7 @@ export default function AdminDashboardPage() {
           .eq('role', 'teacher');
 
         const { count: projectCount } = await supabase
-          .from('projects')
+          .from('student_projects')
           .select('id', { count: 'exact', head: true });
 
         const { data: usersData } = await supabase
@@ -187,6 +187,15 @@ export default function AdminDashboardPage() {
                   </div>
                 </div>
               </button>
+              <Link to="/admin/playground-data" className="block w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-900/50 hover:bg-slate-700/50 transition group">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🧩</span>
+                  <div>
+                    <h3 className="font-bold text-sm text-teal-400">Master Data Playground</h3>
+                    <p className="text-[10px] text-slate-400 mt-1">Atur pulau dan balok yang muncul di halaman playground siswa.</p>
+                  </div>
+                </div>
+              </Link>
             </div>
           </div>
         </div>

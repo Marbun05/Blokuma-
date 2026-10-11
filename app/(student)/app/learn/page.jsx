@@ -7,7 +7,7 @@ export default function LearnPage() {
     <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+      <main className="flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-6xl w-full mx-auto">
         <div className="mb-8">
           <div className="inline-block px-3 py-1 bg-teal-100 text-teal-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-teal-300">
             📚 Kurikulum Petualangan

@@ -44,9 +44,9 @@ export default function ParentDashboardPage() {
 
           // Fetch child projects count
           const { count } = await supabase
-            .from('projects')
+            .from('student_projects')
             .select('id', { count: 'exact', head: true })
-            .eq('owner_id', studentId);
+            .eq('student_id', studentId);
 
           setProjectsCount(count || 0);
         }

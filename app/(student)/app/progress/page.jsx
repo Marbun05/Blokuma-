@@ -7,7 +7,7 @@ export default function ProgressPage() {
     <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-5 sm:p-8 max-w-5xl">
+      <main className="flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-5xl w-full mx-auto">
         {/* Tombol Kembali */}
         <div className="mb-4">
           <Link

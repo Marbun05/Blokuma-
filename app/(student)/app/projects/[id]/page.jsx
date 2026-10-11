@@ -7,7 +7,7 @@ export default function ProjectDetailPage() {
     <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-5 sm:p-8 max-w-4xl">
+      <main className="flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-4xl w-full mx-auto">
         <div className="bg-white rounded-2xl p-6 sm:p-8 border-2 border-slate-200 card-chunky shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="px-3 py-1 bg-amber-100 text-amber-900 font-bold text-xs rounded-full border border-amber-300">

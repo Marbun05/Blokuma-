@@ -1,26 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 import { KikoSmartHint } from '../../../../components/ui/KikoSmartHint.jsx';
 import { KikoStoryGeneratorModal } from '../../../../components/ui/KikoStoryGeneratorModal.jsx';
 import { KikoMissionSuccessModal } from '../../../../components/ui/KikoMissionSuccessModal.jsx';
-
-const islandThemes = [
-  { name: 'Desa Urutan', sky: 'from-sky-300 via-sky-100 to-amber-100', ground: 'bg-emerald-600', landmarks: ['🏡', '🌳', '🌼', '🌳'] },
-  { name: 'Hutan Perulangan', sky: 'from-cyan-300 via-emerald-100 to-lime-100', ground: 'bg-green-800', landmarks: ['🌲', '🌲', '🍄', '🌳'] },
-  { name: 'Gunung Kondisi', sky: 'from-indigo-300 via-slate-100 to-slate-300', ground: 'bg-slate-600', landmarks: ['⛰️', '🌲', '🪨', '⛰️'] },
-  { name: 'Kota Variabel', sky: 'from-orange-300 via-amber-100 to-cyan-100', ground: 'bg-teal-700', landmarks: ['🏙️', '🏢', '🌳', '🏙️'] },
-  { name: 'Arena Game Seru', sky: 'from-indigo-950 via-violet-800 to-fuchsia-700', ground: 'bg-violet-950', landmarks: ['⭐', '🪐', '🎮', '✨'] },
-  { name: 'Laboratorium Algoritma', sky: 'from-violet-900 via-cyan-800 to-teal-500', ground: 'bg-slate-900', landmarks: ['🧪', '⚙️', '🔬', '🧪'] },
-];
+import { supabase } from '../../../../lib/supabase/client';
 
 export default function StudentPlaygroundPage() {
   const [searchParams] = useSearchParams();
   const requestedIsland = Number(searchParams.get('island'));
-  const islandNumber = Number.isInteger(requestedIsland) && requestedIsland >= 1 && requestedIsland <= islandThemes.length
-    ? requestedIsland
-    : 1;
-  const islandTheme = islandThemes[islandNumber - 1];
+
+  const [islandThemes, setIslandThemes] = useState([]);
+  const [availableBlocks, setAvailableBlocks] = useState([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
   const [canvasBlocks, setCanvasBlocks] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
   const [isKikoStageVisible, setIsKikoStageVisible] = useState(false);
@@ -31,12 +24,38 @@ export default function StudentPlaygroundPage() {
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
-  const availableBlocks = [
-    { id: 'move', label: '➔ MAJU 1 LANGKAH', color: 'bg-teal-500 hover:bg-teal-600 text-white border-b-4 border-teal-700' },
-    { id: 'jump', label: '🦘 MELOMPAT TINGGI', color: 'bg-indigo-500 hover:bg-indigo-600 text-white border-b-4 border-indigo-700' },
-    { id: 'repeat', label: '🔁 ULANGI 3 KALI', color: 'bg-amber-400 hover:bg-amber-500 text-slate-900 border-b-4 border-amber-600' },
-    { id: 'sound', label: '🎵 SUARA POP CERIA', color: 'bg-sky-500 hover:bg-sky-600 text-white border-b-4 border-sky-700' },
-  ];
+  useEffect(() => {
+    const fetchPlaygroundData = async () => {
+      try {
+        const [islandsRes, blocksRes] = await Promise.all([
+          supabase.from('playground_islands').select('*').order('created_at', { ascending: true }),
+          supabase.from('playground_blocks').select('*').order('created_at', { ascending: true })
+        ]);
+
+        if (islandsRes.error) throw islandsRes.error;
+        if (blocksRes.error) throw blocksRes.error;
+
+        setIslandThemes(islandsRes.data || []);
+        setAvailableBlocks(blocksRes.data || []);
+      } catch (error) {
+        console.error("Error fetching playground data:", error);
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
+    fetchPlaygroundData();
+  }, []);
+
+  const islandNumber = Number.isInteger(requestedIsland) && requestedIsland >= 1 && requestedIsland <= (islandThemes.length || 1)
+    ? requestedIsland
+    : 1;
+  const islandTheme = islandThemes[islandNumber - 1] || {
+    name: 'Pulau Default',
+    sky: 'from-sky-300 via-sky-100 to-amber-100',
+    ground: 'bg-emerald-600',
+    landmarks: ['🏡', '🌳']
+  };
 
   const handleAddBlock = (block) => {
     if (isRunning) return;
@@ -147,11 +166,22 @@ export default function StudentPlaygroundPage() {
     setIsSuccessModalOpen(true);
   };
 
+  if (isLoadingData) {
+    return (
+      <div className="flex min-h-screen bg-[#FBF9F5] items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 font-bold">Memuat Playground...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+      <main className="flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-6xl w-full mx-auto">
         {/* Tombol Kembali */}
         <div className="mb-4">
           <Link
@@ -230,6 +260,9 @@ export default function StudentPlaygroundPage() {
                       <span className="text-base font-extrabold">+</span>
                     </button>
                   ))}
+                  {availableBlocks.length === 0 && (
+                    <p className="text-sm text-slate-500 italic">Belum ada blok tersedia di database.</p>
+                  )}
                 </div>
               </div>
               <p className="text-[11px] text-slate-500 mt-4 italic font-medium">
@@ -355,7 +388,7 @@ export default function StudentPlaygroundPage() {
             <div className={`kiko-stage-landmarks ${isRunning ? 'kiko-stage-parallax-active' : ''}`} aria-hidden="true">
               {[0, 1].map((copy) => (
                 <div className="kiko-stage-landmark-segment" key={copy}>
-                  {islandTheme.landmarks.map((landmark, index) => (
+                  {Array.isArray(islandTheme.landmarks) && islandTheme.landmarks.map((landmark, index) => (
                     <span
                       className="kiko-stage-landmark"
                       key={`${copy}-${index}`}

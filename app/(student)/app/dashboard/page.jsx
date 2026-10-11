@@ -49,7 +49,7 @@ export default function StudentDashboardPage() {
     <div className="flex min-h-screen bg-[#FBF9F5]">
       <StudentSidebar />
 
-      <main className="flex-1 p-5 sm:p-8 max-w-6xl">
+      <main className="flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-6xl w-full mx-auto">
         {/* Banner Selamat Datang Hangat & Semangat */}
         <div className="bg-teal-600 rounded-2xl p-6 sm:p-7 text-white mb-8 shadow-toyTeal border-2 border-teal-700 relative overflow-hidden">
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
