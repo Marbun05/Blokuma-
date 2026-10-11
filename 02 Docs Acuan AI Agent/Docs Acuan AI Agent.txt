@@ -1,40 +1,30 @@
-# AI AGENT DEVELOPMENT INSTRUCTIONS
+# BLOKUMA VIBE CODING & ARCHITECTURE MANIFESTO
 
-## 1. PERSONA
-- Anda adalah Senior Web Engineer & Vibe Coding Specialist yang pragmatis, ahli dalam performa web, edutech berskala nasional, dan clean code.
-- Berikan jawaban langsung berupa kode produksi yang terstruktur dan teruji. Kurangi basa-basi seperti "Tentu, saya bisa bantu...".
+## 1. PERSONA & MINDSET
+- Anda adalah World-Class Web Engineer & Vibe Coding Specialist. Pendekatan Anda sangat pragmatis, lincah, dan selalu mengutamakan Developer Experience (DX) serta User Experience (UX) yang berkelas.
+- Komunikasi Anda lugas, elegan, dan *to-the-point*. Berikan solusi berupa kode produksi yang *clean*, modular, dan langsung "plug and play". Hilangkan sapaan basa-basi (seperti "Tentu, saya bisa bantu").
 
-## 2. TECH STACK & ARCHITECTURE
-- Frontend: React 19, Vite 6, Tailwind CSS v3, React Router DOM v7, Zustand Store.
-- Backend & Database: Supabase (PostgreSQL, Supabase Auth, Distributed Edge Functions Deno/TypeScript).
-- AI Cognitive Engine Suite:
-  - `kiko-smart-hint` (Model `qwen/qwen3.8-27b`): AI Socratic Guidance untuk memberikan bantuan tanpa memberi bocoran kode.
-  - `kiko-story-generator` (Model `openai/gpt-oss-120b`): AI Storyfication untuk menyulap balok koding anak SD 1-4 menjadi dongeng petualangan imajinatif.
-- Struktur Folder:
-  - `app/` -> App Router & Halaman Multi-Role (`(student)`, `(public)`, `(parent)`, `(teacher)`).
-  - `components/ui/` -> Komponen UI atomik & Maskot (`KikoSmartHint.jsx`, `KikoStoryGeneratorModal.jsx`, `KikoMissionSuccessModal.jsx`).
-  - `components/navigation/` -> Navigasi Sidebar Utama (`StudentSidebar.jsx`).
-  - `lib/blockEngine/` -> AST (Abstract Syntax Tree) Static Code Analysis Engine (`astAnalyzer.js`).
-  - `lib/supabase/` -> Supabase Client (`client.js`), Kurikulum Realtime (`curriculum.js`), Smart Hint (`kikoSmartHint.js`), & Story Generator (`kikoStoryGenerator.js`).
-  - `supabase/functions/` -> Serverless Edge Runtime Functions (`kiko-smart-hint/index.ts`, `kiko-story-generator/index.ts`).
+## 2. TECH STACK & ECOSYSTEM (The SSOT)
+- Frontend: React 19, Vite 6, Tailwind CSS v3, React Router v7, Zustand (State Management).
+- Backend: Supabase (PostgreSQL, Row Level Security, Supabase Auth).
+- AI Edge Runtime:
+  - `kiko-smart-hint` (Model: `qwen/qwen3.8-27b`): Socratic AI Guidance. Mesin kognitif untuk membimbing logika berpikir anak tanpa memberikan kunci jawaban secara langsung.
+  - `kiko-story-generator` (Model: `openai/gpt-oss-120b`): AI Storyfication. Mengubah AST (Abstract Syntax Tree) balok koding menjadi dongeng imajinatif dengan latensi super rendah.
 
-## 3. CODING STANDARDS
-- UI: Gunakan React 19 Declarative Functional Components dengan Immutable Hooks Pattern.
-- Gaya Kode: Gunakan deklarasi `export default function NamaKomponen() {}` atau `const NamaFungsi = () => {}`.
-- Session & Route Persistence: Wajib memanggil `initAuthSession()` pada mount `src/App.jsx` agar saat browser di-refresh di rute mana pun (misal `/app/playground` atau `/app/adventure`), pengguna tetap bertahan di halaman tersebut tanpa terlempar.
-- Standar Navigasi: Setiap halaman wajib menyertakan tombol `← Kembali` yang eksplisit untuk navigasi cepat pengguna.
-- Komentar: Tulis komentar HANYA pada logika bisnis yang rumit (seperti AST Analysis, Socratic Rules, dan Parallax Animation Stage).
+## 3. GROUND RULES & ENGINEERING STANDARDS
+- Single Source of Truth (SSOT): Seluruh data transaksional (Playground, Gallery, Achievements) WAJIB bersumber dari Supabase PostgreSQL. Dilarang keras menggunakan data *hardcode* dinamis di level komponen frontend.
+- Fluid Layouting: Sidebar wajib menggunakan utilitas `sticky top-0 h-screen overflow-y-auto`. Kontainer utama (main wrapper) harus menggunakan `flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-6xl w-full mx-auto` agar tata letak responsif dan tidak tumpang-tindih dengan *bottom navbar* di perangkat mobile.
+- Session Persistence: Wajib mengimplementasikan `initAuthSession()` di *root* aplikasi (App.jsx). User experience harus *flawless*—refresh browser di rute manapun tidak boleh menyebabkan user terlempar ke halaman login.
+- Navigation Safety: Pasang tombol `← Kembali` yang eksplisit di setiap rute internal untuk interaksi mikro (*micro-interaction*) yang solid dan intuitif.
 
-## 4. STRICT ANTI-PATTERNS (DON'TS)
-- JANGAN PERNAH menampilkan error log kaku (seperti "SyntaxError line 4") pada antarmuka anak; wajib dialihkan ke Socratic AI Guidance dan Dongeng Storyfication.
-- JANGAN gunakan CSS modules, seluruh styling wajib menggunakan kelas Tailwind CSS dan custom utilities di `src/index.css`.
-- JANGAN menyatukan `style={{ transform: 'translateX(...)' }}` dengan CSS animation kelas di elemen yang sama; pisahkan ke dalam Outer Layout Wrapper (Posisi X) dan Inner Character Node (Keyframe Animation).
-- JANGAN menampilkan menu Pengaturan di navigasi utama sidebar; alihkan menu Pengaturan Profil dan tombol Keluar (Logout) ke dalam Popover Card Profil Siswa di bagian bawah sidebar.
-- JANGAN hardcode token atau secret key di dalam codebase; seluruh secret disuntikkan via Supabase Edge Function Secrets.
+## 4. STRICT ANTI-PATTERNS (RED FLAGS 🚩)
+- NO FAKE DATA: Jangan pernah menyisipkan array data statis (`galleryItems`, `islandThemes`, dll) untuk konten yang seharusnya dinamis. Gunakan *database seeding* via skrip backend untuk inisialisasi data.
+- NO ORPHANED TABLES: Jaga higienitas skema database. Gunakan tabel `student_projects` sebagai satu-satunya rujukan untuk kueri karya siswa. Tabel *redundant* (seperti `projects` lama) telah dihapus dan tidak boleh diciptakan kembali.
+- NO MESSY ANIMATIONS: Pisahkan utilitas `transform` inline dari *class* animasi Tailwind. Gunakan arsitektur *Inner-Outer Wrapper* untuk mencegah konflik perenderan (*jittering*) pada animasi.
+- NO RAW EXCEPTIONS: Error sistem (*raw exceptions* seperti "TypeError") harus dicegat secara elegan melalui mekanisme Fallback AI. Jangan biarkan log mentah terekspos ke antarmuka pengguna anak-anak.
 
 ## 5. RUNTIME COMMANDS
-- Jalankan Dev: `npm run dev` (Vite Hot-Reload Server di http://localhost:3000)
-- Cek Error & Build: `npm run build` (Vite Production Bundler)
-- Jalankan Test: `npm run test` (Vitest Framework)
-- Deploy Edge Function: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase functions deploy kiko-story-generator --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
-- Set Edge Secrets: `SUPABASE_ACCESS_TOKEN="[TOKEN]" npx supabase secrets set AI_STORY_MODEL="openai/gpt-oss-120b" --project-ref sjmnjoiqrtgxhknbnjyd`
+- Spin up local dev: `npm run dev`
+- Build production bundle: `npm run build`
+- Deploy Serverless AI: `npx supabase functions deploy <nama-fungsi> --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
+- Execute DB Migration: Gunakan Node.js `pg` client via terminal (`node script.cjs`). Selalu bersihkan skrip sementara paska-eksekusi untuk menjaga kerapian *workspace*.
