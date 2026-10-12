@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
 import { AnimatedLoginHero } from '../../../components/ui/AnimatedLoginHero.jsx';
 import { supabase } from '../../../lib/supabase/client.js';
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const { loginWithSupabase, loading } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   // State Lupa Kata Sandi
@@ -181,14 +183,25 @@ export default function LoginPage() {
                     {isResetting ? 'Mengirim...' : 'Lupa kata sandi?'}
                   </button>
                 </div>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-slate-200 text-xs sm:text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 pr-11 rounded-xl border-2 border-slate-200 text-xs sm:text-sm focus:outline-none focus:border-teal-500 transition shadow-sm font-medium"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-600 focus:text-teal-600 focus:outline-none transition-colors p-1.5 rounded-lg hover:bg-slate-100/80 active:scale-95 cursor-pointer"
+                    title={showPassword ? 'Sembunyikan Kata Sandi' : 'Lihat Kata Sandi'}
+                    aria-label={showPassword ? 'Sembunyikan Kata Sandi' : 'Lihat Kata Sandi'}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <button

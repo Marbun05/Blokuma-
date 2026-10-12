@@ -4,39 +4,50 @@
 SECTION 1: HIGH-LEVEL VIBE CODING PROMPTS
 ================================================================================
 
-1. Penyesuaian Kurikulum & Pengaturan Kelas Dinamis:
+1. Pemberlakuan Sistem Penilaian Rapor PDF 3 Pilar Utama (Coding, Logic, Math / Kesiapan COC) Tanpa Inflasi Nilai:
    Prompt:
-   "Pastikan materi kurikulum 6 pulau, label balok koding, dan petunjuk Kiko Smart Hint secara presisi dan dinamis mengikuti jenjang kelas siswa (SD 1-2, SD 3-4, SD 5-6). Ketika siswa mengubah kelasnya di halaman Pengaturan (misalnya ke Kelas 4 SD), pastikan data tersimpan sempurna di LocalStorage, Auth Store, dan Supabase, serta Peta Petualangan dan Sidebar langsung ter-refresh secara realtime tanpa konflik data lama."
+   "Rancang ulang modul Rapor PDF Kurikulum Merdeka (KikoRaportPrintModal) agar mengevaluasi 3 aspek utama: Nilai Coding (rasio ketuntasan pulau), Nilai Logic (kemandirian tanpa hint), dan Nilai Math & Kesiapan Lomba/COC (efisiensi algoritma & proyek mandiri). Pastikan kalkulasi nilai murni dan jujur mengacu KKM 75 tanpa inflasi nilai palsu saat siswa baru menuntaskan 1 pulau, serta berikan kotak rekomendasi bakat yang jelas bagi Orang Tua tanpa adanya istilah teknis Supabase."
 
-2. Mekanisme Unlocking Pulau Realtime & Local-First:
+2. Integrasi Validasi Emosional Instan Sub-100ms & Serverless Edge Function (OpenAI GPT-OSS-20B):
    Prompt:
-   "Rancang sistem pembukaan kunci pulau yang responsif dan anti-gagal. Begitu Robot Kiko berhasil menuntaskan misi di sebuah pulau (seperti Pulau 2: Hutan Perulangan), gerbang pulau berikutnya (Pulau 3: Gunung Kondisi) harus langsung terbuka secara otomatis di LocalStorage dan Supabase, serta memancarkan event realtime agar status di Peta Petualangan berubah menjadi 'Sedang Aktif' tanpa menunggu reload."
+   "Implementasikan Supabase Edge Function kiko-praise-generator menggunakan model openai/gpt-oss-20b via Groq/OpenRouter untuk memberikan pujian personal dan validasi emosional instan dalam waktu < 100 ms saat anak berhasil menuntaskan misi. Hubungkan modal keberhasilan misi KikoMissionSuccessModal dengan pembacaan pesan bangga Kiko secara realtime dan terapkan fallback lokal bebas error."
 
-3. Kalibrasi Efek Audio Pop & Animasi Panggung:
+3. In-Memory Caching & SWR Revalidation untuk Skalabilitas Tinggi (Zero Load Delay):
    Prompt:
-   "Investigasi dan perbaiki efek suara 'Pop' di Playground agar terdengar sangat manis, empuk, dan menyenangkan bagi anak-anak menggunakan Web Audio API. Ubah kurva frekuensi dari pola melengking naik menjadi bentuk gelombang gelembung (high-to-low rapid pitch drop). Pastikan pula latar panggung petualangan bergeser secara halus hanya saat Kiko mengeksekusi perintah berjalan."
+   "Hapus seluruh tampilan loading spinner 'Menyiapkan peta petualangan Kiko...' pada Halaman Petualangan. Terapkan pola In-Memory Cache (progressCache) dan Single Batch Parallel Query (.in('id', studentIds)) pada layanan Supabase agar Peta 6 Pulau langsung tampil seketika (0 ms) dan revalidasi data dilakukan di balik layar tanpa lag meskipun diakses oleh ratusan siswa secara bersamaan."
 
-4. Petunjuk Pintar Kiko (Socratic Smart Hint & Key Answers):
+4. Koreksi Presisi Eksekusi Perulangan & Gerak Maju Maskot Kiko di Playground:
    Prompt:
-   "Bangun sistem Kiko Smart Hint yang mampu membaca materi dan kunci jawaban (solutions) dari setiap misi di 6 pulau. Berikan panduan Socratic AI yang ramah anak, mendukung Text-to-Speech bahasa Indonesia, fitur Voice-to-Block, serta Bantuan Ajaib otomatis jika siswa sudah mencoba 3 kali belum berhasil."
+   "Perbaiki bug di mana Kiko terlihat berjalan mundur dan eksekusi perulangan 'Lompat + Ulangi 3 Kali' menghasilkan gerakan yang tidak sesuai. Perbarui buildExecutionQueue agar menghitung perulangan secara tepat (1x aksi + 3x repeat) serta hubungkan koordinat posisi Kiko dengan variabel stageProgress secara fisik agar Kiko melangkah maju ke kanan panggung secara mulus."
 
-5. Arsitektur Data SSOT & Refaktor UI Playground:
+5. Panel Admin Edge-to-Edge & Pembuat Soal Teka-Teki Mandiri:
    Prompt:
-   "Lakukan refaktor pada kanvas coding visual dan antrean eksekusi balok di Playground. Integrasikan data master pulau dan balok dari Supabase PostgreSQL, sediakan panel Admin CRUD, serta terapkan tata letak responsif yang rapi dan nyaman digunakan di desktop maupun tablet."
+   "Rancang ulang Admin Panel (app/(admin)/admin/page.jsx) menjadi tata letak penuh dari tepi kiri ke kanan (full-width edge-to-edge) dengan 4 fitur moderasi interaktif: Review Laporan Konten Child-Safe, Verifikasi Guru Baru, Pengumuman Massal Broadcast, dan Master Data Playground. Tambahkan pula fitur Pembuat Soal Teka-Teki Mandiri di /app/projects/new agar siswa dan guru dapat merakit tantangan koding buatan sendiri."
 
 ================================================================================
 SECTION 2: CORE ARCHITECTURE & COMMIT LOGS
 ================================================================================
 
-[COMMIT 5] Kurikulum Dinamis, Unlocking Pulau Realtime & Audio Pop Polish (Terbaru)
-- Adaptive Curriculum Engine: Menyinkronkan materi 6 pulau dan kunci jawaban di `curriculumData.js` dengan tingkat kelas siswa (SD 1-2, SD 3-4, SD 5-6).
-- Seamless Unlocking Flow: Memperbaiki `unlockNextIslandInDatabase` dan `getCurriculumMissionsByClass` di `lib/supabase/curriculum.js`. Menyelesaikan Pulau 2 kini secara instan membuka Pulau 3 di LocalStorage & Supabase, memancarkan event `student_progress_updated`, dan mengubah status Pulau 3 menjadi 'Sedang Aktif'.
-- Profile Sync Fix: Memperbarui `SettingsPage`, `AdventurePage`, dan `StudentSidebar` agar perubahan kelas ke 'Kelas 4 SD' tersimpan konsisten di seluruh aplikasi tanpa tertimpa data lama.
-- Cute Bubble Pop Sound: Merancang ulang synthesizer Web Audio API di `playground/page.jsx` dan `public/page.jsx` dengan instan 800Hz -> 200Hz exponential pitch drop, menghasilkan suara gelembung pop yang sangat imut dan memuaskan.
-- Full Test Pass: Seluruh 19 unit test Vitest pada kurikulum dan antrean eksekusi balok koding lulus 100%.
+[COMMIT 10] Realtime Database SSOT, Non-Inflated Raport PDF & High-Scalability Optimization (Terbaru)
+- Pure Database SSOT & Non-Inflated Grades: Seluruh kalkulasi Rapor PDF Kurikulum Merdeka di `KikoRaportPrintModal.jsx`, `ParentReportsPage`, dan `TeacherReportsPage` ditarik murni dari database Supabase PostgreSQL. Dihapus nilai palsu/inflasi sehingga murid yang baru menyelesaikan 1 dari 6 pulau mendapatkan nilai riil (17/100) di bawah KKM 75 dengan narasi evaluasi jujur bagi Orang Tua.
+- 3 Core Assessment Pillars: Menyajikan evaluasi terstruktur untuk 3 aspek utama: Nilai Coding (pemrograman), Nilai Logic (kemandirian tanpa hint), dan Nilai Math & Kesiapan Lomba/COC (penalaran spasial & efisiensi algoritma).
+- Instant UI Load & Batch Data Query: Menerapkan Single Batch Parallel Query (`Promise.all` dengan `.in('id', studentIds)`) dan In-Memory Caching (`progressCache` TTL 15s) sehingga Halaman Petualangan dan Rapor memuat seketika (0 ms) tanpa spinner loading.
+- Instant AI Emotional Praise Edge Function: Menambahkan Supabase Edge Function `kiko-praise-generator` (Model `openai/gpt-oss-20b`) yang menghasilkan pujian personal instan (< 100 ms) saat modal keberhasilan misi muncul.
+- Full-Width Admin Panel & Custom Quiz Creator: Memperbarui Dashboard Admin menjadi antarmuka penuh (*full-width edge-to-edge*) dengan 4 fitur moderasi aktif (Review Laporan Child-Safe, Verifikasi Guru, Broadcast Pengumuman Massal, dan Master Data) serta menghadirkan Pembuat Soal Teka-Teki Mandiri di `/app/projects/new`.
 
-[COMMIT 1 - 4] Rekapitulasi Fondasi Utama
+[COMMIT 8 - 9] Socratic AI Guidance, Storyfication & Child-Safe Guardrails
+- Child-Safe Groq Edge Functions: Menghubungkan Deno Edge Functions `kiko-smart-hint` (Model `qwen/qwen3.8-27b`) untuk bimbingan Socrates tanpa membocorkan kunci jawaban, dan `kiko-story-generator` (Model `openai/gpt-oss-120b`) untuk dongeng petualangan Nusantara.
+- Multi-Layer Safety Guardrails: Menerapkan filter keamanan otomatis via `meta-llama/llama-prompt-guard-2-86m` dan `openai/gpt-oss-safeguard-20b` untuk menjamin interaksi anak 100% aman dan terlindungi dari prompt injection.
+- Seamless Playground & Island Navigation: Memperbaiki alur transisi pulau di Playground agar melanjutkannya secara langsung tanpa terlempar keluar ke peta petualangan.
+
+[COMMIT 7] Full Pure Supabase SSOT Architecture & Zero-Lag Performance
+- Zero LocalStorage Persistence: Menghapus seluruh dependensi LocalStorage kustom pada `curriculum.js`, `SettingsPage`, `AdventurePage`, `DashboardPage`, `Sidebar`, dan `AchievementsPage`.
+- Pure Supabase Integration: Seluruh profil, kelas, progres pulau, XP, dan status pencapaian ditarik dan diperbarui 100% langsung dari tabel Supabase PostgreSQL (`profiles`, `student_progress`, `student_projects`, `master_achievements`).
+- Optimized Query Execution: Menggunakan `Promise.all` paralel, kueri ter-indeks pada `student_id`, dan in-memory state Zustand untuk menjamin performa tanpa lag bagi ribuan pengguna bersamaan.
+- Game Mission Briefing & Smart Hint Limit: Menyediakan `KikoMissionBriefingModal.jsx` saat masuk pulau dan membatasi `KikoSmartHint` maksimal 3 kali per tantangan.
+- Full Test Suite Passing: Seluruh 19 unit test Vitest lulus 100%.
+
+[COMMIT 5 - 6] Rekapitulasi Fondasi Utama
+- Adaptive Curriculum Engine: Menyinkronkan materi 6 pulau dan kunci jawaban di `curriculumData.js` dengan tingkat kelas siswa (SD 1-2, SD 3-4, SD 5-6).
 - Core Block Engine: Mengkonstruksi AST Parser dan antrean eksekusi sekuensial (`executionQueue.js`) untuk evaluasi balok 'move', 'jump', 'sound', dan loop 'repeat'.
-- Serverless AI Edge: Menghubungkan Deno Edge Functions `kiko-smart-hint` (Model Qwen) dan `kiko-story-generator` (Model GPT-OSS) untuk cerita koding anak.
-- SSOT Database: Mengintegrasikan Supabase PostgreSQL untuk `playground_islands`, `playground_blocks`, `student_projects`, dan `student_progress`.
-- Admin & UI Polish: Menyediakan Admin CRUD panel di `playground-data` dan merancang layout responsif `sticky sidebar` yang fluid.
+- Cute Bubble Pop Sound: Merancang ulang synthesizer Web Audio API di `playground/page.jsx` dan `public/page.jsx` dengan instan 800Hz -> 200Hz exponential pitch drop.

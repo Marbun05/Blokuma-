@@ -22,7 +22,7 @@ export default function AchievementsPage() {
         if (masterRes.error) throw masterRes.error;
 
         const masterData = masterRes.data || [];
-        const studentLevel = progressRes?.data?.level || Number(localStorage.getItem('student_completed_level') || 0);
+        const studentLevel = Number(progressRes?.data?.level || 0);
         const studentXp = progressRes?.data?.xp || 0;
 
         const processed = masterData.map((a) => {

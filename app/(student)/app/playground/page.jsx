@@ -4,6 +4,7 @@ import { StudentSidebar } from '../../../../components/navigation/StudentSidebar
 import { KikoSmartHint } from '../../../../components/ui/KikoSmartHint.jsx';
 import { KikoStoryGeneratorModal } from '../../../../components/ui/KikoStoryGeneratorModal.jsx';
 import { KikoMissionSuccessModal } from '../../../../components/ui/KikoMissionSuccessModal.jsx';
+import { KikoMissionBriefingModal } from '../../../../components/ui/KikoMissionBriefingModal.jsx';
 import { supabase } from '../../../../lib/supabase/client';
 import { unlockNextIslandInDatabase } from '../../../../lib/supabase/curriculum.js';
 import { useAuthStore } from '../../../../store/auth/use-auth-store.js';
@@ -59,12 +60,18 @@ const STAGE_ACTION_CLASSES = {
 export default function StudentPlaygroundPage() {
   const [searchParams] = useSearchParams();
   const { user } = useAuthStore();
-  const requestedIsland = Number(searchParams.get('island'));
-  const requestedClass = searchParams.get('class');
-  const storedClass = typeof window !== 'undefined' ? window.localStorage.getItem('student_class') : null;
-  const studentClass = normalizeStudentClass(requestedClass || user?.student_class || storedClass);
+  const rawIslandParam = searchParams.get('island');
+  const isFreePlayMode = !rawIslandParam; // True jika dibuka dari menu sidebar langsung (Sandbox Bebas)
 
-  const [studentGrade, setStudentGrade] = useState('SD 3-4'); // Progressive UI level
+  const requestedIsland = Number(rawIslandParam);
+  const requestedClass = searchParams.get('class');
+  const studentClass = normalizeStudentClass(requestedClass || user?.grade || user?.student_class || 4);
+
+  // Adapts student grade automatically based on actual class
+  const defaultGradeLabel = studentClass <= 2 ? 'SD 1-2' : studentClass <= 4 ? 'SD 3-4' : 'SD 5-6';
+  const [studentGrade, setStudentGrade] = useState(defaultGradeLabel);
+  const [xpEarnedState, setXpEarnedState] = useState(100);
+
   const [islandThemes, setIslandThemes] = useState([]);
   const [availableBlocks, setAvailableBlocks] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
@@ -79,6 +86,8 @@ export default function StudentPlaygroundPage() {
   const [lastExecutionResult, setLastExecutionResult] = useState({ status: 'idle' });
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
   const [isHintOpen, setIsHintOpen] = useState(false);
+  const [isBriefingOpen, setIsBriefingOpen] = useState(!isFreePlayMode);
+  const [hintUsageCount, setHintUsageCount] = useState(0);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isFailureOpen, setIsFailureOpen] = useState(false);
   const [executionAlert, setExecutionAlert] = useState('');
@@ -110,6 +119,14 @@ export default function StudentPlaygroundPage() {
   const islandNumber = Number.isInteger(requestedIsland) && requestedIsland >= 1 && requestedIsland <= 6
     ? requestedIsland
     : 1;
+
+  useEffect(() => {
+    setHintUsageCount(0);
+    if (!isFreePlayMode) {
+      setIsBriefingOpen(true);
+    }
+  }, [islandNumber, isFreePlayMode]);
+
   const currentMission = getCurriculumMission(studentClass, islandNumber);
   const configuredTheme = islandThemes[islandNumber - 1];
   const islandTheme = {
@@ -122,7 +139,6 @@ export default function StudentPlaygroundPage() {
 
   // Fungsi untuk memformat label balok (Progressive Disclosure)
   const formatBlockLabel = (label, grade) => {
-    // Misalnya label aslinya adalah "➔ MAJU 1 LANGKAH"
     if (grade === 'SD 1-2') {
       if (label.includes('MAJU')) return '➡️';
       if (label.includes('LOMPAT')) return '🦘';
@@ -136,7 +152,6 @@ export default function StudentPlaygroundPage() {
       if (label.includes('3 Kali')) return 'for(i=0; i<3; i++) {';
       return 'execute();';
     }
-    // Default SD 3-4
     return label;
   };
 
@@ -211,7 +226,7 @@ export default function StudentPlaygroundPage() {
 
   const waitForNextStep = (ms = 600) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  // Eksekusi Item Tunggal dari Queue
+  // Eksekusi Item Tunggal dari Queue Akurat
   const executeQueueItem = async (item) => {
     const actionId = item.block.id;
     const isRepeat = item.isRepeat;
@@ -224,7 +239,7 @@ export default function StudentPlaygroundPage() {
           : '🚀 Robot Kiko: Maju 1 Langkah!'
       );
       setStageAction('walking');
-      // Latar belakang HANYA bergeser saat aksi MAJU
+      // Kiko melangkah maju ke kanan di panggung
       setStageProgress((prev) => prev + 1);
       await waitForNextStep(600);
     } else if (actionId === 'jump') {
@@ -234,7 +249,8 @@ export default function StudentPlaygroundPage() {
           : '🦘 Robot Kiko: Melompat Tinggi!'
       );
       setStageAction('jumping');
-      // Latar belakang TIDAK BERGESER saat melompat
+      // Kiko melompat sambil melangkah maju ke kanan di panggung
+      setStageProgress((prev) => prev + 1);
       await waitForNextStep(700);
     } else if (actionId === 'sound') {
       setActionMessage(
@@ -261,14 +277,14 @@ export default function StudentPlaygroundPage() {
     setStageAction('still');
 
     if (canvasBlocks.length === 0) {
-      setActionMessage('Misi belum berhasil. Tambahkan balok perintah lalu coba lagi!');
+      setActionMessage('Kanvas masih kosong. Tambahkan balok perintah lalu jalankan kreasimu!');
       setAttemptCount((prev) => prev + 1);
       setLastExecutionResult({ status: 'error', reason: 'empty_canvas' });
-      setIsFailureOpen(true);
+      if (!isFreePlayMode) setIsFailureOpen(true);
       return;
     }
 
-    // 1. Bangun Antrean Eksekusi Sesuai Aturan Repeat
+    // 1. Bangun Antrean Eksekusi Sesuai Aturan Repeat Akurat
     const queueResult = buildExecutionQueue(canvasBlocks);
 
     if (queueResult.error === 'orphan_loop') {
@@ -280,10 +296,10 @@ export default function StudentPlaygroundPage() {
     }
 
     if (queueResult.error || !queueResult.queue) {
-      setActionMessage('Kiko belum menemukan kunci misi. Silakan coba lagi.');
+      setActionMessage('Kiko belum menemukan susunan balok yang pas. Silakan coba lagi.');
       setAttemptCount((prev) => prev + 1);
       setLastExecutionResult({ status: 'error', reason: queueResult.error });
-      setIsFailureOpen(true);
+      if (!isFreePlayMode) setIsFailureOpen(true);
       return;
     }
 
@@ -304,14 +320,22 @@ export default function StudentPlaygroundPage() {
     await waitForNextStep(400);
     setIsRunning(false);
 
-    // 3. Evaluasi Kunci Jawaban Misi
-    const validation = validateMissionAnswer(canvasBlocks, currentMission);
-    if (validation.error) {
-      setIsFailureOpen(true);
-    } else {
-      setIsSuccessOpen(true);
-      // Buka kunci pulau berikutnya di LocalStorage & Supabase secara otomatis
-      unlockNextIslandInDatabase(user?.id, islandNumber);
+    // 3. Evaluasi Kunci Jawaban Misi jika dalam Mode Misi Terstruktur
+    if (!isFreePlayMode) {
+      const validation = validateMissionAnswer(canvasBlocks, currentMission);
+      if (validation.error) {
+        setIsFailureOpen(true);
+      } else {
+        const minSolutionLength = currentMission?.solutions?.length
+          ? Math.min(...currentMission.solutions.map((s) => s.length))
+          : 3;
+        const isOptimal = canvasBlocks.length <= minSolutionLength;
+        const calculatedXp = isOptimal ? 125 : 100;
+
+        setXpEarnedState(calculatedXp);
+        setIsSuccessOpen(true);
+        unlockNextIslandInDatabase(user?.id, islandNumber, calculatedXp);
+      }
     }
   };
 
@@ -344,20 +368,27 @@ export default function StudentPlaygroundPage() {
             to="/app/adventure"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-800 bg-white hover:bg-teal-50 px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-sm transition"
           >
-            <span>← Kembali ke Petualangan</span>
+            <span>← Kembali ke Peta Petualangan</span>
           </Link>
         </div>
 
+        {/* Dynamic Header Banner */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-amber-300">
-              🧩 Meja Eksperimen Kode Bebas
+            <div className={`inline-block px-3 py-1 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border ${
+              isFreePlayMode
+                ? 'bg-amber-100 text-amber-900 border-amber-300'
+                : 'bg-teal-100 text-teal-900 border-teal-300'
+            }`}>
+              {isFreePlayMode ? '🎨 Mode Kreasi Bebas (Sandbox)' : `🎯 Mode Misi Terstruktur • ${islandTheme.name}`}
             </div>
             <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
-              Kanvas Coding Robot Kiko
+              {isFreePlayMode ? 'Kanvas Eksperimen Koding Bebas 🚀' : `Misi: ${currentMission.island_title}`}
             </h1>
             <p className="text-slate-600 text-sm sm:text-base font-medium">
-              Rakit perintah balok warna-warni dan lihat aksi Kiko melompat serta bergerak di panggung!
+              {isFreePlayMode
+                ? 'Rakit perintah balok warna-warni sesukamu dan buat game, animasi, atau tarian Kiko!'
+                : `Selesaikan tantangan di ${currentMission.island_title} dengan susunan balok logikamu!`}
             </p>
           </div>
 
@@ -369,7 +400,7 @@ export default function StudentPlaygroundPage() {
                 <button
                   key={grade}
                   onClick={() => setStudentGrade(grade)}
-                  className={`text-[10px] font-extrabold px-2 py-1 rounded-lg transition ${
+                  className={`text-[10px] font-extrabold px-2 py-1 rounded-lg transition cursor-pointer ${
                     studentGrade === grade
                       ? 'bg-teal-500 text-white shadow-sm'
                       : 'text-slate-600 hover:bg-slate-100'
@@ -380,26 +411,50 @@ export default function StudentPlaygroundPage() {
               ))}
             </div>
 
+            {!isFreePlayMode && (
+              <button
+                onClick={() => setIsBriefingOpen(true)}
+                className="toy-btn-white px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-800 flex items-center gap-1.5 border-2 border-slate-200 shadow-sm hover:border-teal-300 transition cursor-pointer"
+                title="Lihat Kartu Tantangan Misi Pulau"
+              >
+                <span>🎯</span>
+                <span>Tantangan Misi</span>
+              </button>
+            )}
+
             <button
               onClick={() => setIsStoryModalOpen(true)}
-              className="toy-btn-teal px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-toyTeal flex items-center gap-2 border-2 border-teal-700 active:scale-95"
+              className="toy-btn-teal px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-toyTeal flex items-center gap-2 border-2 border-teal-700 active:scale-95 cursor-pointer"
               title="Sulap koding balokmu menjadi Dongeng Petualangan!"
             >
               <span>📖</span>
               <span>Ubah Kode Jadi Dongeng!</span>
             </button>
 
-            <KikoSmartHint
-              isOpen={isHintOpen}
-              onOpenChange={handleHintOpenChange}
-              mission={currentMission}
-              canvasBlocks={canvasBlocks}
-              executionResult={lastExecutionResult}
-              attemptCount={attemptCount}
-              autoOpenOnFail={false}
-            />
+            {!isFreePlayMode && (
+              <KikoSmartHint
+                isOpen={isHintOpen}
+                onOpenChange={handleHintOpenChange}
+                mission={currentMission}
+                canvasBlocks={canvasBlocks}
+                executionResult={lastExecutionResult}
+                attemptCount={attemptCount}
+                maxHints={3}
+                hintUsageCount={hintUsageCount}
+                onIncrementHint={() => setHintUsageCount((prev) => prev + 1)}
+              />
+            )}
           </div>
         </div>
+
+        {!isFreePlayMode && (
+          <KikoMissionBriefingModal
+            isOpen={isBriefingOpen}
+            onClose={() => setIsBriefingOpen(false)}
+            mission={currentMission}
+            islandNumber={islandNumber}
+          />
+        )}
 
         {executionAlert && (
           <p role="alert" className="mb-4 rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm font-extrabold text-amber-900 shadow-sm">
@@ -411,9 +466,9 @@ export default function StudentPlaygroundPage() {
           isOpen={isStoryModalOpen}
           onClose={() => setIsStoryModalOpen(false)}
           studentName="Kiko"
-          projectTitle="Petualangan Balok Kiko"
+          projectTitle={isFreePlayMode ? 'Kreasi Koding Bebas Kiko' : currentMission.island_title}
           canvasBlocks={canvasBlocks}
-          xpEarned={75}
+          xpEarned={xpEarnedState}
         />
 
         <div className="bg-white p-5 sm:p-7 rounded-2xl border-2 border-slate-200 card-chunky shadow-sm">
@@ -430,7 +485,6 @@ export default function StudentPlaygroundPage() {
                 </p>
                 <div className="space-y-2.5">
                   {availableBlocks.map((block) => {
-                    // Filter: SD 1-2 tidak melihat blok 'repeat' (loop) untuk mencegah pusing
                     if (studentGrade === 'SD 1-2' && block.id === 'repeat') return null;
 
                     return (
@@ -438,7 +492,7 @@ export default function StudentPlaygroundPage() {
                         key={block.id}
                         onClick={() => handleAddBlock(block)}
                         disabled={isRunning}
-                        className={`w-full p-3 rounded-xl font-bold text-xs shadow-sm text-left transition transform active:scale-95 flex items-center justify-between ${block.color}`}
+                        className={`w-full p-3 rounded-xl font-bold text-xs shadow-sm text-left transition transform active:scale-95 flex items-center justify-between cursor-pointer ${block.color}`}
                       >
                         <span className={studentGrade === 'SD 1-2' ? 'text-2xl text-center w-full' : studentGrade === 'SD 5-6' ? 'font-mono tracking-tight text-[11px]' : ''}>
                           {formatBlockLabel(block.label, studentGrade)}
@@ -466,7 +520,7 @@ export default function StudentPlaygroundPage() {
                     <button
                       onClick={handleClearCanvas}
                       disabled={isRunning}
-                      className="text-xs text-rose-600 hover:text-rose-700 font-bold bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200 hover:bg-rose-100 transition"
+                      className="text-xs text-rose-600 hover:text-rose-700 font-bold bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200 hover:bg-rose-100 transition cursor-pointer"
                     >
                       ✕ Bersihkan Kanvas
                     </button>
@@ -520,7 +574,7 @@ export default function StudentPlaygroundPage() {
               <button
                 onClick={handleRunCode}
                 disabled={isRunning}
-                className={`w-full py-3.5 px-6 font-bold text-sm sm:text-base rounded-xl transition flex items-center justify-center gap-2 ${
+                className={`w-full py-3.5 px-6 font-bold text-sm sm:text-base rounded-xl transition flex items-center justify-center gap-2 cursor-pointer ${
                   isRunning
                     ? 'bg-slate-300 text-slate-500 cursor-not-allowed border-b-2 border-slate-400'
                     : 'toy-btn-teal shadow-toyTeal active:scale-95'
@@ -588,7 +642,7 @@ export default function StudentPlaygroundPage() {
 
             <div className="absolute left-4 right-4 top-4 z-10 flex items-center justify-between gap-3 sm:left-6 sm:right-6">
               <span className="rounded-full border border-white/80 bg-white/85 px-3 py-1 text-xs font-bold text-sky-900 shadow-sm">
-                🚀 {currentMission.island_title}
+                🚀 {isFreePlayMode ? 'Panggung Kreasi Bebas' : currentMission.island_title}
               </span>
               <span className="rounded-full border border-white/80 bg-white/85 px-3 py-1 text-xs font-bold text-slate-700 shadow-sm">
                 {isRunning ? 'Kiko sedang beraksi!' : 'Kreasimu selesai dijalankan!'}
@@ -603,8 +657,12 @@ export default function StudentPlaygroundPage() {
               {actionMessage}
             </div>
 
+            {/* Maskot Kiko Bergerak Maju ke Kanan secara Presisi */}
             <div
-              className={`absolute bottom-9 left-[8%] z-10 ${STAGE_ACTION_CLASSES[stageAction]}`}
+              className={`absolute bottom-9 z-10 transition-all duration-500 ease-out ${STAGE_ACTION_CLASSES[stageAction]}`}
+              style={{
+                left: `calc(8% + ${Math.min(stageProgress * 36, 450)}px)`,
+              }}
             >
               <img
                 src="/images/Robot.webp"
@@ -619,19 +677,21 @@ export default function StudentPlaygroundPage() {
           </section>
         )}
 
-        <KikoMissionSuccessModal
-          isOpen={isSuccessOpen}
-          onClose={() => setIsSuccessOpen(false)}
-          islandNumber={islandNumber}
-          islandTitle={currentMission.island_title}
-          xpEarned={100}
-          onTryAgain={() => {
-            setIsSuccessOpen(false);
-            handleRunCode();
-          }}
-        />
+        {!isFreePlayMode && (
+          <KikoMissionSuccessModal
+            isOpen={isSuccessOpen}
+            onClose={() => setIsSuccessOpen(false)}
+            islandNumber={islandNumber}
+            islandTitle={currentMission.island_title}
+            xpEarned={xpEarnedState}
+            onTryAgain={() => {
+              setIsSuccessOpen(false);
+              handleRunCode();
+            }}
+          />
+        )}
 
-        {isFailureOpen && (
+        {!isFreePlayMode && isFailureOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
             <section
               role="alertdialog"
@@ -644,7 +704,7 @@ export default function StudentPlaygroundPage() {
                 type="button"
                 onClick={() => setIsFailureOpen(false)}
                 aria-label="Tutup modal misi belum berhasil"
-                className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-xl font-bold text-slate-600 transition hover:rotate-90 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-200"
+                className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-xl font-bold text-slate-600 transition hover:rotate-90 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-200 cursor-pointer"
               >
                 ×
               </button>
@@ -658,7 +718,7 @@ export default function StudentPlaygroundPage() {
               <button
                 type="button"
                 onClick={() => handleHintOpenChange(true)}
-                className="toy-btn-amber w-full rounded-xl px-5 py-3 font-bold text-sm shadow-sm"
+                className="toy-btn-amber w-full rounded-xl px-5 py-3 font-bold text-sm shadow-sm cursor-pointer"
               >
                 💡 Minta Panduan Kiko Smart Hint
               </button>

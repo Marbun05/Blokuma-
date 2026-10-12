@@ -9,32 +9,28 @@ export default function StudentDashboardPage() {
   const [studentNickname, setStudentNickname] = useState(user?.nickname || 'Kiko');
   const [progress, setProgress] = useState(null);
 
-  // Memuat data dari Supabase
+  // Memuat data langsung dari Supabase PostgreSQL (100% DB SSOT)
   const loadProfileData = async () => {
-    if (user?.id) {
-      const { data } = await supabase
-        .from('student_progress')
-        .select('*')
-        .eq('student_id', user.id)
-        .single();
-      if (data) {
-        setProgress(data);
-      }
-    }
+    if (user?.nickname) setStudentNickname(user.nickname);
 
-    if (typeof window !== 'undefined') {
-      const savedName = localStorage.getItem('student_nickname');
-      if (savedName) {
-        setStudentNickname(savedName);
+    if (user?.id) {
+      const [{ data: progressData }, { data: profileData }] = await Promise.all([
+        supabase.from('student_progress').select('*').eq('student_id', user.id).single(),
+        supabase.from('profiles').select('nickname, full_name').eq('id', user.id).single()
+      ]);
+
+      if (progressData) {
+        setProgress(progressData);
+      }
+      if (profileData) {
+        setStudentNickname(profileData.nickname || profileData.full_name || 'Kiko');
       }
     }
   };
 
   useEffect(() => {
-    // 1. Muat data saat pertama kali komponen dibuka
     loadProfileData();
 
-    // 2. Listener Custom Event agar nama & progres update secara otomatis jika berubah
     const handleProfileUpdate = () => {
       loadProfileData();
     };
@@ -61,7 +57,7 @@ export default function StudentDashboardPage() {
               </span>
               
               <h1 className="font-heading text-2xl sm:text-4xl font-bold mt-2">
-                Halo, {user?.nickname || studentNickname}! 👋
+                Halo, {studentNickname}! 👋
               </h1>
               <p className="text-teal-100 text-xs sm:text-sm font-medium mt-1">
                 Hari ini mau bikin game atau pecahkan teka-teki balok apa?
@@ -95,7 +91,7 @@ export default function StudentDashboardPage() {
               <span>Lanjutkan Petualangan Aktif</span>
             </h2>
             <span className="text-xs font-bold bg-teal-50 text-teal-700 px-3 py-1 rounded-full border border-teal-200">
-              3 dari 8 Misi Selesai (38%)
+              Misi Aktif • Level {progress?.level || 1}
             </span>
           </div>
 
@@ -114,18 +110,18 @@ export default function StudentDashboardPage() {
               </div>
               <div>
                 <span className="text-[11px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300">
-                  Dunia 2: Hutan Perulangan
+                  Dunia Koding Kiko
                 </span>
                 <h3 className="font-heading font-bold text-slate-900 text-base mt-1">
-                  Misi Loop: Bantu Kiko Menyeberangi Hutan
+                  Misi Aktif Pulau Petualangan
                 </h3>
                 <p className="text-xs text-slate-600 font-medium">
-                  Gunakan balok perulangan (loop) agar Kiko melompat 3 kali tanpa menyusun balok berulang!
+                  Gunakan balok koding untuk menyelesaikan tantangan pulau berikutnya bersama Kiko!
                 </p>
               </div>
             </div>
             <Link
-              to="/app/learn/l2"
+              to="/app/adventure"
               className="toy-btn-teal px-6 py-3 font-bold text-sm rounded-xl shadow-toyTeal shrink-0 flex items-center justify-center gap-2"
             >
               <span>Ayo Lanjutkan!</span>
@@ -134,7 +130,7 @@ export default function StudentDashboardPage() {
           </div>
         </div>
 
-        {/* 3 Kartu Menu Cepat dengan Ritme Visual & Aksen Playful */}
+        {/* 3 Kartu Menu Cepat */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
           
           <Link

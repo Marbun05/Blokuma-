@@ -10,7 +10,6 @@ const menuItems = [
   { name: 'Projects', href: '/app/projects', icon: <Gamepad2 className="w-5 h-5" /> },
   { name: 'Achievements', href: '/app/achievements', icon: <Trophy className="w-5 h-5" /> },
   { name: 'Galeri', href: '/app/gallery', icon: <ImageIcon className="w-5 h-5" /> },
-  { name: 'Progress', href: '/app/progress', icon: <BarChart3 className="w-5 h-5" /> },
 ];
 
 export function StudentSidebar() {
@@ -27,28 +26,26 @@ export function StudentSidebar() {
   // Helper untuk menentukan subtema materi
   const getSubthemeByClass = (selectedClass) => {
     if (!selectedClass) return 'Dunia Blok & Logika';
-    if (selectedClass.includes('1') || selectedClass.includes('2')) {
+    const str = String(selectedClass);
+    if (str.includes('1') || str.includes('2')) {
       return 'Dunia Ikon & Suara';
-    } else if (selectedClass.includes('3') || selectedClass.includes('4')) {
+    } else if (str.includes('3') || str.includes('4')) {
       return 'Dunia Blok & Logika';
-    } else if (selectedClass.includes('5') || selectedClass.includes('6')) {
+    } else if (str.includes('5') || str.includes('6')) {
       return 'Dunia Algoritma & Game';
     }
     return 'Dunia Blok & Logika';
   };
 
-  // Fungsi memuat data profil dari localStorage & store
+  // Fungsi memuat data profil langsung dari Auth Store / DB
   const loadProfileData = () => {
-    const savedClass =
-      localStorage.getItem('student_class') ||
-      (user?.grade ? `Kelas ${user.grade} SD` : null) ||
-      user?.student_class ||
-      'Kelas 4 SD';
-    const savedName = localStorage.getItem('student_nickname') || user?.nickname || 'Kiko';
+    const userGrade = user?.grade || user?.student_class || 4;
+    const gradeString = typeof userGrade === 'number' ? `Kelas ${userGrade} SD` : String(userGrade);
+    const nameString = user?.nickname || user?.fullName || 'Kiko';
 
-    setCurrentGrade(savedClass);
-    setCurrentSubtheme(getSubthemeByClass(savedClass));
-    setStudentNickname(savedName);
+    setCurrentGrade(gradeString);
+    setCurrentSubtheme(getSubthemeByClass(gradeString));
+    setStudentNickname(nameString);
   };
 
   useEffect(() => {
@@ -87,9 +84,9 @@ export function StudentSidebar() {
 
   const mobileNavItems = [
     { name: 'Beranda', href: '/app/dashboard', icon: <Home className="w-5 h-5" /> },
+    { name: 'Petualangan', href: '/app/adventure', icon: <Map className="w-5 h-5" /> },
     { name: 'Playground', href: '/app/playground', icon: <Puzzle className="w-5 h-5" /> },
     { name: 'Projects', href: '/app/projects', icon: <Gamepad2 className="w-5 h-5" /> },
-    { name: 'Progress', href: '/app/progress', icon: <BarChart3 className="w-5 h-5" /> },
   ];
 
   return (

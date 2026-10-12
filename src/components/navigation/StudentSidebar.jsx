@@ -9,7 +9,6 @@ const menuItems = [
   { name: 'Projects', href: '/app/projects', icon: '🎮' },
   { name: 'Achievements', href: '/app/achievements', icon: '🏆' },
   { name: 'Galeri', href: '/app/gallery', icon: '🖼️' },
-  { name: 'Progress', href: '/app/progress', icon: '📊' },
   { name: 'Pengaturan', href: '/app/settings', icon: '⚙️' },
 ];
 
@@ -19,9 +18,9 @@ export function StudentSidebar() {
 
   const mobileNavItems = [
     { name: 'Beranda', href: '/app/dashboard', icon: '🏠' },
+    { name: 'Petualangan', href: '/app/adventure', icon: '🗺️' },
     { name: 'Playground', href: '/app/playground', icon: '🧩' },
     { name: 'Projects', href: '/app/projects', icon: '🎮' },
-    { name: 'Progress', href: '/app/progress', icon: '📊' },
   ];
 
   return (

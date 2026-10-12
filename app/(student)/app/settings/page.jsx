@@ -6,7 +6,8 @@ import { supabase } from '../../../../lib/supabase/client.js';
 import { normalizeStudentClass } from '../../../../src/data/curriculumData.js';
 
 export default function StudentSettingsPage() {
-  const [nickname, setNickname] = useState('Kiko marbun');
+  const { user } = useAuthStore();
+  const [nickname, setNickname] = useState('Kiko');
   const [gradeClass, setGradeClass] = useState('Kelas 4 SD');
   const [isSaved, setIsSaved] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,67 +34,66 @@ export default function StudentSettingsPage() {
     return 'Dunia Blok dan Logika';
   };
 
-  // 1. TAMBAHAN UTAMA: Membaca data tersimpan saat halaman dimuat/di-refresh
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedName = localStorage.getItem('student_nickname');
-      const savedClass = localStorage.getItem('student_class');
+    async function loadProfile() {
+      if (user?.nickname) setNickname(user.nickname);
+      if (user?.grade) setGradeClass(`Kelas ${user.grade} SD`);
 
-      if (savedName) {
-        setNickname(savedName);
-      }
-      if (savedClass) {
-        setGradeClass(savedClass);
+      if (user?.id) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('nickname, grade')
+          .eq('id', user.id)
+          .single();
+
+        if (data) {
+          if (data.nickname) setNickname(data.nickname);
+          if (data.grade) setGradeClass(`Kelas ${data.grade} SD`);
+        }
       }
     }
-  }, []);
+    loadProfile();
+  }, [user]);
 
-  const handleSaveSettings = (e) => {
+  const handleSaveSettings = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const numericGrade = normalizeStudentClass(gradeClass);
-    const currentSubtheme = getSubthemeByClass(gradeClass);
+    const { user: currentUser, setUserProfile } = useAuthStore.getState();
 
-    // 1. Simpan ke localStorage
-    localStorage.setItem('student_nickname', nickname);
-    localStorage.setItem('student_class', gradeClass);
-    localStorage.setItem('student_subtheme', currentSubtheme);
-
-    // 2. Update Auth Store
-    const { user, setUserProfile } = useAuthStore.getState();
-    if (user) {
-      setUserProfile({
-        ...user,
-        nickname,
-        student_class: gradeClass,
-        grade: numericGrade,
-      });
+    // 1. Update Supabase PostgreSQL directly (100% DB SSOT)
+    if (currentUser?.id) {
+      try {
+        await supabase
+          .from('profiles')
+          .update({
+            nickname,
+            grade: numericGrade,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', currentUser.id);
+      } catch (err) {
+        console.error('Gagal update profile ke Supabase:', err);
+      }
     }
 
-    // 3. Sync ke Supabase jika user terautentikasi
-    if (user?.id) {
-      supabase
-        .from('profiles')
-        .update({
-          nickname,
-          grade: numericGrade,
-        })
-        .eq('id', user.id)
-        .then(({ error }) => {
-          if (error) console.warn('Gagal sync profil ke Supabase:', error);
-        });
+    // 2. Update memory store state untuk responsif UI
+    if (currentUser) {
+      setUserProfile({
+        ...currentUser,
+        nickname,
+        grade: numericGrade,
+        student_class: gradeClass,
+      });
     }
 
     // Memicu event agar Sidebar, Dashboard, dan Petualangan ter-refresh secara bersamaan
     window.dispatchEvent(new Event('student_profile_updated'));
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSaved(true);
-
-      setTimeout(() => setIsSaved(false), 3000);
-    }, 500);
+    setIsSubmitting(false);
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 3000);
   };
 
   return (
@@ -127,7 +127,7 @@ export default function StudentSettingsPage() {
           <div className="mb-6 p-4 bg-teal-50 border-2 border-teal-300 text-teal-900 rounded-2xl flex items-center gap-3 shadow-sm">
             <span className="text-2xl">✨</span>
             <span className="text-sm font-bold">
-              Hore! Profil berhasil diperbarui. Nama dan kelas kamu sudah tersimpan dengan aman!
+              Hore! Profil berhasil diperbarui di database Supabase!
             </span>
           </div>
         )}
@@ -188,7 +188,7 @@ export default function StudentSettingsPage() {
                 {isSubmitting ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Menyimpan Profil...</span>
+                    <span>Menyimpan ke Supabase...</span>
                   </>
                 ) : (
                   <>

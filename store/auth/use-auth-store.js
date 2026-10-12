@@ -2,32 +2,16 @@ import { create } from 'zustand';
 import { loginUser, registerUser, logoutUser } from '../../services/auth/auth-service.js';
 import { supabaseClient } from '../../lib/supabase/client.js';
 
-// Load initial user state from localStorage for zero-delay refresh persistence
-const getSavedUser = () => {
-  if (typeof window === 'undefined') return null;
-  try {
-    const saved = localStorage.getItem('blokuma_user_session');
-    return saved ? JSON.parse(saved) : null;
-  } catch (e) {
-    return null;
-  }
-};
-
-const savedUser = getSavedUser();
-
 export const useAuthStore = create((set, get) => ({
-  user: savedUser,
-  isAuthenticated: !!savedUser,
+  user: null,
+  isAuthenticated: false,
   loading: false,
 
   setUserProfile: (profile) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('blokuma_user_session', JSON.stringify(profile));
-    }
-    set({ user: profile, isAuthenticated: true });
+    set({ user: profile, isAuthenticated: !!profile });
   },
 
-  // Initialize Supabase Auth Session on refresh
+  // Initialize Supabase Auth Session on refresh directly from PostgreSQL (100% DB SSOT)
   initAuthSession: async () => {
     try {
       const { data: sessionData } = await supabaseClient.auth.getSession();
@@ -50,11 +34,9 @@ export const useAuthStore = create((set, get) => ({
           avatarUrl: profile?.avatar_url || '🧑‍🚀',
         };
 
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('blokuma_user_session', JSON.stringify(userProfile));
-        }
-
         set({ user: userProfile, isAuthenticated: true });
+      } else {
+        set({ user: null, isAuthenticated: false });
       }
     } catch (err) {
       console.warn('Auth session init warning:', err);
@@ -65,9 +47,6 @@ export const useAuthStore = create((set, get) => ({
     set({ loading: true });
     try {
       const profile = await loginUser({ email, password });
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('blokuma_user_session', JSON.stringify(profile));
-      }
       set({ user: profile, isAuthenticated: true, loading: false });
       return profile;
     } catch (err) {
@@ -89,9 +68,6 @@ export const useAuthStore = create((set, get) => ({
         grade: profile.grade,
         avatarUrl: profile.avatar_url || '🧑‍🚀',
       };
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('blokuma_user_session', JSON.stringify(userProfile));
-      }
       set({ user: userProfile, isAuthenticated: true, loading: false });
       return userProfile;
     } catch (err) {
@@ -101,11 +77,6 @@ export const useAuthStore = create((set, get) => ({
   },
 
   logout: async () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('blokuma_user_session');
-      localStorage.removeItem('student_nickname');
-      localStorage.removeItem('student_class');
-    }
     await logoutUser();
     set({ user: null, isAuthenticated: false });
   },

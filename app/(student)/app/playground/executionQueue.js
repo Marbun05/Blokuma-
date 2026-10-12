@@ -19,17 +19,17 @@ export function buildExecutionQueue(canvasBlocks) {
     return { error: 'unsupported_block', block: unsupportedBlock };
   }
 
-  // 3. Bangun Antrean Eksekusi Berurutan (Execution Queue)
+  // 3. Bangun Antrean Eksekusi Berurutan Akurat
   const queue = [];
   for (let index = 0; index < canvasBlocks.length; index += 1) {
     const block = canvasBlocks[index];
 
     if (block.id === 'repeat') {
-      // Ambil balok perintah TEPAT SEBELUMNYA di kanvas (misal: 'jump' / MELOMPAT TINGGI)
+      // Ambil balok perintah TEPAT SEBELUMNYA di kanvas (misal: 'jump' / 'move')
       const previousBlock = canvasBlocks[index - 1];
 
       if (previousBlock && EXECUTABLE_BLOCK_IDS.has(previousBlock.id)) {
-        // Masukkan 3 salinan eksplisit dari balok sebelumnya ke antrean
+        // Masukkan 3 salinan perulangan dari balok sebelumnya ke antrean
         queue.push(
           { block: previousBlock, repetition: 1, repetitions: 3, isRepeat: true },
           { block: previousBlock, repetition: 2, repetitions: 3, isRepeat: true },
