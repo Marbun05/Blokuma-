@@ -5,6 +5,7 @@ import { KikoSmartHint } from '../../../../components/ui/KikoSmartHint.jsx';
 import { KikoStoryGeneratorModal } from '../../../../components/ui/KikoStoryGeneratorModal.jsx';
 import { KikoMissionSuccessModal } from '../../../../components/ui/KikoMissionSuccessModal.jsx';
 import { supabase } from '../../../../lib/supabase/client';
+import { unlockNextIslandInDatabase } from '../../../../lib/supabase/curriculum.js';
 import { useAuthStore } from '../../../../store/auth/use-auth-store.js';
 import { getCurriculumMission, normalizeStudentClass } from '../../../../src/data/curriculumData.js';
 import { validateMissionAnswer, buildExecutionQueue } from './executionQueue.js';
@@ -309,6 +310,8 @@ export default function StudentPlaygroundPage() {
       setIsFailureOpen(true);
     } else {
       setIsSuccessOpen(true);
+      // Buka kunci pulau berikutnya di LocalStorage & Supabase secara otomatis
+      unlockNextIslandInDatabase(user?.id, islandNumber);
     }
   };
 

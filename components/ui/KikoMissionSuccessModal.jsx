@@ -17,13 +17,16 @@ export function KikoMissionSuccessModal({
   useEffect(() => {
     if (!isOpen) return undefined;
 
+    // Buka kunci pulau berikutnya secara langsung saat modal muncul
+    unlockNextIslandInDatabase(user?.id, islandNumber);
+
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') onClose();
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, user?.id, islandNumber, onClose]);
 
   if (!isOpen) return null;
 

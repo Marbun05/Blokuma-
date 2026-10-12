@@ -15,17 +15,17 @@ export default function AdventurePage() {
 
   const loadAdventureData = async () => {
     setLoading(true);
-    let currentClassStr = '3';
+    let currentClassStr = 'Kelas 4 SD';
 
     if (typeof window !== 'undefined') {
       const savedClass = localStorage.getItem('student_class');
       if (savedClass) {
         currentClassStr = savedClass;
+      } else if (user?.student_class || user?.grade) {
+        currentClassStr = String(user.student_class || user.grade);
       }
-    }
-
-    if (user?.student_class) {
-      currentClassStr = user.student_class;
+    } else if (user?.student_class || user?.grade) {
+      currentClassStr = String(user.student_class || user.grade);
     }
 
     setStudentClass(currentClassStr);
@@ -44,8 +44,10 @@ export default function AdventurePage() {
     };
 
     window.addEventListener('student_profile_updated', handleProfileUpdate);
+    window.addEventListener('student_progress_updated', handleProfileUpdate);
     return () => {
       window.removeEventListener('student_profile_updated', handleProfileUpdate);
+      window.removeEventListener('student_progress_updated', handleProfileUpdate);
     };
   }, [user]);
 

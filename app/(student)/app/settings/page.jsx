@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
+import { useAuthStore } from '../../../../store/auth/use-auth-store.js';
+import { supabase } from '../../../../lib/supabase/client.js';
+import { normalizeStudentClass } from '../../../../src/data/curriculumData.js';
 
 export default function StudentSettingsPage() {
   const [nickname, setNickname] = useState('Kiko marbun');
@@ -49,14 +52,40 @@ export default function StudentSettingsPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    const numericGrade = normalizeStudentClass(gradeClass);
     const currentSubtheme = getSubthemeByClass(gradeClass);
 
-    // Simpan ke localStorage
+    // 1. Simpan ke localStorage
     localStorage.setItem('student_nickname', nickname);
     localStorage.setItem('student_class', gradeClass);
     localStorage.setItem('student_subtheme', currentSubtheme);
 
-    // Memicu event agar Sidebar & Dashboard ter-refresh secara bersamaan
+    // 2. Update Auth Store
+    const { user, setUserProfile } = useAuthStore.getState();
+    if (user) {
+      setUserProfile({
+        ...user,
+        nickname,
+        student_class: gradeClass,
+        grade: numericGrade,
+      });
+    }
+
+    // 3. Sync ke Supabase jika user terautentikasi
+    if (user?.id) {
+      supabase
+        .from('profiles')
+        .update({
+          nickname,
+          grade: numericGrade,
+        })
+        .eq('id', user.id)
+        .then(({ error }) => {
+          if (error) console.warn('Gagal sync profil ke Supabase:', error);
+        });
+    }
+
+    // Memicu event agar Sidebar, Dashboard, dan Petualangan ter-refresh secara bersamaan
     window.dispatchEvent(new Event('student_profile_updated'));
 
     setTimeout(() => {

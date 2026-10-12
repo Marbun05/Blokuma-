@@ -4,39 +4,39 @@
 SECTION 1: HIGH-LEVEL VIBE CODING PROMPTS
 ================================================================================
 
-1. Arsitektur Data Dinamis & Migrasi Database:
+1. Penyesuaian Kurikulum & Pengaturan Kelas Dinamis:
    Prompt:
-   "Rancang lapisan data (*data layer*) yang *seamless* untuk modul Playground, Galeri, dan Achievements. Hilangkan seluruh *state* matriks data *hardcode* lokal. Lakukan migrasi struktur data utama ke PostgreSQL di Supabase, terapkan kebijakan RLS yang ketat, dan pastikan antarmuka melakukan *hydration* secara dinamis dari database untuk mencapai Single Source of Truth (SSOT). Buatkan juga panel Admin CRUD untuk mengelola data master ini tanpa perlu menyentuh kode."
+   "Pastikan materi kurikulum 6 pulau, label balok koding, dan petunjuk Kiko Smart Hint secara presisi dan dinamis mengikuti jenjang kelas siswa (SD 1-2, SD 3-4, SD 5-6). Ketika siswa mengubah kelasnya di halaman Pengaturan (misalnya ke Kelas 4 SD), pastikan data tersimpan sempurna di LocalStorage, Auth Store, dan Supabase, serta Peta Petualangan dan Sidebar langsung ter-refresh secara realtime tanpa konflik data lama."
 
-2. Refaktor Fluid UI & Layout:
+2. Mekanisme Unlocking Pulau Realtime & Local-First:
    Prompt:
-   "Lakukan refaktor pada arsitektur *layout* global demi menghadirkan pengalaman navigasi yang bebas hambatan (*frictionless*). Terapkan *sidebar* yang *sticky* dan dapat di-*scroll* secara independen dari konten utama. Berikan batas ruang aman (safe-area constraints / bottom paddings) pada kontainer utama guna menjamin tata letak yang *pixel-perfect* dan bebas *overlap* di seluruh ukuran layar mobile maupun desktop."
+   "Rancang sistem pembukaan kunci pulau yang responsif dan anti-gagal. Begitu Robot Kiko berhasil menuntaskan misi di sebuah pulau (seperti Pulau 2: Hutan Perulangan), gerbang pulau berikutnya (Pulau 3: Gunung Kondisi) harus langsung terbuka secara otomatis di LocalStorage dan Supabase, serta memancarkan event realtime agar status di Peta Petualangan berubah menjadi 'Sedang Aktif' tanpa menunggu reload."
 
-3. AI Edge Storyfication Engine:
+3. Kalibrasi Efek Audio Pop & Animasi Panggung:
    Prompt:
-   "Desain sebuah mesin AI Storyfication asinkronus berlatensi rendah menggunakan Supabase Edge Functions. Integrasikan model openai/gpt-oss-120b untuk menelan (ingest) struktur balok koding anak dalam format AST (Abstract Syntax Trees) dan menyintesisnya menjadi petualangan naratif yang sangat imajinatif dan terpersonalisasi. Pastikan UI terhubung secara mulus (*seamless bridging*) lengkap dengan mekanisme *modal fallback* yang elegan."
+   "Investigasi dan perbaiki efek suara 'Pop' di Playground agar terdengar sangat manis, empuk, dan menyenangkan bagi anak-anak menggunakan Web Audio API. Ubah kurva frekuensi dari pola melengking naik menjadi bentuk gelombang gelembung (high-to-low rapid pitch drop). Pastikan pula latar panggung petualangan bergeser secara halus hanya saat Kiko mengeksekusi perintah berjalan."
 
-4. Penanganan Aset & Sinkronisasi Animasi:
+4. Petunjuk Pintar Kiko (Socratic Smart Hint & Key Answers):
    Prompt:
-   "Lakukan investigasi dan tuntaskan *bottleneck* perenderan pada aset Maskot. Sinkronkan *keyframe animations* Tailwind dengan transformasi CSS *inline* dengan cara merefaktor hierarki DOM menjadi sistem *inner/outer wrappers* untuk mencegah *layout shifting*. Implementasikan fungsi *onError fallbacks* otomatis pada gambar untuk menjaga estetika UI agar tetap sempurna (*flawless*)."
+   "Bangun sistem Kiko Smart Hint yang mampu membaca materi dan kunci jawaban (solutions) dari setiap misi di 6 pulau. Berikan panduan Socratic AI yang ramah anak, mendukung Text-to-Speech bahasa Indonesia, fitur Voice-to-Block, serta Bantuan Ajaib otomatis jika siswa sudah mencoba 3 kali belum berhasil."
 
-5. Persistensi Sesi & Navigasi Bersih:
+5. Arsitektur Data SSOT & Refaktor UI Playground:
    Prompt:
-   "Tingkatkan DX/UX perutean (routing) dengan merancang persistensi sesi yang ketat. Pasang sebuah Auth Listener pada *root* React guna mencegah hilangnya *state* saat terjadi *hard reload* di browser. Sederhanakan *sidebar* dengan mengekstraksi aksi Pengaturan dan Logout ke dalam komponen Profile Popover Menu yang modern dan terdeklarasi rapi."
+   "Lakukan refaktor pada kanvas coding visual dan antrean eksekusi balok di Playground. Integrasikan data master pulau dan balok dari Supabase PostgreSQL, sediakan panel Admin CRUD, serta terapkan tata letak responsif yang rapi dan nyaman digunakan di desktop maupun tablet."
 
 ================================================================================
 SECTION 2: CORE ARCHITECTURE & COMMIT LOGS
 ================================================================================
 
-[COMMIT 5] Migrasi DB SSOT & Arsitektur Layout (Terbaru)
-- Database Synchronization: Mengeksekusi skrip Node.js `pg` dengan mulus untuk membangun tabel `playground_islands`, `playground_blocks`, `student_projects`, `master_achievements`, dan `teacher_assignments`.
-- UI Hydration: Menyambung ulang halaman `app/(student)/app/playground/page.jsx`, `gallery/page.jsx`, `projects/page.jsx`, dan `achievements/page.jsx` agar menarik payload data secara *real-time* dari Supabase.
-- Schema Optimization: Menghapus tabel `projects` yang *redundant*. Menjadikan `student_projects` sebagai satu-satunya rujukan kanonikal (*sole canonical source*) untuk seluruh kueri galeri dan analitik pada tampilan Guru, Orang Tua, dan Admin.
-- Admin Tooling: Merilis antarmuka admin CRUD fungsional penuh di `playground-data/page.jsx` untuk pengelolaan data master yang *seamless*.
-- Layout Architecture: Merekayasa *sidebar* dengan `sticky top-0 h-screen overflow-y-auto` serta menyuntikkan restriksi *padding* `pb-24 md:pb-8` pada kontainer global `<main>` demi mendapatkan fluiditas responsif yang sempurna.
+[COMMIT 5] Kurikulum Dinamis, Unlocking Pulau Realtime & Audio Pop Polish (Terbaru)
+- Adaptive Curriculum Engine: Menyinkronkan materi 6 pulau dan kunci jawaban di `curriculumData.js` dengan tingkat kelas siswa (SD 1-2, SD 3-4, SD 5-6).
+- Seamless Unlocking Flow: Memperbaiki `unlockNextIslandInDatabase` dan `getCurriculumMissionsByClass` di `lib/supabase/curriculum.js`. Menyelesaikan Pulau 2 kini secara instan membuka Pulau 3 di LocalStorage & Supabase, memancarkan event `student_progress_updated`, dan mengubah status Pulau 3 menjadi 'Sedang Aktif'.
+- Profile Sync Fix: Memperbarui `SettingsPage`, `AdventurePage`, dan `StudentSidebar` agar perubahan kelas ke 'Kelas 4 SD' tersimpan konsisten di seluruh aplikasi tanpa tertimpa data lama.
+- Cute Bubble Pop Sound: Merancang ulang synthesizer Web Audio API di `playground/page.jsx` dan `public/page.jsx` dengan instan 800Hz -> 200Hz exponential pitch drop, menghasilkan suara gelembung pop yang sangat imut dan memuaskan.
+- Full Test Pass: Seluruh 19 unit test Vitest pada kurikulum dan antrean eksekusi balok koding lulus 100%.
 
-[COMMIT 1 - 4] Rekapitulasi Fondasi Lama
-- Core Engine: Mengkonstruksi AST Parser (`lib/blockEngine/astAnalyzer.js`) untuk evaluasi logika struktural balok koding.
-- Serverless AI: Melakukan *deploy* `kiko-smart-hint` (Logika Socratic) dan `kiko-story-generator` (AI Naratif) melalui Deno Edge Functions.
-- Gamification: Menghubungkan Peta Petualangan 6-Pulau dengan skema `curriculum_missions` secara *real-time*.
-- UX Polish: Menstandardisasi loop rute persisten dan interaksi mikro (micro-interactions) tombol `← Kembali` secara global.
+[COMMIT 1 - 4] Rekapitulasi Fondasi Utama
+- Core Block Engine: Mengkonstruksi AST Parser dan antrean eksekusi sekuensial (`executionQueue.js`) untuk evaluasi balok 'move', 'jump', 'sound', dan loop 'repeat'.
+- Serverless AI Edge: Menghubungkan Deno Edge Functions `kiko-smart-hint` (Model Qwen) dan `kiko-story-generator` (Model GPT-OSS) untuk cerita koding anak.
+- SSOT Database: Mengintegrasikan Supabase PostgreSQL untuk `playground_islands`, `playground_blocks`, `student_projects`, dan `student_progress`.
+- Admin & UI Polish: Menyediakan Admin CRUD panel di `playground-data` dan merancang layout responsif `sticky sidebar` yang fluid.

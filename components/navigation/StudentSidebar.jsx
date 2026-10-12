@@ -39,18 +39,16 @@ export function StudentSidebar() {
 
   // Fungsi memuat data profil dari localStorage & store
   const loadProfileData = () => {
-    const savedClass = localStorage.getItem('student_class');
-    const savedName = localStorage.getItem('student_nickname');
+    const savedClass =
+      localStorage.getItem('student_class') ||
+      (user?.grade ? `Kelas ${user.grade} SD` : null) ||
+      user?.student_class ||
+      'Kelas 4 SD';
+    const savedName = localStorage.getItem('student_nickname') || user?.nickname || 'Kiko';
 
-    if (savedClass) {
-      setCurrentGrade(savedClass);
-      setCurrentSubtheme(getSubthemeByClass(savedClass));
-    }
-    if (savedName) {
-      setStudentNickname(savedName);
-    } else if (user?.nickname) {
-      setStudentNickname(user.nickname);
-    }
+    setCurrentGrade(savedClass);
+    setCurrentSubtheme(getSubthemeByClass(savedClass));
+    setStudentNickname(savedName);
   };
 
   useEffect(() => {

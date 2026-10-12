@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< Updated upstream
-=======
 import { getKikoSmartHint } from '../../lib/supabase/kikoSmartHint.js';
 import { Mic, MicOff, Wand2 } from 'lucide-react';
->>>>>>> Stashed changes
 
 export function KikoSmartHint({
   isOpen: controlledIsOpen,
@@ -14,30 +11,25 @@ export function KikoSmartHint({
   autoOpenOnFail = true,
   mission = null,
 }) {
-<<<<<<< Updated upstream
   const [localIsOpen, setLocalIsOpen] = useState(false);
-  const [hintData, setHintData] = useState(null);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const isOpen = controlledIsOpen ?? localIsOpen;
-
-  const updateIsOpen = (nextIsOpen) => {
-    if (controlledIsOpen === undefined) setLocalIsOpen(nextIsOpen);
-    onOpenChange(nextIsOpen);
-=======
-  const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [gradeLevel, setGradeLevel] = useState('SD 1-2');
   const [hintData, setHintData] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [voiceInput, setVoiceInput] = useState('');
   const [showMagicHelp, setShowMagicHelp] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const isOpen = controlledIsOpen ?? localIsOpen;
+
+  const updateIsOpen = (nextIsOpen) => {
+    if (controlledIsOpen === undefined) setLocalIsOpen(nextIsOpen);
+    onOpenChange(nextIsOpen);
+  };
 
   // Auto-fetch & pop up hint jika anak sudah mencoba 2 kali lebih
   useEffect(() => {
     if (autoOpenOnFail && attemptCount >= 2 && !isOpen) {
       handleFetchHint();
-      setIsOpen(true);
+      updateIsOpen(true);
     }
     if (attemptCount >= 3) {
       setShowMagicHelp(true);
@@ -62,25 +54,6 @@ export function KikoSmartHint({
 
     setIsListening(true);
     setVoiceInput("Kiko sedang mendengarkan... (Bicara sekarang)");
-  };
-
-  const handleFetchHint = async () => {
-    setLoading(true);
-    try {
-      const res = await getKikoSmartHint({
-        canvasBlocks,
-        targetLevel,
-        executionResult,
-        gradeLevel,
-        attemptCount,
-      });
-      setHintData(res);
-    } catch (e) {
-      console.error('Error getting hint:', e);
-    } finally {
-      setLoading(false);
-    }
->>>>>>> Stashed changes
   };
 
   useEffect(() => {
@@ -296,9 +269,6 @@ export function KikoSmartHint({
                       </ul>
                     </div>
                   )}
-<<<<<<< Updated upstream
-              </>
-=======
 
                   {/* Magic Help (Bantuan Otomatis jika Stuck 3 kali) */}
                   {showMagicHelp && (
@@ -321,7 +291,6 @@ export function KikoSmartHint({
                   )}
                 </>
               )}
->>>>>>> Stashed changes
             </div>
 
             {/* Footer Pop-up */}

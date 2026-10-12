@@ -34,14 +34,16 @@ export default function StudentDashboardPage() {
     // 1. Muat data saat pertama kali komponen dibuka
     loadProfileData();
 
-    // 2. Listener Custom Event agar nama di banner update secara otomatis jika diubah dari halaman Pengaturan
+    // 2. Listener Custom Event agar nama & progres update secara otomatis jika berubah
     const handleProfileUpdate = () => {
       loadProfileData();
     };
 
     window.addEventListener('student_profile_updated', handleProfileUpdate);
+    window.addEventListener('student_progress_updated', handleProfileUpdate);
     return () => {
       window.removeEventListener('student_profile_updated', handleProfileUpdate);
+      window.removeEventListener('student_progress_updated', handleProfileUpdate);
     };
   }, [user]);
 
