@@ -425,8 +425,6 @@ Tugas Perbaikan:
 
 Catatan: Logika berjalan 100% di client-side (React State/Refs) tanpa memerlukan API atau database tambahan.
 
-Copilot: 
-
 User: Fix & tingkatkan logika antrean eksekusi dan animasi panggung Kiko pada `app/(student)/app/playground/page.jsx` (atau file runner/executionQueue terkait).
 
 Tugas Perbaikan:
