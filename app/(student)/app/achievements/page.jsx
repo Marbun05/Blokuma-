@@ -12,19 +12,52 @@ export default function AchievementsPage() {
   useEffect(() => {
     const fetchAchievements = async () => {
       try {
-        const { data, error } = await supabase
-          .from('master_achievements')
-          .select('*')
-          .order('target_value', { ascending: true });
+        const [masterRes, progressRes] = await Promise.all([
+          supabase.from('master_achievements').select('*').order('target_value', { ascending: true }),
+          user?.id
+            ? supabase.from('student_progress').select('*').eq('student_id', user.id).single()
+            : Promise.resolve({ data: null })
+        ]);
 
-        if (error) throw error;
+        if (masterRes.error) throw masterRes.error;
 
-        // Simulasikan status unlocked (Dalam produksi ini ditarik dari tabel student_achievements join master_achievements)
-        // Disini kita set first_step kebuka, loop_master progress, game_architect kekunci
-        const processed = (data || []).map(a => {
-          if (a.id === 'first_step') return { ...a, status: 'unlocked', progress: 100 };
-          if (a.id === 'loop_master') return { ...a, status: 'progress', progress: 70 };
-          return { ...a, status: 'locked', progress: 0 };
+        const masterData = masterRes.data || [];
+        const studentLevel = progressRes?.data?.level || Number(localStorage.getItem('student_completed_level') || 0);
+        const studentXp = progressRes?.data?.xp || 0;
+
+        const processed = masterData.map((a) => {
+          let status = 'locked';
+          let progress = 0;
+
+          if (a.id === 'first_step') {
+            if (studentLevel >= 1) {
+              status = 'unlocked';
+              progress = 100;
+            }
+          } else if (a.id === 'loop_master') {
+            if (studentLevel >= 2) {
+              status = 'unlocked';
+              progress = 100;
+            } else if (studentLevel === 1) {
+              status = 'progress';
+              progress = 50;
+            }
+          } else if (a.id === 'game_architect') {
+            if (studentLevel >= 3 || studentXp >= 300) {
+              status = 'unlocked';
+              progress = 100;
+            } else if (studentLevel === 2) {
+              status = 'progress';
+              progress = 60;
+            }
+          } else {
+            if (studentLevel >= (a.target_value || 1)) {
+              status = 'unlocked';
+              progress = 100;
+            }
+          }
+
+          return { ...a, status, progress };
         });
 
         setAchievements(processed);
@@ -65,10 +98,10 @@ export default function AchievementsPage() {
         </div>
 
         {loading ? (
-           <div className="py-12 flex flex-col items-center justify-center text-teal-800 gap-3">
-             <div className="w-10 h-10 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
-             <span className="text-sm font-bold animate-pulse">Memuat medali dan lencana...</span>
-           </div>
+          <div className="py-12 flex flex-col items-center justify-center text-teal-800 gap-3">
+            <div className="w-10 h-10 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
+            <span className="text-sm font-bold animate-pulse">Memuat medali dan lencana...</span>
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {achievements.map((item) => {

@@ -20,15 +20,7 @@ export default function ProjectsPage() {
           .order('updated_at', { ascending: false });
 
         if (error) throw error;
-
-        // Data dummy sementara agar page tidak kosong jika user belum ada data
-        if (!data || data.length === 0) {
-           setMyProjects([
-             { id: 'dummy-1', icon: '🚀', badge_color: 'text-emerald-800 border-emerald-300', title: 'Space Runner Kiko', description: 'Game menghindari meteorit dan rintangan luar angkasa dengan melompat.', updated_at: new Date().toISOString() }
-           ]);
-        } else {
-           setMyProjects(data);
-        }
+        setMyProjects(data || []);
       } catch (err) {
         console.error('Error fetching projects:', err);
       } finally {
@@ -79,14 +71,14 @@ export default function ProjectsPage() {
             <div className="w-10 h-10 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
             <span className="text-sm font-bold animate-pulse">Memuat meja kerja...</span>
           </div>
-        ) : (
+        ) : myProjects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {myProjects.map((project) => (
               <div key={project.id} className="bg-white rounded-2xl p-6 border-2 border-teal-200 card-chunky shadow-sm hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-2xl shadow-sm">
-                      {project.icon}
+                      {project.icon || '🎮'}
                     </span>
                     <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-opacity-20 ${project.badge_color || 'bg-emerald-100 text-emerald-800 border-emerald-300'}`}>
                       Game Aktif
@@ -96,12 +88,12 @@ export default function ProjectsPage() {
                     {project.title}
                   </h3>
                   <p className="text-xs text-slate-600 font-medium leading-relaxed mb-4">
-                    {project.description}
+                    {project.description || 'Proyek koding kreatif rancangan sendiri.'}
                   </p>
                 </div>
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-[11px] text-slate-400 font-bold">
-                    Diperbarui {new Date(project.updated_at).toLocaleDateString('id-ID')}
+                    Diperbarui {new Date(project.updated_at || Date.now()).toLocaleDateString('id-ID')}
                   </span>
                   <Link
                     to="/app/playground"
@@ -113,6 +105,20 @@ export default function ProjectsPage() {
                 </div>
               </div>
             ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl p-10 border-2 border-dashed border-slate-300 text-center text-slate-500 font-medium max-w-md mx-auto">
+            <span className="text-5xl block mb-3">📦</span>
+            <h3 className="font-heading font-bold text-slate-800 text-lg mb-1">Belum Ada Karya Tersimpan</h3>
+            <p className="text-xs text-slate-500 mb-4">
+              Yuk, mulai rakit balok koding pertamamu di Playground dan simpan hasilnya di sini!
+            </p>
+            <Link
+              to="/app/playground"
+              className="toy-btn-teal inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs"
+            >
+              <span>🚀 Masuk ke Playground</span>
+            </Link>
           </div>
         )}
       </main>

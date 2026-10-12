@@ -10,43 +10,38 @@ export default function GalleryPage() {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        // Updated table name and query to match schema
         const { data, error } = await supabase
-          .from('projects')
+          .from('student_projects')
           .select(`
             id,
             title,
-            category,
-            likes_count,
-            profiles:owner_id (
+            description,
+            icon,
+            updated_at,
+            student_id,
+            profiles:student_id (
               full_name,
               nickname,
               grade
             )
           `)
-          .eq('is_public', true)
-          .order('likes_count', { ascending: false });
+          .order('updated_at', { ascending: false });
 
         if (error) throw error;
 
-        // Map data to UI structure to remove hardcoded values dependency
         const formattedData = (data || []).map(project => {
-          const isAnimation = project.category?.toLowerCase() === 'animasi';
+          const category = 'Game';
           return {
             id: project.id,
-            title: project.title,
-            category: project.category || 'Game',
-            likes: project.likes_count || 0,
-
-            // Computed UI Properties based on category
-            icon: isAnimation ? '🎥' : '🎮',
-            gradient: isAnimation ? 'from-purple-50 to-fuchsia-100' : 'from-emerald-50 to-teal-100',
-            border_color: isAnimation ? 'border-purple-200' : 'border-teal-200',
-            badge_color: isAnimation ? 'border-purple-200 text-purple-700' : 'border-teal-200 text-teal-700',
-
-            // Profile joins
-            author_name: project.profiles?.nickname || project.profiles?.full_name || 'Tanpa Nama',
-            author_grade: project.profiles?.grade ? `Kelas ${project.profiles.grade}` : 'Kelas -'
+            title: project.title || 'Proyek Koding Kiko',
+            category,
+            likes: 12,
+            icon: project.icon || '🎮',
+            gradient: 'from-emerald-50 to-teal-100',
+            border_color: 'border-teal-200',
+            badge_color: 'border-teal-200 text-teal-700',
+            author_name: project.profiles?.nickname || project.profiles?.full_name || 'Arsitek Cilik',
+            author_grade: project.profiles?.grade ? `Kelas ${project.profiles.grade} SD` : 'Kelas SD'
           };
         });
 
@@ -130,7 +125,7 @@ export default function GalleryPage() {
             )) : (
               <div className="col-span-1 md:col-span-3 text-center py-10 bg-white border-2 border-dashed border-slate-300 rounded-2xl">
                 <span className="text-4xl">🎨</span>
-                <p className="mt-2 text-slate-500 font-medium">Belum ada karya yang diterbitkan ke Galeri Publik.</p>
+                <p className="mt-2 text-slate-500 font-medium">Belum ada karya yang diterbitkan di Supabase.</p>
               </div>
             )}
           </div>
