@@ -41,6 +41,7 @@ import TeacherSettingsPage from '../app/(teacher)/teacher/settings/page.jsx';
 
 // Admin Page
 import AdminDashboardPage from '../app/(admin)/admin/page.jsx';
+import AdminPlaygroundDataPage from '../app/(admin)/admin/playground-data/page.jsx';
 
 export default function App() {
   const { initAuthSession } = useAuthStore();
@@ -91,6 +92,7 @@ export default function App() {
 
       {/* Admin Route */}
       <Route path="/admin" element={<AdminDashboardPage />} />
+      <Route path="/admin/playground-data" element={<AdminPlaygroundDataPage />} />
     </Routes>
   );
 }

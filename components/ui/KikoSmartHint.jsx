@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< Updated upstream
+=======
+import { getKikoSmartHint } from '../../lib/supabase/kikoSmartHint.js';
+import { Mic, MicOff, Wand2 } from 'lucide-react';
+>>>>>>> Stashed changes
 
 export function KikoSmartHint({
   isOpen: controlledIsOpen,
@@ -9,6 +14,7 @@ export function KikoSmartHint({
   autoOpenOnFail = true,
   mission = null,
 }) {
+<<<<<<< Updated upstream
   const [localIsOpen, setLocalIsOpen] = useState(false);
   const [hintData, setHintData] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -17,6 +23,64 @@ export function KikoSmartHint({
   const updateIsOpen = (nextIsOpen) => {
     if (controlledIsOpen === undefined) setLocalIsOpen(nextIsOpen);
     onOpenChange(nextIsOpen);
+=======
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [gradeLevel, setGradeLevel] = useState('SD 1-2');
+  const [hintData, setHintData] = useState(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [voiceInput, setVoiceInput] = useState('');
+  const [showMagicHelp, setShowMagicHelp] = useState(false);
+
+  // Auto-fetch & pop up hint jika anak sudah mencoba 2 kali lebih
+  useEffect(() => {
+    if (autoOpenOnFail && attemptCount >= 2 && !isOpen) {
+      handleFetchHint();
+      setIsOpen(true);
+    }
+    if (attemptCount >= 3) {
+      setShowMagicHelp(true);
+    }
+  }, [attemptCount]);
+
+  const handleVoiceToBlock = async () => {
+    if (isListening) {
+      setIsListening(false);
+      // Simulate: Llama-Prompt-Guard-22m checking for toxicity
+      setVoiceInput("Mengecek keamanan suara dengan Llama-Prompt-Guard-22m...");
+
+      setTimeout(() => {
+        // Simulate: whisper-large-v3-turbo processing
+        setVoiceInput("Memproses suara Kiko dengan Whisper Turbo...");
+        setTimeout(() => {
+          setVoiceInput("Oh, Kiko mengerti! Kamu ingin maju 3 kali ya?");
+        }, 1500);
+      }, 1000);
+      return;
+    }
+
+    setIsListening(true);
+    setVoiceInput("Kiko sedang mendengarkan... (Bicara sekarang)");
+  };
+
+  const handleFetchHint = async () => {
+    setLoading(true);
+    try {
+      const res = await getKikoSmartHint({
+        canvasBlocks,
+        targetLevel,
+        executionResult,
+        gradeLevel,
+        attemptCount,
+      });
+      setHintData(res);
+    } catch (e) {
+      console.error('Error getting hint:', e);
+    } finally {
+      setLoading(false);
+    }
+>>>>>>> Stashed changes
   };
 
   useEffect(() => {
@@ -180,17 +244,40 @@ export function KikoSmartHint({
                         "{hintData?.hint || 'Ayo susun baloknya dan klik tombol hint jika butuh petunjuk!'}"
                       </p>
 
-                      {/* Tombol Suara Bicara TTS */}
-                      <button
-                        onClick={handleSpeakHint}
-                        className={`text-xs px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition ${
-                          isSpeaking
-                            ? 'bg-rose-100 text-rose-700 border border-rose-300 animate-pulse'
-                            : 'bg-amber-200 hover:bg-amber-300 text-amber-900 border border-amber-400'
-                        }`}
-                      >
-                        <span>{isSpeaking ? '🔊 Sedang Bicara...' : '🔊 Suara Kiko'}</span>
-                      </button>
+                      <div className="flex gap-2">
+                        {/* Tombol Suara Bicara TTS */}
+                        <button
+                          onClick={handleSpeakHint}
+                          className={`text-xs px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition ${
+                            isSpeaking
+                              ? 'bg-rose-100 text-rose-700 border border-rose-300 animate-pulse'
+                              : 'bg-amber-200 hover:bg-amber-300 text-amber-900 border border-amber-400'
+                          }`}
+                        >
+                          <span>{isSpeaking ? '🔊 Sedang Bicara...' : '🔊 Suara Kiko'}</span>
+                        </button>
+
+                        {/* Tombol Mikrofon (Voice-to-Block) */}
+                        <button
+                          onClick={handleVoiceToBlock}
+                          className={`text-xs px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition ${
+                            isListening
+                              ? 'bg-rose-500 text-white animate-pulse shadow-md border-rose-600'
+                              : 'bg-sky-500 hover:bg-sky-600 text-white shadow-sm border-sky-600'
+                          }`}
+                          title="Bicara ke Kiko (Voice-to-Block)"
+                        >
+                          {isListening ? <MicOff size={14} /> : <Mic size={14} />}
+                          <span>{isListening ? 'Berhenti' : 'Bicara'}</span>
+                        </button>
+                      </div>
+
+                      {/* Display Voice Input/STT Results */}
+                      {voiceInput && (
+                        <div className="mt-3 p-2 bg-sky-50 border border-sky-200 rounded-lg text-[10px] text-sky-800 font-medium italic">
+                          🎤 {voiceInput}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -209,7 +296,32 @@ export function KikoSmartHint({
                       </ul>
                     </div>
                   )}
+<<<<<<< Updated upstream
               </>
+=======
+
+                  {/* Magic Help (Bantuan Otomatis jika Stuck 3 kali) */}
+                  {showMagicHelp && (
+                    <div className="mt-4 pt-3 border-t-2 border-dashed border-rose-300">
+                      <div className="bg-rose-50 border border-rose-200 p-3 rounded-xl">
+                        <p className="text-[11px] font-extrabold text-rose-800 mb-2 flex items-center gap-1">
+                          <Wand2 size={14} />
+                          Bantuan Ajaib Kiko (Kamu sudah mencoba 3x!)
+                        </p>
+                        <p className="text-[10px] text-rose-600 font-medium mb-2">
+                          Sepertinya ini agak sulit ya? Jangan menyerah! Coba susunan balok ini:
+                        </p>
+                        <div className="flex gap-1.5">
+                          <span className="bg-teal-500 text-white px-2 py-1 rounded text-[9px] font-bold">➔ MAJU</span>
+                          <span className="bg-teal-500 text-white px-2 py-1 rounded text-[9px] font-bold">➔ MAJU</span>
+                          <span className="bg-amber-500 text-white px-2 py-1 rounded text-[9px] font-bold">🦘 LOMPAT</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+>>>>>>> Stashed changes
             </div>
 
             {/* Footer Pop-up */}

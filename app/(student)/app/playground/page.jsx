@@ -63,6 +63,7 @@ export default function StudentPlaygroundPage() {
   const storedClass = typeof window !== 'undefined' ? window.localStorage.getItem('student_class') : null;
   const studentClass = normalizeStudentClass(requestedClass || user?.student_class || storedClass);
 
+  const [studentGrade, setStudentGrade] = useState('SD 3-4'); // Progressive UI level
   const [islandThemes, setIslandThemes] = useState([]);
   const [availableBlocks, setAvailableBlocks] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
@@ -116,6 +117,26 @@ export default function StudentPlaygroundPage() {
     ground: configuredTheme?.ground || 'bg-emerald-600',
     landmarks: configuredTheme?.landmarks || ['🏡', '🌳'],
     ...ADVENTURE_THEME_OVERRIDES[islandNumber]
+  };
+
+  // Fungsi untuk memformat label balok (Progressive Disclosure)
+  const formatBlockLabel = (label, grade) => {
+    // Misalnya label aslinya adalah "➔ MAJU 1 LANGKAH"
+    if (grade === 'SD 1-2') {
+      if (label.includes('MAJU')) return '➡️';
+      if (label.includes('LOMPAT')) return '🦘';
+      if (label.includes('POP')) return '🎵';
+      if (label.includes('3 Kali')) return '🔁 3x';
+      return '❓';
+    } else if (grade === 'SD 5-6') {
+      if (label.includes('MAJU')) return 'move(forward);';
+      if (label.includes('LOMPAT')) return 'jump(up);';
+      if (label.includes('POP')) return 'playSound("pop");';
+      if (label.includes('3 Kali')) return 'for(i=0; i<3; i++) {';
+      return 'execute();';
+    }
+    // Default SD 3-4
+    return label;
   };
 
   const handleAddBlock = (block) => {
@@ -338,6 +359,24 @@ export default function StudentPlaygroundPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
+            {/* Pemilih Kelas / Level UI */}
+            <div className="bg-white border border-slate-200 px-2 py-1 rounded-xl flex items-center gap-1 shadow-sm h-10">
+              <span className="text-[10px] font-bold text-slate-500 mr-1">Tampilan Balok:</span>
+              {['SD 1-2', 'SD 3-4', 'SD 5-6'].map((grade) => (
+                <button
+                  key={grade}
+                  onClick={() => setStudentGrade(grade)}
+                  className={`text-[10px] font-extrabold px-2 py-1 rounded-lg transition ${
+                    studentGrade === grade
+                      ? 'bg-teal-500 text-white shadow-sm'
+                      : 'text-slate-600 hover:bg-slate-100'
+                  }`}
+                >
+                  {grade}
+                </button>
+              ))}
+            </div>
+
             <button
               onClick={() => setIsStoryModalOpen(true)}
               className="toy-btn-teal px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-toyTeal flex items-center gap-2 border-2 border-teal-700 active:scale-95"
@@ -387,17 +426,24 @@ export default function StudentPlaygroundPage() {
                   </span>
                 </p>
                 <div className="space-y-2.5">
-                  {availableBlocks.map((block) => (
-                    <button
-                      key={block.id}
-                      onClick={() => handleAddBlock(block)}
-                      disabled={isRunning}
-                      className={`w-full p-3 rounded-xl font-bold text-xs shadow-sm text-left transition transform active:scale-95 flex items-center justify-between ${block.color}`}
-                    >
-                      <span>{block.label}</span>
-                      <span className="text-base font-extrabold">+</span>
-                    </button>
-                  ))}
+                  {availableBlocks.map((block) => {
+                    // Filter: SD 1-2 tidak melihat blok 'repeat' (loop) untuk mencegah pusing
+                    if (studentGrade === 'SD 1-2' && block.id === 'repeat') return null;
+
+                    return (
+                      <button
+                        key={block.id}
+                        onClick={() => handleAddBlock(block)}
+                        disabled={isRunning}
+                        className={`w-full p-3 rounded-xl font-bold text-xs shadow-sm text-left transition transform active:scale-95 flex items-center justify-between ${block.color}`}
+                      >
+                        <span className={studentGrade === 'SD 1-2' ? 'text-2xl text-center w-full' : studentGrade === 'SD 5-6' ? 'font-mono tracking-tight text-[11px]' : ''}>
+                          {formatBlockLabel(block.label, studentGrade)}
+                        </span>
+                        {studentGrade !== 'SD 1-2' && <span className="text-base font-extrabold">+</span>}
+                      </button>
+                    );
+                  })}
                   {availableBlocks.length === 0 && (
                     <p className="text-sm text-slate-500 italic">Belum ada blok tersedia di database.</p>
                   )}
@@ -437,7 +483,9 @@ export default function StudentPlaygroundPage() {
                         key={block.instanceId}
                         className={`p-2.5 rounded-lg font-bold text-xs shadow-sm flex items-center justify-between ${block.color}`}
                       >
-                        <span>{idx + 1}. {block.label}</span>
+                        <span className={studentGrade === 'SD 5-6' ? 'font-mono text-[10px]' : ''}>
+                          {idx + 1}. {formatBlockLabel(block.label, studentGrade)}
+                        </span>
                       </div>
                     ))
                   )}

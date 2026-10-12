@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
 import { supabase } from '../../../../lib/supabase/client';
 
 export default function AdminPlaygroundData() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('islands'); // 'islands' or 'blocks'
   const [islands, setIslands] = useState([]);
   const [blocks, setBlocks] = useState([]);
@@ -145,10 +148,20 @@ export default function AdminPlaygroundData() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-slate-800">Manajemen Data Playground (Admin)</h1>
+    <div className="w-full min-h-screen bg-white text-slate-900 px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+      <div className="w-full">
+        <div className="flex items-center mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="mr-4 p-2 bg-white rounded-full shadow-sm border border-slate-200 hover:bg-slate-100 transition-colors"
+            title="Kembali"
+          >
+            <ChevronLeft size={24} className="text-slate-700" />
+          </button>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Manajemen Data Playground (Admin)</h1>
+        </div>
 
-      {/* Tabs */}
+        {/* Tabs */}
       <div className="flex space-x-4 mb-6">
         <button
           className={`px-4 py-2 rounded-lg font-semibold transition-colors ${activeTab === 'islands' ? 'bg-teal-600 text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
@@ -170,9 +183,9 @@ export default function AdminPlaygroundData() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         {/* Form Section */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 lg:col-span-1 h-fit">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 xl:col-span-1 h-fit">
           <h2 className="text-xl font-bold mb-4">{isEditing ? 'Edit Data' : 'Tambah Data Baru'}</h2>
 
           {activeTab === 'islands' ? (
@@ -234,13 +247,13 @@ export default function AdminPlaygroundData() {
         </div>
 
         {/* List Section */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 lg:col-span-2">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 xl:col-span-2 overflow-hidden">
           <h2 className="text-xl font-bold mb-4">Daftar Data</h2>
 
           {loading && !isEditing ? (
             <div className="text-center py-8 text-slate-500">Memuat data...</div>
           ) : activeTab === 'islands' ? (
-            <div className="overflow-x-auto">
+            <div className="w-full overflow-x-auto">
               <table className="min-w-full divide-y divide-slate-200">
                 <thead className="bg-slate-50">
                   <tr>
@@ -272,7 +285,7 @@ export default function AdminPlaygroundData() {
               </table>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="w-full overflow-x-auto">
               <table className="min-w-full divide-y divide-slate-200">
                 <thead className="bg-slate-50">
                   <tr>
@@ -304,6 +317,7 @@ export default function AdminPlaygroundData() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
