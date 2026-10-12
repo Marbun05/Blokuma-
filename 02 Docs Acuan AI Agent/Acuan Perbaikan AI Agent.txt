@@ -19,79 +19,65 @@ Catatan Pelaksanaan:
 - Pertahankan gaya Tailwind CSS yang ramah anak, playful, dan konsisten dengan UI/UX Blokuma yang ada saat ini.
 - Pastikan fungsionalitas tombol "Coba Lagi" dan "Lanjut Misi Berikutnya" tetap berfungsi dengan baik.
 
-Copilot: Find files matching `**/playground/page.jsx`
 
-git_status
-Completed with input: {
-  "directory": "/home/melvin/Dokumen/Lomba Web/Blokuma-"
-}
+Tugas Perbaikan:
 
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx"
-}
+1. Exec Queue & Loop Guard (ULANGI 3 KALI):
+   - Baca kanvas sekuensial via Async Queue / setTimeout (~600ms/step).
+   - Blok 'ULANGI 3 KALI' HARUS mengulang animasi dari perintah TEPAT SEBELUMNYA sebanyak 3x (contoh: sebelum loop ada 'MELOMPAT', maka Kiko melompat 3x).
+   - VALIDASI: Jika 'ULANGI 3 KALI' dipasang di urutan awal/sendirian, BATALKAN animasi, Kiko diam, dan tampilkan alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
 
-Search for `Hore|Misi Tuntas|Coba Lagi|Lanjut Misi Berikutnya|showSuccess|SuccessModal`
+2. Background Dinamis (Tema Petualangan):
+   - Sesuaikan visual background berdasarkan pulau/misi (Pulau 1: Desa/Gerbang Desa, Pulau 2: Hutan/Pohon).
+   - Saat Kiko bergerak/beraksi, buat background bergeser halus (kanan ke kiri) untuk efek berjalan.
 
-Saya menemukan modal keberhasilan dirender dari komponen bersama, dengan handler penutupan sudah diteruskan dari halaman playground. Saya akan periksa implementasi modal dan alur tombol yang ada sebelum menambahkan kontrol tutup.
+3. Animasi Karakter & Action Trigger:
+   - Maju: Geser X Kiko / gerakkan background.
+   - Melompat: Animasi translasi Y (naik-turun melompati rintangan).
+   - Suara: Panggil audio lokal `public/sounds/pop.mp3` atau Web Speech API.
 
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/components/ui/KikoMissionSuccessModal.jsx"
-}
+Catatan: 100% client-side (React State/Refs, tanpa DB baru). Styling Tailwind CSS playful/ramah anak.
 
-Read , lines 1 to 35
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    1,
-    35
-  ]
-}
 
-Read , lines 425 to 460
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    425,
-    460
-  ]
-}
+User: Tolong audit dan perbarui komponen modal/pop-up keberhasilan misi ("Misi Tuntas") pada modul playground (`app/(student)/app/playground/page.jsx` atau `app/playground/page.jsx`).
 
-Search for `KikoMissionSuccessModal`
+Masalah Saat Ini:
+Ketika misi diselesaikan, pop-up modal "Hore! Desa Urutan Selesai!" muncul di layar, namun tidak memiliki opsi/tombol untuk menutup window tersebut. Pengguna hanya bisa mengeklik tombol "Coba Lagi" atau "Lanjut Misi Berikutnya".
 
-Edit 
+Tugas & Langkah Perbaikan:
+1. Lokasi Komponen:
+   - Cari komponen Modal / Dialog Keberhasilan Misi di dalam file `page.jsx` (atau file komponen terkait seperti `MissionSuccessModal.jsx`).
 
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/package.json"
-}
+2. Tambahkan Tombol Tutup (Close Button):
+   - Tambahkan ikon silang 'X' di pojok kanan atas kontainer modal putih.
+   - Atau tambahkan tombol sekunder "Tutup" / "Kembali ke Playground" di samping tombol "Coba Lagi" dan "Lanjut Misi Berikutnya".
 
-git_log_or_diff
-Completed with input: {
-  "action": "diff",
-  "directory": "/home/melvin/Dokumen/Lomba Web/Blokuma-",
-  "revision_range": "HEAD"
-}
+3. Implementasi State & Handler:
+   - Pastikan terdapat state handler (misalnya `setShowSuccessModal(false)` atau `setIsModalOpen(false)`) yang memicu penutupan/penyembunyian modal saat tombol 'X' atau tombol "Tutup" diklik.
+   - (Opsional) Tambahkan penanganan agar modal dapat ditutup saat pengguna mengeklik area latar belakang/overlay (backdrop click) atau menekan tombol ESC.
 
-Find files matching `**/*.{test,spec}.{js,jsx,ts,tsx}`
+Catatan Pelaksanaan:User: Tolong audit dan perbarui komponen modal/pop-up keberhasilan misi ("Misi Tuntas") pada modul playground (`app/(student)/app/playground/page.jsx` atau `app/playground/page.jsx`).
 
-Search for `vitest|describe\(`
+Masalah Saat Ini:
+Ketika misi diselesaikan, pop-up modal "Hore! Desa Urutan Selesai!" muncul di layar, namun tidak memiliki opsi/tombol untuk menutup window tersebut. Pengguna hanya bisa mengeklik tombol "Coba Lagi" atau "Lanjut Misi Berikutnya".
 
-Tombol silang sudah ditambahkan, dan modal juga sekarang dapat ditutup dengan tombol Escape. Handler tutup yang sudah dipakai tombol misi tetap dipertahankan; saya lanjut memeriksa build dan suite tes yang tersedia.
+Tugas & Langkah Perbaikan:
+1. Lokasi Komponen:
+   - Cari komponen Modal / Dialog Keberhasilan Misi di dalam file `page.jsx` (atau file komponen terkait seperti `MissionSuccessModal.jsx`).
 
-Ran terminal command: npm run build
+2. Tambahkan Tombol Tutup (Close Button):
+   - Tambahkan ikon silang 'X' di pojok kanan atas kontainer modal putih.
+   - Atau tambahkan tombol sekunder "Tutup" / "Kembali ke Playground" di samping tombol "Coba Lagi" dan "Lanjut Misi Berikutnya".
 
-Ran terminal command: npm test
+3. Implementasi State & Handler:
+   - Pastikan terdapat state handler (misalnya `setShowSuccessModal(false)` atau `setIsModalOpen(false)`) yang memicu penutupan/penyembunyian modal saat tombol 'X' atau tombol "Tutup" diklik.
+   - (Opsional) Tambahkan penanganan agar modal dapat ditutup saat pengguna mengeklik area latar belakang/overlay (backdrop click) atau menekan tombol ESC.
 
-git_status
-Completed with input: {
-  "directory": "/home/melvin/Dokumen/Lomba Web/Blokuma-"
-}
+Catatan Pelaksanaan:
+- Pertahankan gaya Tailwind CSS yang ramah anak, playful, dan konsisten dengan UI/UX Blokuma yang ada saat ini.
+- Pastikan fungsionalitas tombol "Coba Lagi" dan "Lanjut Misi Berikutnya" tetap berfungsi dengan baik.
 
-Modal “Misi Tuntas” kini memiliki tombol silang di pojok kanan atas yang memanggil `onClose`, serta dapat ditutup dengan tombol Escape. Fungsi “Coba Lagi” dan “Lanjut Misi Berikutnya” tidak diubah. Perubahan ada di `KikoMissionSuccessModal.jsx`.
 
-**Validasi:** `npm test` lulus (6 tes) dan `npm run build` berhasil. Build menampilkan peringatan ukuran bundle JavaScript di atas 500 kB.
 
 User: Audit & tingkatkan Panggung Karakter Kiko, Latar Belakang Dinamis, dan Logika Eksekusi di `app/(student)/app/playground/page.jsx` (atau komponen terkait).
 
@@ -113,272 +99,7 @@ Tugas Perbaikan:
 
 Catatan: 100% client-side (React State/Refs, tanpa DB baru). Styling Tailwind CSS playful/ramah anak.
 
-Copilot: Saya akan telusuri urutan blok yang sebenarnya dipakai playground, state/animasi panggung Kiko, dan aset tema/suara yang tersedia. Saya juga akan menjaga perubahan tombol tutup modal dari pekerjaan sebelumnya tetap utuh.
 
-git_status
-Completed with input: {
-  "directory": "/home/melvin/Dokumen/Lomba Web/Blokuma-"
-}
-
-Read , lines 1 to 230
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    1,
-    230
-  ]
-}
-
-Read , lines 230 to 480
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    230,
-    480
-  ]
-}
-
-Search for `ULANGI|MELOMPAT|Maju|jump|move|actionMessage|isKikoStageVisible|stageAction|i...`
-
-Find files matching `public/{images,sounds}/**/*`
-
-Read , lines 370 to 455
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    370,
-    455
-  ]
-}
-
-Read , lines 1 to 120
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(public)/page.jsx",
-  "view_range": [
-    1,
-    120
-  ]
-}
-
-Search for `kiko-stage-|playground_islands|landmarks|Pulau 1|Pulau 2|Gerbang Desa|Hutan`
-
-Find files matching `**/*.{css,scss}`
-
-Search for `playground_blocks|id.*repeat|ULANGI 3 KALI`
-
-Search for `kiko-stage|animate-kiko-stage-jump|animate-kiko-walk|animate-kiko`
-
-Read , lines 1 to 220
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/src/index.css",
-  "view_range": [
-    1,
-    220
-  ]
-}
-
-Read , lines 1 to 250
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/globals.css",
-  "view_range": [
-    1,
-    250
-  ]
-}
-
-Read , lines 85 to 175
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    85,
-    175
-  ]
-}
-
-Search for `globals.css|src/index.css`
-
-Read , lines 145 to 215
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    145,
-    215
-  ]
-}
-
-"Read" failed
-Completed with input: {
-  "path": "/home/melvin/Dokumen Lomba/Web/Blokuma-/nonexistent.file"
-}
-Tool execution failed: Path does not exist
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/vite.config.js"
-}
-
-Read , lines 290 to 380
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    290,
-    380
-  ]
-}
-
-Read , lines 45 to 180
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    45,
-    180
-  ]
-}
-
-Saya menemukan dua akar masalah: looping saat ini menjalankan perintah sebelumnya sekali lalu mengulanginya tiga kali (total empat), dan styling parallax/jump panggung yang dirujuk JSX belum tersedia. Saya akan mengganti eksekusi menjadi antrean aksi 600 ms yang memvalidasi loop sebelum animasi, lalu menghubungkan gerak, latar tema, dan suara ke adegan misi.
-
-Edit 
-
-Edit 
-
-Edit 
-
-Search for `StudentPlaygroundPage|app/\(student\)|app/globals.css|src/index.css`
-
-Read , lines 45 to 205
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    45,
-    205
-  ]
-}
-
-Read , lines 330 to 485
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    330,
-    485
-  ]
-}
-
-git_log_or_diff
-Completed with input: {
-  "action": "diff",
-  "directory": "/home/melvin/Dokumen/Lomba Web/Blokuma-",
-  "revision_range": "HEAD"
-}
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/src/main.jsx"
-}
-
-Read , lines 1 to 35
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/src/App.jsx",
-  "view_range": [
-    1,
-    35
-  ]
-}
-
-Read , lines 1 to 25
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/layout.jsx",
-  "view_range": [
-    1,
-    25
-  ]
-}
-
-Read , lines 195 to 215
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    195,
-    215
-  ]
-}
-
-Edit 
-
-Edit 
-
-Edit 
-
-Antrean eksekusi kini membentuk aksi 600 ms per langkah, dan loop mengonsumsi perintah tepat sebelumnya sebanyak tiga kali tanpa menjalankannya sebagai langkah tambahan. Tema desa/hutan serta lapisan parallax/jump sudah terhubung; saya lanjut validasi build, tes, dan whitespace.
-
-Ran terminal command: npm run build
-
-Ran terminal command: npm test
-
-Ran terminal command: git diff --check
-
-Checked , , , no problems found
-
-Edit 
-
-Edit 
-
-Edit 
-
-Pengecekan build dan tes awal lulus. Saya menambahkan satu validasi yang lebih terarah: logika pembentukan antrean dipisahkan sebagai fungsi murni agar kasus “perintah sebelum loop tepat 3 kali” dan loop yatim bisa diuji langsung, bukan hanya lolos build.
-
-Edit 
-
-Edit 
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/tests/unit/rule-engine.test.js"
-}
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/tests/unit/ast-parser.test.js"
-}
-
-Edit 
-
-Ran terminal command: npm test
-
-Ran terminal command: npm run build
-
-Ran terminal command: git diff --check
-
-Checked , , , , , no problems found
-
-git_status
-Completed with input: {
-  "directory": "/home/melvin/Dokumen/Lomba Web/Blokuma-"
-}
-
-Ran terminal command: git diff --stat
-
-Ran terminal command: git diff --numstat -- "app/(student)/app/playground/page.jsx" && git diff --ignore-space-at-eol --stat -- "app/(student)/app/playground/page.jsx"
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/executionQueue.js"
-}
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/tests/unit/playground-execution-queue.test.js"
-}
-
-Panggung Kiko dan eksekusi misi sudah diperbarui:
-
-- Loop **ULANGI 3 KALI** kini mengulang perintah tepat sebelumnya sebanyak tiga kali—tanpa menjalankan perintah itu sebagai langkah tambahan. Jika blok loop berdiri sendiri atau didahului loop lain, eksekusi dibatalkan, Kiko diam, dan pesan alert yang diminta ditampilkan.
-- Eksekusi berjalan berurutan dengan jeda sekitar 600 ms per aksi. Gerakan maju menggeser latar, sedangkan melompat menjalankan animasi naik-turun.
-- Tampilan Pulau 1 memakai tema desa dan Pulau 2 memakai tema hutan; keduanya memiliki landmark yang bergeser halus. Suara “Pop!” menggunakan Web Speech API, dengan Web Audio sebagai fallback.
-- Logika antrean dipisahkan dan diuji di `executionQueue.js` dan `playground-execution-queue.test.js`. Tidak ada tabel atau database baru.
-
-**Validasi:** `npm test` lulus (10 tes), `npm run build` berhasil, dan `git diff --check` bersih. Build masih menampilkan peringatan ukuran bundle di atas 500 kB. Perubahan tombol tutup modal dari pekerjaan sebelumnya tetap ada dan tidak saya ubah.
-
-Perubahan utama ada di `page.jsx`, `src/index.css` dan `app/globals.css`.
 
 User: Audit & perbaiki Panggung Karakter Kiko di `app/(student)/app/playground/page.jsx` (atau komponen panggung terkait).
 
@@ -403,167 +124,7 @@ Tugas Perbaikan:
 
 Catatan: 100% client-side (React State/Refs, tanpa DB baru). Gunakan Tailwind CSS yang playful.
 
-Copilot: Saya akan mengecek kondisi terbaru halaman dan implementasi Smart Hint/modal keberhasilan, lalu memastikan area panggung tidak dirender di panel samping dan baru muncul setelah aksi dijalankan. Saya juga akan verifikasi loop guard dan pemisahan state modal tanpa menyentuh perubahan lain yang belum terkait.
 
-git_status
-Completed with input: {
-  "directory": "/home/melvin/Dokumen/Lomba Web/Blokuma-"
-}
-
-Read , lines 1 to 245
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    1,
-    245
-  ]
-}
-
-Read , lines 245 to 500
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    245,
-    500
-  ]
-}
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/components/ui/KikoSmartHint.jsx"
-}
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/components/ui/KikoMissionSuccessModal.jsx"
-}
-
-Read 
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/executionQueue.js"
-}
-
-Find files matching `**/*SmartHint*`
-
-Read , lines 1 to 180
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/components/ui/KikoSmartHint.jsx",
-  "view_range": [
-    1,
-    180
-  ]
-}
-
-Read , lines 215 to 430
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    215,
-    430
-  ]
-}
-
-Read , lines 430 to 535
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    430,
-    535
-  ]
-}
-
-Search for `isHintOpen|autoOpenOnFail|KikoSmartHint`
-
-Saya lihat panel ketiga memang menampilkan latar dan landmark dinamis sebelum tombol dijalankan, sementara panggung bawah sudah punya conditional render. Smart Hint punya state internal sendiri, sehingga bisa tumpang tindih dengan modal sukses; saya akan membuat state Hint terkontrol dari halaman dan menjadikan panel ketiga statis.
-
-Edit 
-
-Edit 
-
-Edit 
-
-Search for `isSuccessModalOpen|setIsSuccessModalOpen|isHintOpen|isSuccessOpen|kiko-stage-...`
-
-Read , lines 145 to 225
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    145,
-    225
-  ]
-}
-
-Read , lines 235 to 400
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/app/(student)/app/playground/page.jsx",
-  "view_range": [
-    235,
-    400
-  ]
-}
-
-Read , lines 1 to 145
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/components/ui/KikoSmartHint.jsx",
-  "view_range": [
-    1,
-    145
-  ]
-}
-
-Search for `setIsOpen\(`
-
-Edit 
-
-"Apply Patch" failed
-Completed with input: "*** Begin Patch\n*** Update File: /home/melvin/Dokumen/Lomba Web/Blokuma-/components/ui/KikoSmartHint.jsx\n@@\n               <button\n-                onClick={() => setIsOpen(false)}\n+                type=\"button\"\n+                aria-label=\"Tutup Kiko Smart Hint\"\n+                onClick={() => updateIsOpen(false)}\n                 className=\"toy-btn-white px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm\"\n               >\n*** End Patch"
-Tool execution failed: Failed to apply patch: Error: Failed to find expected lines in /home/melvin/Dokumen/Lomba Web/Blokuma-/components/ui/KikoSmartHint.jsx:
-              <button
-                onClick={() => setIsOpen(false)}
-                className="toy-btn-white px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm"
-              >
-
-Read , lines 238 to 275
-Completed with input: {
-  "path": "/home/melvin/Dokumen/Lomba Web/Blokuma-/components/ui/KikoSmartHint.jsx",
-  "view_range": [
-    238,
-    275
-  ]
-}
-
-Edit 
-
-Panel ketiga kini hanya berisi kontrol statis; panggung dan animasi karakter hanya dirender di bawah, setelah tombol dijalankan. Saya juga sudah menghubungkan pesan validasi ke panggung bawah dan mengontrol Smart Hint dari state halaman agar tidak bertumpuk dengan modal sukses; sekarang saya verifikasi hasilnya.
-
-Ran terminal command: npm test
-
-Ran terminal command: npm run build
-
-Ran terminal command: git diff --check
-
-Checked , , , no problems found
-
-git_status
-Completed with input: {
-  "directory": "/home/melvin/Dokumen/Lomba Web/Blokuma-"
-}
-
-Search for `isSuccessOpen|isHintOpen|KikoSmartHint|isKikoStageVisible|Harap berikan balok...`
-
-Search for `aria-label="Tutup Kiko Smart Hint"|Tutup Kiko Smart Hint|updateIsOpen\(false\...`
-
-Panggung Kiko sudah diperbaiki:
-
-- Panel ketiga sekarang hanya menampilkan kontrol statis. Panggung dengan Kiko dan latar pulau hanya muncul di bawah setelah tombol **Jalankan Kreasimu!** ditekan.
-- Eksekusi tetap berjalan berurutan dengan jeda 600 ms; blok **ULANGI 3 KALI** mengulang perintah tepat sebelumnya tiga kali.
-- Loop tanpa perintah sebelumnya membatalkan aksi, menjaga Kiko tetap diam, dan menampilkan pesan alert yang diminta di panggung.
-- Latar bergeser saat aksi maju, melompat, maupun suara dijalankan.
-- State Smart Hint dan modal sukses kini terpisah dan saling menutup saat modal lain dibuka. Tombol **X** tersedia di keduanya; Smart Hint juga dapat ditutup dengan Escape.
-
-Perubahan utama ada di `page.jsx` dan `KikoSmartHint.jsx`. Logika antrean diuji di `executionQueue.js`.
-
-**Validasi:** `npm test` lulus (10 tes), `npm run build` berhasil, dan `git diff --check` bersih. Build masih menampilkan peringatan ukuran bundle di atas 500 kB.
 
 User: Audit & perbarui materi petualangan, master data kurikulum, logika eksekusi, serta teks panduan Smart Hint di `src/data/curriculumData.js` (atau file data/database terkait), `app/(student)/app/adventure/page.jsx`, dan `app/(student)/app/playground/page.jsx`.
 
@@ -607,6 +168,9 @@ User: Audit & perbarui materi petualangan, master data kurikulum, logika eksekus
 Catatan: Seluruh logika berjalan 100% di client-side (React State) tanpa membutuhkan API atau database baru[cite: 9].
 
 
+
+User: Fix & tingkatkan logika antrean eksekusi dan animasi panggung Kiko pada `app/(student)/app/playground/page.jsx` (atau file runner/executionQueue terkait).
+
 Tugas Perbaikan:
 
 1. Perbaikan Logika Execution Queue (Loop 3 Kali):
@@ -630,17 +194,263 @@ Tugas Perbaikan:
 Catatan: Logika berjalan 100% di client-side (React State/Refs) tanpa memerlukan API atau database tambahan.
 
 
+User: Fix & tingkatkan logika antrean eksekusi dan animasi panggung Kiko pada `app/(student)/app/playground/page.jsx` (atau file runner/executionQueue terkait).
 
-Perbaikan antrean dan animasi Kiko selesai:
+Tugas Perbaikan:
 
-- Untuk `[AKSI] + [ULANGI 3 KALI]`, antrean berisi **1 aksi awal + 3 aksi ulang**. Runner memproses setiap item berurutan dengan jeda sekitar 600 ms.
-- Guard untuk loop tanpa perintah sebelumnya menghentikan eksekusi sebelum panggung ditampilkan dan menampilkan pesan peringatan yang diminta.
-- Runner membaca `item.block.id` untuk memicu animasi `move`/`jump` atau suara `sound`.
-- Suara mencoba memutar `/sounds/pop.mp3`, lalu memakai POP sintetis sebagai fallback. **Aset `pop.mp3` belum tersedia** di `public/sounds/`; folder saat ini hanya berisi file suara lain.
+1. Perbaikan Logika Execution Queue (Loop 3 Kali):
+   - Ubah pemrosesan antrean agar panggung animasi memutar item dari `execution.queue` secara sekuensial (~600ms/step).
+   - Ketika menemukan blok 'ULANGI 3 KALI' (`repeat`):
+     a. Ambil balok aksi tepat sebelumnya (`previousBlock = canvasBlocks[index - 1]`).
+     b. Masukkan 3 salinan eksplisit `previousBlock` ke dalam antrean eksekusi.
+     c. Pastikan Kiko mengeksekusi 1 kali aksi awal + 3 kali aksi perulangan penuh (total 4 pergerakan berurutan di panggung, misal: 1x lompat awal + 3x lompat perulangan).
 
-Perubahan ada di `page.jsx` dan `executionQueue.js`. Tes antrean diperbarui di `playground-execution-queue.test.js`.
+2. Loop Validation Guard:
+   - Jika 'ULANGI 3 KALI' dipasang di urutan awal (tanpa balok perintah sebelumnya) ATAU berdiri sendiri:
+     * BATALKAN animasi di panggung (Kiko tetap diam/tidak bergerak).
+     * Tampilkan peringatan/alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
 
-**Validasi:** `npm test` lulus (19 tes), `npm run build` berhasil, dan `git diff --check` bersih. Build tetap menampilkan peringatan bundle lebih dari 500 kB.
+3. Sinkronisasi Animasi Panggung Bawah:
+   - Pastikan panggung animasi di bagian bawah membaca `actionId` dari `item.block.id` dalam `execution.queue` sehingga memicu animasi yang sesuai:
+     * `jump`: Animasi melompat Y (naik-turun).
+     * `move`: Animasi bergerak X / latar belakang bergeser.
+     * `sound`: Memutar efek audio lokal (`public/sounds/pop.mp3`).
+
+Catatan: Logika berjalan 100% di client-side (React State/Refs) tanpa memerlukan API atau database tambahan.
+
+
+User: Audit & perbaiki Panggung Karakter Kiko di `app/(student)/app/playground/page.jsx` (atau komponen panggung terkait).
+
+Tugas Perbaikan:
+
+1. Penempatan Panggung & Animasi:
+   - Sembunyikan animasi/latar belakang dari Tabel 3 (samping kanvas).
+   - Animasi & latar belakang dinamis HANYA BOHLEH tampil di bagian bawah setelah pengguna menekan tombol "Jalankan Kreasimu!".
+
+2. Exec Queue & Loop Guard (ULANGI 3 KALI):
+   - Baca kanvas sekuensial via Async Queue (~600ms/step).
+   - Blok 'ULANGI 3 KALI' HARUS mengulang animasi dari perintah TEPAT SEBELUMNYA sebanyak 3x.
+   - VALIDASI: Jika 'ULANGI 3 KALI' dipasang di urutan awal/tanpa perintah sebelumnya, BATALKAN animasi, Kiko diam, dan tampilkan alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
+
+3. Latar Belakang Dinamis & Action Trigger:
+   - Sesuaikan visual background berdasarkan pulau/misi (Pulau 1: Desa/Gerbang Desa, Pulau 2: Hutan/Pohon).
+   - Efek background bergeser halus (kanan ke kiri) saat Kiko beraksi (Maju/Lompat/Suara).
+
+4. Pemisahan State Modal (Smart Hint & Success Modal):
+   - Pisahkan state `isHintOpen` dan `isSuccessOpen` agar tidak tampil tumpang tindih.
+   - Tambahkan tombol Tutup ('X') pada kedua modal.
+
+Catatan: 100% client-side (React State/Refs, tanpa DB baru). Gunakan Tailwind CSS yang playful.
+
+
+
+User: Audit & perbarui materi petualangan, master data kurikulum, logika eksekusi, serta teks panduan Smart Hint di `src/data/curriculumData.js` (atau file data/database terkait), `app/(student)/app/adventure/page.jsx`, dan `app/(student)/app/playground/page.jsx`.
+
+1. Master Data Kurikulum Adaptif (6 Pulau Per Jenjang Kelas SD):
+   - Kelas 1–2 SD (Dunia Ikon & Suara):
+     * P1 (Desa Urutan): Kiko melangkah 3 kali ke gerbang desa [MAJU 1 LANGKAH x 3].
+     * P2 (Hutan Perulangan): Bunyikan nada ceria berulang [SUARA POP CERIA + ULANGI 3 KALI].
+     * P3 (Gunung Kondisi): Melompati bukit kecil [MAJU + MELOMPAT TINGGI].
+     * P4 (Rawa Rintangan): Menyeberangi rawa [MAJU + MELOMPAT TINGGI + MAJU].
+     * P5 (Goa Misteri): Pintu goa [MAJU + SUARA POP CERIA].
+     * P6 (Benteng Kiko): Kemenangan benteng [MELOMPAT TINGGI + SUARA POP CERIA].
+   - Kelas 3–4 SD (Dunia Blok & Logika):
+     * P1 (Desa Urutan): Kiko melangkah 3 kali ke gerbang desa [MAJU 1 LANGKAH + ULANGI 3 KALI] (atau MAJU 3x).
+     * P2 (Hutan Perulangan): Bantu Kiko melompati pohon lebat dengan balok Loop 3 Kali! [MELOMPAT TINGGI + ULANGI 3 KALI].
+     * P3 (Gunung Kondisi): Pilih jalur aman [MELOMPAT TINGGI + MAJU x2].
+     * P4 (Rawa Rintangan): Kombinasi lompatan berulang [MAJU + MELOMPAT TINGGI + ULANGI 3 KALI].
+     * P5 (Goa Misteri): Kode suara 3 kali di goa [SUARA POP CERIA + ULANGI 3 KALI].
+     * P6 (Benteng Kiko): Kombinasi master [MAJU + MELOMPAT + ULANGI 3 KALI + SUARA].
+   - Kelas 5–6 SD (Dunia Algoritma & Game):
+     * P1: Navigasi cepat [MAJU + ULANGI 3 KALI].
+     * P2: Rintangan pohon & semak [MELOMPAT + ULANGI 3 KALI + MAJU].
+     * P3: Tebing gunung [MELOMPAT + MAJU + ULANGI 3 KALI].
+     * P4: Jebakan rawa [MELOMPAT + SUARA + MAJU + ULANGI 3 KALI].
+     * P5: Goa misteri [SUARA + MELOMPAT + ULANGI 3 KALI].
+     * P6: Algoritma Master Benteng [MAJU + MELOMPAT + ULANGI 3 KALI + SUARA + ULANGI 3 KALI].
+
+2. Exec Queue, Loop Guard (ULANGI 3 KALI), & Validasi Jawaban Misi:
+   - Baca kanvas sekuensial via Async Queue (~600ms/step).
+   - Perbaikan Loop: Blok 'ULANGI 3 KALI' HARUS mengulang animasi dari perintah TEPAT SEBELUMNYA sebanyak 3x berturut-turut (contoh: [MELOMPAT TINGGI] + [ULANGI 3 KALI] = Kiko melompat 3 kali).
+   - VALIDASI ULANGI 3X: Jika 'ULANGI 3 KALI' dipasang di urutan awal/tanpa perintah sebelumnya, BATALKAN animasi, Kiko diam, dan tampilkan alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
+   - Pengecekan Kunci Misi saat tombol "Jalankan Kreasimu!" diklik:
+     * Jika SESUAI: Jalankan animasi panggung lalu tampilkan Modal Success ("Misi Tuntas!").
+     * Jika TIDAK SESUAI: Batalkan animasi panggung, tampilkan Modal Gagal ("Misi Belum Berhasil! Coba periksa kembali susunan kodenmu."), dan berikan akses ke tombol "Minta Panduan Kiko Smart Hint".
+
+3. Penyesuaian Teks Panduan Kiko Smart Hint (Ramah Anak):
+   - Sesuaikan kalimat penjelasan/petunjuk di dalam Modal Smart Hint agar dinamis mengikuti kunci jawaban pulau/misi yang aktif.
+   - Kalimat penjelasan HARUS menarik, hangat, dan ramah anak.
+   - Contoh untuk Kelas 5–6 SD P1 (Kunci: Maju + Ulangi 3 Kali):
+     "Hai sobat Kiko, sepertinya Kiko harus maju 1 langkah dan mengulanginya 3 kali untuk menyelesaikan misi ini! 🚀"
+
+Catatan: Seluruh logika berjalan 100% di client-side (React State) tanpa membutuhkan API atau database baru[cite: 9].
+
+C
+
+User: Fix & tingkatkan logika antrean eksekusi dan animasi panggung Kiko pada `app/(student)/app/playground/page.jsx` (atau file runner/executionQueue terkait).
+
+Tugas Perbaikan:
+
+1. Perbaikan Logika Execution Queue (Loop 3 Kali):
+   - Ubah pemrosesan antrean agar panggung animasi memutar item dari `execution.queue` secara sekuensial (~600ms/step).
+   - Ketika menemukan blok 'ULANGI 3 KALI' (`repeat`):
+     a. Ambil balok aksi tepat sebelumnya (`previousBlock = canvasBlocks[index - 1]`).
+     b. Masukkan 3 salinan eksplisit `previousBlock` ke dalam antrean eksekusi.
+     c. Pastikan Kiko mengeksekusi 1 kali aksi awal + 3 kali aksi perulangan penuh (total 4 pergerakan berurutan di panggung, misal: 1x lompat awal + 3x lompat perulangan).
+
+2. Loop Validation Guard:
+   - Jika 'ULANGI 3 KALI' dipasang di urutan awal (tanpa balok perintah sebelumnya) ATAU berdiri sendiri:
+     * BATALKAN animasi di panggung (Kiko tetap diam/tidak bergerak).
+     * Tampilkan peringatan/alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
+
+3. Sinkronisasi Animasi Panggung Bawah:
+   - Pastikan panggung animasi di bagian bawah membaca `actionId` dari `item.block.id` dalam `execution.queue` sehingga memicu animasi yang sesuai:
+     * `jump`: Animasi melompat Y (naik-turun).
+     * `move`: Animasi bergerak X / latar belakang bergeser.
+     * `sound`: Memutar efek audio lokal (`public/sounds/pop.mp3`).
+
+Catatan: Logika berjalan 100% di client-side (React State/Refs) tanpa memerlukan API atau database tambahan.
+
+
+User: Fix & tingkatkan logika antrean eksekusi dan animasi panggung Kiko pada `app/(student)/app/playground/page.jsx` (atau file runner/executionQueue terkait).
+
+Tugas Perbaikan:
+
+1. Perbaikan Logika Execution Queue (Loop 3 Kali):
+   - Ubah pemrosesan antrean agar panggung animasi memutar item dari `execution.queue` secara sekuensial (~600ms/step).
+   - Ketika menemukan blok 'ULANGI 3 KALI' (`repeat`):
+     a. Ambil balok aksi tepat sebelumnya (`previousBlock = canvasBlocks[index - 1]`).
+     b. Masukkan 3 salinan eksplisit `previousBlock` ke dalam antrean eksekusi.
+     c. Pastikan Kiko mengeksekusi 1 kali aksi awal + 3 kali aksi perulangan penuh (total 4 pergerakan berurutan di panggung, misal: 1x lompat awal + 3x lompat perulangan).
+
+2. Loop Validation Guard:
+   - Jika 'ULANGI 3 KALI' dipasang di urutan awal (tanpa balok perintah sebelumnya) ATAU berdiri sendiri:
+     * BATALKAN animasi di panggung (Kiko tetap diam/tidak bergerak).
+     * Tampilkan peringatan/alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
+
+3. Sinkronisasi Animasi Panggung Bawah:
+   - Pastikan panggung animasi di bagian bawah membaca `actionId` dari `item.block.id` dalam `execution.queue` sehingga memicu animasi yang sesuai:
+     * `jump`: Animasi melompat Y (naik-turun).
+     * `move`: Animasi bergerak X / latar belakang bergeser.
+     * `sound`: Memutar efek audio lokal (`public/sounds/pop.mp3`).
+
+Catatan: Logika berjalan 100% di client-side (React State/Refs) tanpa memerlukan API atau database tambahan.
+
+
+Tugas Perbaikan:
+
+1. Penempatan Panggung & Animasi:
+   - Sembunyikan animasi/latar belakang dari Tabel 3 (samping kanvas).
+   - Animasi & latar belakang dinamis HANYA BOHLEH tampil di bagian bawah setelah pengguna menekan tombol "Jalankan Kreasimu!".
+
+2. Exec Queue & Loop Guard (ULANGI 3 KALI):
+   - Baca kanvas sekuensial via Async Queue (~600ms/step).
+   - Blok 'ULANGI 3 KALI' HARUS mengulang animasi dari perintah TEPAT SEBELUMNYA sebanyak 3x.
+   - VALIDASI: Jika 'ULANGI 3 KALI' dipasang di urutan awal/tanpa perintah sebelumnya, BATALKAN animasi, Kiko diam, dan tampilkan alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
+
+3. Latar Belakang Dinamis & Action Trigger:
+   - Sesuaikan visual background berdasarkan pulau/misi (Pulau 1: Desa/Gerbang Desa, Pulau 2: Hutan/Pohon).
+   - Efek background bergeser halus (kanan ke kiri) saat Kiko beraksi (Maju/Lompat/Suara).
+
+4. Pemisahan State Modal (Smart Hint & Success Modal):
+   - Pisahkan state `isHintOpen` dan `isSuccessOpen` agar tidak tampil tumpang tindih.
+   - Tambahkan tombol Tutup ('X') pada kedua modal.
+
+Catatan: 100% client-side (React State/Refs, tanpa DB baru). Gunakan Tailwind CSS yang playful.
+
+C
+User: Audit & perbarui materi petualangan, master data kurikulum, logika eksekusi, serta teks panduan Smart Hint di `src/data/curriculumData.js` (atau file data/database terkait), `app/(student)/app/adventure/page.jsx`, dan `app/(student)/app/playground/page.jsx`.
+
+1. Master Data Kurikulum Adaptif (6 Pulau Per Jenjang Kelas SD):
+   - Kelas 1–2 SD (Dunia Ikon & Suara):
+     * P1 (Desa Urutan): Kiko melangkah 3 kali ke gerbang desa [MAJU 1 LANGKAH x 3].
+     * P2 (Hutan Perulangan): Bunyikan nada ceria berulang [SUARA POP CERIA + ULANGI 3 KALI].
+     * P3 (Gunung Kondisi): Melompati bukit kecil [MAJU + MELOMPAT TINGGI].
+     * P4 (Rawa Rintangan): Menyeberangi rawa [MAJU + MELOMPAT TINGGI + MAJU].
+     * P5 (Goa Misteri): Pintu goa [MAJU + SUARA POP CERIA].
+     * P6 (Benteng Kiko): Kemenangan benteng [MELOMPAT TINGGI + SUARA POP CERIA].
+   - Kelas 3–4 SD (Dunia Blok & Logika):
+     * P1 (Desa Urutan): Kiko melangkah 3 kali ke gerbang desa [MAJU 1 LANGKAH + ULANGI 3 KALI] (atau MAJU 3x).
+     * P2 (Hutan Perulangan): Bantu Kiko melompati pohon lebat dengan balok Loop 3 Kali! [MELOMPAT TINGGI + ULANGI 3 KALI].
+     * P3 (Gunung Kondisi): Pilih jalur aman [MELOMPAT TINGGI + MAJU x2].
+     * P4 (Rawa Rintangan): Kombinasi lompatan berulang [MAJU + MELOMPAT TINGGI + ULANGI 3 KALI].
+     * P5 (Goa Misteri): Kode suara 3 kali di goa [SUARA POP CERIA + ULANGI 3 KALI].
+     * P6 (Benteng Kiko): Kombinasi master [MAJU + MELOMPAT + ULANGI 3 KALI + SUARA].
+   - Kelas 5–6 SD (Dunia Algoritma & Game):
+     * P1: Navigasi cepat [MAJU + ULANGI 3 KALI].
+     * P2: Rintangan pohon & semak [MELOMPAT + ULANGI 3 KALI + MAJU].
+     * P3: Tebing gunung [MELOMPAT + MAJU + ULANGI 3 KALI].
+     * P4: Jebakan rawa [MELOMPAT + SUARA + MAJU + ULANGI 3 KALI].
+     * P5: Goa misteri [SUARA + MELOMPAT + ULANGI 3 KALI].
+     * P6: Algoritma Master Benteng [MAJU + MELOMPAT + ULANGI 3 KALI + SUARA + ULANGI 3 KALI].
+
+2. Exec Queue, Loop Guard (ULANGI 3 KALI), & Validasi Jawaban Misi:
+   - Baca kanvas sekuensial via Async Queue (~600ms/step).
+   - Perbaikan Loop: Blok 'ULANGI 3 KALI' HARUS mengulang animasi dari perintah TEPAT SEBELUMNYA sebanyak 3x berturut-turut (contoh: [MELOMPAT TINGGI] + [ULANGI 3 KALI] = Kiko melompat 3 kali).
+   - VALIDASI ULANGI 3X: Jika 'ULANGI 3 KALI' dipasang di urutan awal/tanpa perintah sebelumnya, BATALKAN animasi, Kiko diam, dan tampilkan alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
+   - Pengecekan Kunci Misi saat tombol "Jalankan Kreasimu!" diklik:
+     * Jika SESUAI: Jalankan animasi panggung lalu tampilkan Modal Success ("Misi Tuntas!").
+     * Jika TIDAK SESUAI: Batalkan animasi panggung, tampilkan Modal Gagal ("Misi Belum Berhasil! Coba periksa kembali susunan kodenmu."), dan berikan akses ke tombol "Minta Panduan Kiko Smart Hint".
+
+3. Penyesuaian Teks Panduan Kiko Smart Hint (Ramah Anak):
+   - Sesuaikan kalimat penjelasan/petunjuk di dalam Modal Smart Hint agar dinamis mengikuti kunci jawaban pulau/misi yang aktif.
+   - Kalimat penjelasan HARUS menarik, hangat, dan ramah anak.
+   - Contoh untuk Kelas 5–6 SD P1 (Kunci: Maju + Ulangi 3 Kali):
+     "Hai sobat Kiko, sepertinya Kiko harus maju 1 langkah dan mengulanginya 3 kali untuk menyelesaikan misi ini! 🚀"
+
+Catatan: Seluruh logika berjalan 100% di client-side (React State) tanpa membutuhkan API atau database baru[cite: 9].
+
+
+User: Fix & tingkatkan logika antrean eksekusi dan animasi panggung Kiko pada `app/(student)/app/playground/page.jsx` (atau file runner/executionQueue terkait).
+
+Tugas Perbaikan:
+
+1. Perbaikan Logika Execution Queue (Loop 3 Kali):
+   - Ubah pemrosesan antrean agar panggung animasi memutar item dari `execution.queue` secara sekuensial (~600ms/step).
+   - Ketika menemukan blok 'ULANGI 3 KALI' (`repeat`):
+     a. Ambil balok aksi tepat sebelumnya (`previousBlock = canvasBlocks[index - 1]`).
+     b. Masukkan 3 salinan eksplisit `previousBlock` ke dalam antrean eksekusi.
+     c. Pastikan Kiko mengeksekusi 1 kali aksi awal + 3 kali aksi perulangan penuh (total 4 pergerakan berurutan di panggung, misal: 1x lompat awal + 3x lompat perulangan).
+
+2. Loop Validation Guard:
+   - Jika 'ULANGI 3 KALI' dipasang di urutan awal (tanpa balok perintah sebelumnya) ATAU berdiri sendiri:
+     * BATALKAN animasi di panggung (Kiko tetap diam/tidak bergerak).
+     * Tampilkan peringatan/alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
+
+3. Sinkronisasi Animasi Panggung Bawah:
+   - Pastikan panggung animasi di bagian bawah membaca `actionId` dari `item.block.id` dalam `execution.queue` sehingga memicu animasi yang sesuai:
+     * `jump`: Animasi melompat Y (naik-turun).
+     * `move`: Animasi bergerak X / latar belakang bergeser.
+     * `sound`: Memutar efek audio lokal (`public/sounds/pop.mp3`).
+
+Catatan: Logika berjalan 100% di client-side (React State/Refs) tanpa memerlukan API atau database tambahan.
+
+Copilot: 
+
+User: Fix & tingkatkan logika antrean eksekusi dan animasi panggung Kiko pada `app/(student)/app/playground/page.jsx` (atau file runner/executionQueue terkait).
+
+Tugas Perbaikan:
+
+1. Perbaikan Logika Execution Queue (Loop 3 Kali):
+   - Ubah pemrosesan antrean agar panggung animasi memutar item dari `execution.queue` secara sekuensial (~600ms/step).
+   - Ketika menemukan blok 'ULANGI 3 KALI' (`repeat`):
+     a. Ambil balok aksi tepat sebelumnya (`previousBlock = canvasBlocks[index - 1]`).
+     b. Masukkan 3 salinan eksplisit `previousBlock` ke dalam antrean eksekusi.
+     c. Pastikan Kiko mengeksekusi 1 kali aksi awal + 3 kali aksi perulangan penuh (total 4 pergerakan berurutan di panggung, misal: 1x lompat awal + 3x lompat perulangan).
+
+2. Loop Validation Guard:
+   - Jika 'ULANGI 3 KALI' dipasang di urutan awal (tanpa balok perintah sebelumnya) ATAU berdiri sendiri:
+     * BATALKAN animasi di panggung (Kiko tetap diam/tidak bergerak).
+     * Tampilkan peringatan/alert: "⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!".
+
+3. Sinkronisasi Animasi Panggung Bawah:
+   - Pastikan panggung animasi di bagian bawah membaca `actionId` dari `item.block.id` dalam `execution.queue` sehingga memicu animasi yang sesuai:
+     * `jump`: Animasi melompat Y (naik-turun).
+     * `move`: Animasi bergerak X / latar belakang bergeser.
+     * `sound`: Memutar efek audio lokal (`public/sounds/pop.mp3`).
+
+Catatan: Logika berjalan 100% di client-side (React State/Refs) tanpa memerlukan API atau database tambahan.
+
 
 User: Fix arah pergerakan latar belakang dinamis di `app/(student)/app/playground/page.jsx` (komponen Panggung Kiko):
 
@@ -657,4 +467,5 @@ Perbaikan di JSX:
 
 Hasil:
 Saat `stageProgress` bertambah saat aksi MAJU, latar belakang bergeser dari kanan ke kiri sehingga Kiko terlihat berjalan maju ke depan secara alami.
+
 
