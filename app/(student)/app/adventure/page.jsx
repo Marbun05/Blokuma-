@@ -3,12 +3,15 @@ import { Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 import { useAuthStore } from '../../../../store/auth/use-auth-store.js';
 import { getCurriculumMissionsByClass } from '../../../../lib/supabase/curriculum.js';
+import { getCurriculumWorld, normalizeStudentClass } from '../../../../src/data/curriculumData.js';
 
 export default function AdventurePage() {
   const { user } = useAuthStore();
   const [studentClass, setStudentClass] = useState('3');
   const [islands, setIslands] = useState([]);
   const [loading, setLoading] = useState(true);
+  const curriculumWorld = getCurriculumWorld(studentClass);
+  const displayedClass = normalizeStudentClass(studentClass);
 
   const loadAdventureData = async () => {
     setLoading(true);
@@ -64,7 +67,7 @@ export default function AdventurePage() {
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="inline-block px-3 py-1 bg-teal-100 text-teal-800 font-bold text-xs rounded-full uppercase tracking-wider mb-2 border border-teal-300">
-              🗺️ Peta Petualangan Kiko • Kelas {studentClass} SD
+              🗺️ {curriculumWorld.title} • Kelas {displayedClass} SD
             </div>
             <h1 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
               6 Pulau Petualangan Kode
@@ -77,7 +80,7 @@ export default function AdventurePage() {
           <div className="bg-amber-100 border-2 border-amber-300 px-4 py-2 rounded-2xl text-xs font-bold text-amber-900 shadow-sm flex items-center gap-2 self-start sm:self-auto">
             <span>🎯 Kurikulum Sesuai Kelas:</span>
             <span className="bg-white px-2 py-0.5 rounded-lg border border-amber-300">
-              {studentClass.includes('SD') ? studentClass : `Kelas ${studentClass} SD`}
+              Kelas {displayedClass} SD
             </span>
           </div>
         </div>
@@ -86,7 +89,7 @@ export default function AdventurePage() {
           <div className="py-20 flex flex-col items-center justify-center text-teal-800 gap-3">
             <div className="w-10 h-10 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
             <span className="text-sm font-bold animate-pulse">
-              Memuat data kurikulum pulau dari database Supabase...
+              Menyiapkan peta petualangan Kiko...
             </span>
           </div>
         ) : (
@@ -127,7 +130,7 @@ export default function AdventurePage() {
                 <div>
                   {w.unlocked ? (
                     <Link
-                      to={`/app/playground?island=${w.id}&class=${studentClass}`}
+                      to={`/app/playground?island=${w.id}&class=${displayedClass}`}
                       className="toy-btn-teal w-full py-3 px-4 font-bold text-xs rounded-xl shadow-toyTeal flex items-center justify-center gap-1.5"
                     >
                       <span>Ayo Masuk Pulau!</span>

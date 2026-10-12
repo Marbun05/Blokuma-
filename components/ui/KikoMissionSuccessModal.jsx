@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth/use-auth-store.js';
 import { unlockNextIslandInDatabase } from '../../lib/supabase/curriculum.js';
@@ -13,6 +13,17 @@ export function KikoMissionSuccessModal({
 }) {
   const navigate = useNavigate();
   const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -30,6 +41,15 @@ export function KikoMissionSuccessModal({
 
         {/* Confetti Aksen Banner */}
         <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-400 via-teal-400 to-amber-400" />
+
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Tutup modal keberhasilan misi"
+          className="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-xl font-bold leading-none text-slate-600 shadow-sm transition hover:rotate-90 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 focus:outline-none focus:ring-4 focus:ring-emerald-200"
+        >
+          ×
+        </button>
 
         <div className="my-2 flex justify-center">
           <div className="relative">

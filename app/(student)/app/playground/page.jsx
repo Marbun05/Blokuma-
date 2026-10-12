@@ -1,14 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { StudentSidebar } from '../../../../components/navigation/StudentSidebar.jsx';
 import { KikoSmartHint } from '../../../../components/ui/KikoSmartHint.jsx';
 import { KikoStoryGeneratorModal } from '../../../../components/ui/KikoStoryGeneratorModal.jsx';
 import { KikoMissionSuccessModal } from '../../../../components/ui/KikoMissionSuccessModal.jsx';
 import { supabase } from '../../../../lib/supabase/client';
+import { useAuthStore } from '../../../../store/auth/use-auth-store.js';
+import { getCurriculumMission, normalizeStudentClass } from '../../../../src/data/curriculumData.js';
+import { validateMissionAnswer, buildExecutionQueue } from './executionQueue.js';
+
+const ADVENTURE_THEME_OVERRIDES = {
+  1: {
+    name: 'Desa Urutan',
+    sky: 'from-amber-100 via-sky-100 to-emerald-100',
+    ground: 'bg-emerald-600',
+    landmarks: ['🏡', '🚪', '🌼', '🏡']
+  },
+  2: {
+    name: 'Hutan Perulangan',
+    sky: 'from-sky-300 via-emerald-100 to-lime-100',
+    ground: 'bg-green-800',
+    landmarks: ['🌲', '🌳', '🍄', '🌲']
+  },
+  3: {
+    name: 'Gunung Kondisi',
+    sky: 'from-slate-300 via-amber-100 to-stone-200',
+    ground: 'bg-stone-700',
+    landmarks: ['⛰️', '🪨', '⛰️', '🦅']
+  },
+  4: {
+    name: 'Rawa Rintangan',
+    sky: 'from-teal-300 via-emerald-200 to-cyan-200',
+    ground: 'bg-teal-900',
+    landmarks: ['🐊', '🌿', '🪵', '🌿']
+  },
+  5: {
+    name: 'Goa Misteri',
+    sky: 'from-indigo-950 via-purple-900 to-slate-900',
+    ground: 'bg-indigo-950',
+    landmarks: ['🦇', '💎', '🪨', '✨']
+  },
+  6: {
+    name: 'Benteng Kiko',
+    sky: 'from-amber-200 via-orange-300 to-rose-300',
+    ground: 'bg-slate-800',
+    landmarks: ['🏰', '🚩', '⚔️', '🏰']
+  }
+};
+const STAGE_ACTION_CLASSES = {
+  idle: 'animate-kiko-idle',
+  walking: 'animate-kiko-walk',
+  jumping: 'animate-kiko-stage-jump',
+  celebrating: 'animate-kiko-happy',
+  still: ''
+};
 
 export default function StudentPlaygroundPage() {
   const [searchParams] = useSearchParams();
+  const { user } = useAuthStore();
   const requestedIsland = Number(searchParams.get('island'));
+  const requestedClass = searchParams.get('class');
+  const storedClass = typeof window !== 'undefined' ? window.localStorage.getItem('student_class') : null;
+  const studentClass = normalizeStudentClass(requestedClass || user?.student_class || storedClass);
 
   const [islandThemes, setIslandThemes] = useState([]);
   const [availableBlocks, setAvailableBlocks] = useState([]);
@@ -18,11 +71,16 @@ export default function StudentPlaygroundPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [isKikoStageVisible, setIsKikoStageVisible] = useState(false);
   const [stageAction, setStageAction] = useState('idle');
+  const [stageProgress, setStageProgress] = useState(0);
   const [actionMessage, setActionMessage] = useState('Pilih balok lalu klik Jalankan Kode!');
   const [attemptCount, setAttemptCount] = useState(0);
   const [lastExecutionResult, setLastExecutionResult] = useState({ status: 'idle' });
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isHintOpen, setIsHintOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isFailureOpen, setIsFailureOpen] = useState(false);
+  const [executionAlert, setExecutionAlert] = useState('');
+  const popAudioRef = useRef(null);
 
   useEffect(() => {
     const fetchPlaygroundData = async () => {
@@ -47,18 +105,22 @@ export default function StudentPlaygroundPage() {
     fetchPlaygroundData();
   }, []);
 
-  const islandNumber = Number.isInteger(requestedIsland) && requestedIsland >= 1 && requestedIsland <= (islandThemes.length || 1)
+  const islandNumber = Number.isInteger(requestedIsland) && requestedIsland >= 1 && requestedIsland <= 6
     ? requestedIsland
     : 1;
-  const islandTheme = islandThemes[islandNumber - 1] || {
-    name: 'Pulau Default',
-    sky: 'from-sky-300 via-sky-100 to-amber-100',
-    ground: 'bg-emerald-600',
-    landmarks: ['🏡', '🌳']
+  const currentMission = getCurriculumMission(studentClass, islandNumber);
+  const configuredTheme = islandThemes[islandNumber - 1];
+  const islandTheme = {
+    name: configuredTheme?.name || ADVENTURE_THEME_OVERRIDES[islandNumber]?.name || 'Pulau Default',
+    sky: configuredTheme?.sky || 'from-sky-300 via-sky-100 to-amber-100',
+    ground: configuredTheme?.ground || 'bg-emerald-600',
+    landmarks: configuredTheme?.landmarks || ['🏡', '🌳'],
+    ...ADVENTURE_THEME_OVERRIDES[islandNumber]
   };
 
   const handleAddBlock = (block) => {
     if (isRunning) return;
+    setExecutionAlert('');
     setCanvasBlocks((prev) => [...prev, { ...block, instanceId: Date.now() + Math.random() }]);
   };
 
@@ -66,12 +128,15 @@ export default function StudentPlaygroundPage() {
     if (isRunning) return;
     setCanvasBlocks([]);
     setIsKikoStageVisible(false);
+    setExecutionAlert('');
+    setIsFailureOpen(false);
     setStageAction('idle');
+    setStageProgress(0);
     setActionMessage('Kanvas dikosongkan & Maskot kembali ke posisi awal!');
     setAttemptCount(0);
   };
 
-  const playPopSound = () => {
+  const playSynthesizedPop = () => {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (AudioCtx) {
@@ -88,82 +153,150 @@ export default function StudentPlaygroundPage() {
         osc.start();
         osc.stop(ctx.currentTime + 0.15);
       }
-    } catch (e) {
-      // Audio autoplay policy fallback
+    } catch (error) {
+      console.error('Tidak dapat memainkan suara Kiko:', error);
     }
   };
 
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const playPopSound = () => {
+    if (typeof window.Audio !== 'function') {
+      playSynthesizedPop();
+      return;
+    }
 
-  const executeSingleBlock = async (blockId) => {
-    if (blockId === 'move') {
-      setActionMessage('🚀 Robot Kiko: Maju 1 Langkah!');
+    if (!popAudioRef.current) {
+      popAudioRef.current = new window.Audio('/sounds/pop.mp3');
+    }
+
+    const audio = popAudioRef.current;
+    let didFallback = false;
+    const fallbackToSynthesizedPop = () => {
+      if (didFallback) return;
+      didFallback = true;
+      playSynthesizedPop();
+    };
+    audio.currentTime = 0;
+    audio.onerror = () => {
+      fallbackToSynthesizedPop();
+    };
+    const playback = audio.play();
+    if (playback) {
+      playback.catch((error) => {
+        fallbackToSynthesizedPop();
+      });
+    }
+  };
+
+  const waitForNextStep = (ms = 600) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  // Eksekusi Item Tunggal dari Queue
+  const executeQueueItem = async (item) => {
+    const actionId = item.block.id;
+    const isRepeat = item.isRepeat;
+    const repetition = item.repetition;
+
+    if (actionId === 'move') {
+      setActionMessage(
+        isRepeat
+          ? `🚀 Robot Kiko: Maju 1 Langkah! (Perulangan ${repetition}/3)`
+          : '🚀 Robot Kiko: Maju 1 Langkah!'
+      );
       setStageAction('walking');
-      await sleep(600);
-    } else if (blockId === 'jump') {
-      setActionMessage('🦘 Robot Kiko: Melompat!');
+      // Latar belakang HANYA bergeser saat aksi MAJU
+      setStageProgress((prev) => prev + 1);
+      await waitForNextStep(600);
+    } else if (actionId === 'jump') {
+      setActionMessage(
+        isRepeat
+          ? `🦘 Robot Kiko: Melompat Tinggi! (Perulangan ${repetition}/3)`
+          : '🦘 Robot Kiko: Melompat Tinggi!'
+      );
       setStageAction('jumping');
-      await sleep(400);
-      setStageAction('idle');
-      await sleep(300);
-    } else if (blockId === 'sound') {
-      setActionMessage('🎵 Robot Kiko: Memainkan Suara POP!');
+      // Latar belakang TIDAK BERGESER saat melompat
+      await waitForNextStep(700);
+    } else if (actionId === 'sound') {
+      setActionMessage(
+        isRepeat
+          ? `🎵 Robot Kiko: Memainkan Suara POP! (Perulangan ${repetition}/3)`
+          : '🎵 Robot Kiko: Memainkan Suara POP!'
+      );
       setStageAction('celebrating');
       playPopSound();
-      await sleep(600);
+      await waitForNextStep(600);
     }
+
     setStageAction('idle');
+    await waitForNextStep(100);
   };
 
   const handleRunCode = async () => {
     if (isRunning) return;
-
-    setIsKikoStageVisible(true);
-    setStageAction('idle');
+    setIsHintOpen(false);
+    setIsSuccessOpen(false);
+    setIsFailureOpen(false);
+    setExecutionAlert('');
+    setIsKikoStageVisible(false);
+    setStageAction('still');
 
     if (canvasBlocks.length === 0) {
-      setActionMessage('⚠️ Kanvas masih kosong! Tambahkan balok terlebih dahulu.');
+      setActionMessage('Misi belum berhasil. Tambahkan balok perintah lalu coba lagi!');
+      setAttemptCount((prev) => prev + 1);
+      setLastExecutionResult({ status: 'error', reason: 'empty_canvas' });
+      setIsFailureOpen(true);
       return;
     }
 
-    if (canvasBlocks[0].id === 'repeat') {
-      setActionMessage('⚠️ Masukkan perintah lain terlebih dahulu sebelum menambahkan balok Ulangi 3 Kali!');
+    // 1. Bangun Antrean Eksekusi Sesuai Aturan Repeat
+    const queueResult = buildExecutionQueue(canvasBlocks);
+
+    if (queueResult.error === 'orphan_loop') {
+      setActionMessage('');
+      setExecutionAlert('⚠️ Harap berikan balok perintah terlebih dahulu sebelum menggunakan blok Ulangi 3 Kali!');
       setAttemptCount((prev) => prev + 1);
       setLastExecutionResult({ status: 'error', reason: 'orphan_loop' });
       return;
     }
 
+    if (queueResult.error || !queueResult.queue) {
+      setActionMessage('Kiko belum menemukan kunci misi. Silakan coba lagi.');
+      setAttemptCount((prev) => prev + 1);
+      setLastExecutionResult({ status: 'error', reason: queueResult.error });
+      setIsFailureOpen(true);
+      return;
+    }
+
+    setIsKikoStageVisible(true);
+    setStageAction('idle');
+    setStageProgress(0);
     setIsRunning(true);
     setAttemptCount((prev) => prev + 1);
+    setLastExecutionResult({ status: 'running' });
 
-    for (let i = 0; i < canvasBlocks.length; i++) {
-      const currentBlock = canvasBlocks[i];
-
-      if (currentBlock.id === 'repeat') {
-        const previousBlock = i > 0 ? canvasBlocks[i - 1] : null;
-
-        if (previousBlock && previousBlock.id !== 'repeat') {
-          setActionMessage(`🔁 Mengulangi perintah "${previousBlock.label}" sebanyak 3 Kali...`);
-          await sleep(500);
-
-          for (let r = 1; r <= 3; r++) {
-            setActionMessage(`🔁 Perulangan (${r}/3): ${previousBlock.label}`);
-            await executeSingleBlock(previousBlock.id);
-          }
-        } else {
-          setActionMessage('⚠️ Tidak ada perintah valid sebelum balok Ulangi!');
-          await sleep(1000);
-        }
-      } else {
-        await executeSingleBlock(currentBlock.id);
-      }
+    // 2. Putar Animasi dari queue secara sekuensial
+    for (const item of queueResult.queue) {
+      await executeQueueItem(item);
     }
 
     setActionMessage('✨ Horay! Seluruh instruksi di Kanvas berhasil dijalankan!');
-    setLastExecutionResult({ status: 'completed', stepsTaken: canvasBlocks.length });
+    setLastExecutionResult({ status: 'completed', stepsTaken: queueResult.queue.length });
+    await waitForNextStep(400);
     setIsRunning(false);
-    await sleep(500);
-    setIsSuccessModalOpen(true);
+
+    // 3. Evaluasi Kunci Jawaban Misi
+    const validation = validateMissionAnswer(canvasBlocks, currentMission);
+    if (validation.error) {
+      setIsFailureOpen(true);
+    } else {
+      setIsSuccessOpen(true);
+    }
+  };
+
+  const handleHintOpenChange = (isOpen) => {
+    setIsHintOpen(isOpen);
+    if (isOpen) {
+      setIsSuccessOpen(false);
+      setIsFailureOpen(false);
+    }
   };
 
   if (isLoadingData) {
@@ -182,7 +315,6 @@ export default function StudentPlaygroundPage() {
       <StudentSidebar />
 
       <main className="flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-6xl w-full mx-auto">
-        {/* Tombol Kembali */}
         <div className="mb-4">
           <Link
             to="/app/adventure"
@@ -205,7 +337,6 @@ export default function StudentPlaygroundPage() {
             </p>
           </div>
 
-          {/* Integration: Smart Hint & Storyfication Dongeng Generator */}
           <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => setIsStoryModalOpen(true)}
@@ -217,16 +348,23 @@ export default function StudentPlaygroundPage() {
             </button>
 
             <KikoSmartHint
+              isOpen={isHintOpen}
+              onOpenChange={handleHintOpenChange}
+              mission={currentMission}
               canvasBlocks={canvasBlocks}
-              targetLevel={{ targetDistance: 4, riverWidth: 2, hasRiver: true }}
               executionResult={lastExecutionResult}
               attemptCount={attemptCount}
-              autoOpenOnFail={true}
+              autoOpenOnFail={false}
             />
           </div>
         </div>
 
-        {/* Modal Dongeng Generator */}
+        {executionAlert && (
+          <p role="alert" className="mb-4 rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm font-extrabold text-amber-900 shadow-sm">
+            {executionAlert}
+          </p>
+        )}
+
         <KikoStoryGeneratorModal
           isOpen={isStoryModalOpen}
           onClose={() => setIsStoryModalOpen(false)}
@@ -310,43 +448,22 @@ export default function StudentPlaygroundPage() {
               </p>
             </div>
 
-            {/* 3. Area Maskot & Eksekusi - Panggung Ceria Ramah Anak */}
-            <div className="bg-gradient-to-b from-sky-200 via-sky-100 to-emerald-100 rounded-2xl p-6 border-2 border-sky-300 flex flex-col items-center justify-between min-h-[290px] text-center relative overflow-hidden shadow-sm">
-              <div className="w-full flex items-center justify-between mb-2">
-                <span className="text-[11px] font-bold text-sky-800 bg-white/80 px-2.5 py-0.5 rounded-full border border-sky-200">
-                  Panggung Kiko
+            {/* 3. Kontrol Eksekusi */}
+            <div
+              className="bg-[#FAF8F5] rounded-2xl p-6 border-2 border-slate-200 flex flex-col items-center justify-between min-h-[290px] text-center shadow-sm"
+            >
+              <div className="w-full flex items-center justify-between mb-4">
+                <span className="text-[11px] font-bold text-slate-700 bg-white px-2.5 py-1 rounded-full border border-slate-200">
+                  3. Panggung Kiko
                 </span>
-                <span className="text-xs">🌳 🌊 ☀️</span>
+                <span className="text-xl" aria-hidden="true">🎮</span>
               </div>
 
-              <div className="my-auto w-full flex flex-col items-center gap-2">
-                <div
-                  onClick={() => {
-                    playPopSound();
-                    setActionMessage('😄 Robot Kiko: Yey! Kamu menyapaku!');
-                  }}
-                  className="cursor-pointer group animate-kiko-idle transition-transform hover:scale-110"
-                  title="Klik Robot Kiko untuk menyapa!"
-                >
-                  <img
-                    src="/images/Robot.webp"
-                    alt="Mascot Kiko"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = "/images/robot.webp";
-                    }}
-                    className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-xl transition transform group-hover:rotate-6 filter"
-                  />
-                </div>
-
-                <div className="bg-white/95 backdrop-blur-sm text-slate-800 px-3.5 py-1.5 rounded-xl border border-teal-200 shadow-sm text-xs font-bold min-h-[32px] flex items-center justify-center max-w-full">
-                  {actionMessage}
-                </div>
-              </div>
-
-              {/* Garis Lantai Hijau & Visual Sungai */}
-              <div className="w-full h-3 bg-emerald-400 rounded-full border-t border-emerald-500 mb-3 relative overflow-hidden">
-                <div className="absolute right-1/4 top-0 bottom-0 w-12 bg-sky-500 animate-pulse" title="Sungai" />
+              <div className="my-auto flex flex-col items-center gap-3">
+                <span className="text-5xl" aria-hidden="true">🤖</span>
+                <p className="max-w-[220px] text-xs font-bold leading-relaxed text-slate-600">
+                  Kiko dan latar petualangan akan muncul di bawah setelah kamu menjalankan kode.
+                </p>
               </div>
 
               <button
@@ -375,17 +492,34 @@ export default function StudentPlaygroundPage() {
           </div>
         </div>
 
+        {/* Area Panggung Utama */}
         {isKikoStageVisible && (
           <section
             aria-label="Panggung aksi Kiko"
             aria-live="polite"
             data-island={islandNumber}
-            className={`kiko-stage-enter relative isolate mt-6 min-h-[280px] w-full overflow-hidden rounded-2xl border-2 border-white/70 bg-gradient-to-b ${islandTheme.sky} shadow-lg sm:min-h-[340px] ${isRunning ? 'kiko-stage-parallax-active' : ''}`}
+            className={`kiko-stage-enter relative isolate mt-6 min-h-[280px] w-full overflow-hidden rounded-2xl border-2 border-white/70 bg-gradient-to-b ${islandTheme.sky} shadow-lg sm:min-h-[340px]`}
           >
-            <div className="kiko-stage-clouds absolute inset-x-0 top-0 h-2/3" aria-hidden="true" />
-            <div className="kiko-stage-hills absolute inset-x-0 bottom-12 h-2/3" aria-hidden="true" />
-            <div className={`kiko-stage-ground absolute inset-x-0 bottom-0 h-14 border-t-4 border-white/30 ${islandTheme.ground}`} aria-hidden="true" />
-            <div className={`kiko-stage-landmarks ${isRunning ? 'kiko-stage-parallax-active' : ''}`} aria-hidden="true">
+            <div
+              className="kiko-stage-clouds absolute inset-x-0 top-0 h-2/3"
+              style={{ backgroundPositionX: `-${stageProgress * 40}px` }}
+              aria-hidden="true"
+            />
+            <div
+              className="kiko-stage-hills absolute inset-x-0 bottom-12 h-2/3"
+              style={{ backgroundPositionX: `-${stageProgress * 25}px` }}
+              aria-hidden="true"
+            />
+            <div
+              className={`kiko-stage-ground absolute inset-x-0 bottom-0 h-14 border-t-4 border-white/30 ${islandTheme.ground}`}
+              style={{ backgroundPositionX: `-${stageProgress * 30}px` }}
+              aria-hidden="true"
+            />
+            <div
+              className="kiko-stage-landmarks"
+              style={{ transform: `translateX(-${(stageProgress % 8) * 12.5}%)` }}
+              aria-hidden="true"
+            >
               {[0, 1].map((copy) => (
                 <div className="kiko-stage-landmark-segment" key={copy}>
                   {Array.isArray(islandTheme.landmarks) && islandTheme.landmarks.map((landmark, index) => (
@@ -403,7 +537,7 @@ export default function StudentPlaygroundPage() {
 
             <div className="absolute left-4 right-4 top-4 z-10 flex items-center justify-between gap-3 sm:left-6 sm:right-6">
               <span className="rounded-full border border-white/80 bg-white/85 px-3 py-1 text-xs font-bold text-sky-900 shadow-sm">
-                🚀 Pulau {islandNumber}: {islandTheme.name}
+                🚀 {currentMission.island_title}
               </span>
               <span className="rounded-full border border-white/80 bg-white/85 px-3 py-1 text-xs font-bold text-slate-700 shadow-sm">
                 {isRunning ? 'Kiko sedang beraksi!' : 'Kreasimu selesai dijalankan!'}
@@ -411,15 +545,15 @@ export default function StudentPlaygroundPage() {
             </div>
 
             <div
-              className={`absolute bottom-9 left-[8%] z-10 ${
-                stageAction === 'walking'
-                  ? 'animate-kiko-walk'
-                  : stageAction === 'jumping'
-                  ? 'animate-kiko-stage-jump'
-                  : stageAction === 'celebrating'
-                  ? 'animate-kiko-happy'
-                  : 'animate-kiko-idle'
-              }`}
+              role={lastExecutionResult.status === 'error' ? 'alert' : 'status'}
+              aria-live={lastExecutionResult.status === 'error' ? 'assertive' : 'polite'}
+              className="absolute left-1/2 top-16 z-10 max-w-[calc(100%-2rem)] -translate-x-1/2 rounded-xl border border-teal-200 bg-white/95 px-3.5 py-2 text-center text-xs font-bold text-slate-800 shadow-sm"
+            >
+              {actionMessage}
+            </div>
+
+            <div
+              className={`absolute bottom-9 left-[8%] z-10 ${STAGE_ACTION_CLASSES[stageAction]}`}
             >
               <img
                 src="/images/Robot.webp"
@@ -434,18 +568,52 @@ export default function StudentPlaygroundPage() {
           </section>
         )}
 
-        {/* Modal Sukses Munasib */}
         <KikoMissionSuccessModal
-          isOpen={isSuccessModalOpen}
-          onClose={() => setIsSuccessModalOpen(false)}
+          isOpen={isSuccessOpen}
+          onClose={() => setIsSuccessOpen(false)}
           islandNumber={islandNumber}
-          islandTitle={islandTheme.name}
+          islandTitle={currentMission.island_title}
           xpEarned={100}
           onTryAgain={() => {
-            setIsSuccessModalOpen(false);
+            setIsSuccessOpen(false);
             handleRunCode();
           }}
         />
+
+        {isFailureOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+            <section
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="mission-failure-title"
+              className="relative w-full max-w-md overflow-hidden rounded-3xl border-4 border-rose-300 bg-white p-6 text-center shadow-2xl"
+            >
+              <div className="absolute inset-x-0 top-0 h-3 bg-gradient-to-r from-rose-400 via-amber-300 to-rose-400" />
+              <button
+                type="button"
+                onClick={() => setIsFailureOpen(false)}
+                aria-label="Tutup modal misi belum berhasil"
+                className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-xl font-bold text-slate-600 transition hover:rotate-90 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-200"
+              >
+                ×
+              </button>
+              <div className="mb-3 mt-3 text-6xl" aria-hidden="true">🤔</div>
+              <h2 id="mission-failure-title" className="mb-2 font-heading text-2xl font-bold text-slate-900">
+                Misi Belum Berhasil!
+              </h2>
+              <p className="mb-6 text-sm font-medium leading-relaxed text-slate-600">
+                Coba periksa kembali susunan kodenmu.
+              </p>
+              <button
+                type="button"
+                onClick={() => handleHintOpenChange(true)}
+                className="toy-btn-amber w-full rounded-xl px-5 py-3 font-bold text-sm shadow-sm"
+              >
+                💡 Minta Panduan Kiko Smart Hint
+              </button>
+            </section>
+          </div>
+        )}
       </main>
     </div>
   );
