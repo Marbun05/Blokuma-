@@ -30,7 +30,7 @@ export const useAuthStore = create((set, get) => ({
           nickname: profile?.nickname || sessionUser.user_metadata?.nickname || 'Kiko',
           email: sessionUser.email,
           role: profile?.role || sessionUser.user_metadata?.role || 'student',
-          grade: profile?.grade || sessionUser.user_metadata?.grade || 4,
+          grade: profile?.grade !== undefined && profile?.grade !== null ? profile.grade : (sessionUser.user_metadata?.grade ?? null),
           avatarUrl: profile?.avatar_url || '🧑‍🚀',
         };
 

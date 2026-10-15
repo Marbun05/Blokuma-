@@ -39,7 +39,7 @@ export default function TeacherSettingsPage() {
 
         {saved && (
           <div className="bg-emerald-50 border-2 border-emerald-400 text-emerald-900 px-4 py-3 rounded-2xl flex items-center gap-3 animate-fade-in font-medium text-sm">
-            <span>🎉</span> Preferensi kelas Bu Maya berhasil diperbarui!
+            <span>🎉</span> Preferensi kelas {user?.nickname || 'Guru'} berhasil diperbarui!
           </div>
         )}
 

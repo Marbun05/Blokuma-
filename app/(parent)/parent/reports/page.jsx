@@ -27,16 +27,7 @@ export default function ParentReportsPage() {
           .select('student_id')
           .eq('parent_id', user.id);
 
-        let studentIds = (relations || []).map((r) => r.student_id);
-
-        if (studentIds.length === 0) {
-          const { data: activeStudents } = await supabase
-            .from('profiles')
-            .select('id')
-            .eq('role', 'student')
-            .limit(2);
-          studentIds = (activeStudents || []).map((s) => s.id);
-        }
+        const studentIds = (relations || []).map((r) => r.student_id);
 
         if (studentIds.length > 0) {
           // BATCH QUERY paralel tunggal (< 50 ms)
@@ -61,8 +52,7 @@ export default function ParentReportsPage() {
             const level = prog?.level || 1;
             const xp = prog?.xp || 0;
             const studentName = prof?.full_name || prof?.nickname || 'Kiko Pratama';
-            const gradeNum = prof?.grade || 4;
-            const gradeStr = `Kelas ${gradeNum} SD`;
+            const gradeStr = prof?.grade ? `Kelas ${prof.grade} SD` : 'Belum Memilih Kelas';
 
             return {
               studentId: sid,

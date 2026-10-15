@@ -1,0 +1,67 @@
+================================================================================
+JURNAL PROMPT VIBE CODING & LOG ARSITEKTUR MENTAH BLOKUMA
+================================================================================
+Hari, Tanggal: Kamis, 15 Oktober 2026
+Waktu Pembaruan: 23:50:00 WIB
+Rentang Histori Komit Repo Main: Senin, 05 Oktober 2026 – Kamis, 15 Oktober 2026
+Status Logs: Production Log Complete (Komit Pertama s/d Komit Terakhir Repo Main)
+================================================================================
+
+--------------------------------------------------------------------------------
+BAGIAN 1: KUMPULAN PROMPT UTAMA (HIGH-LEVEL VIBE CODING PROMPTS)
+--------------------------------------------------------------------------------
+
+PROMPT 1: Peluncuran Detektif Kiko (Autonomous Peer-Learning Agent & Kanvas Kasus Misteri Bug SD 1-6)
+"Transformasikan fitur Galeri menjadi Detektif Kiko (/app/ai-agent) menggunakan pendekatan Protégé Effect di mana anak SD (Kelas 1-6) berperan sebagai Senior Detektif yang membimbing Tobi (Si Peer Agent) memecahkan kasus koding rusak (Misteri Bug). Bangun antarmuka Kanvas Kode Rusak dengan kontrol bongkar-pasang balok visual, audio Text-To-Speech Bahasa Indonesia, dan Whisper Voice AI."
+
+PROMPT 2: Arsitektur Multi-Agent Edge Runtime (Mastermind 120b, Peer Tobi 20b, Safeguard 20b, Llama Guard 86m) & Deploy Supabase Terminal
+"Rancang Supabase Edge Function kiko-ai-agent dengan arsitektur Multi-Agent 4 lapisan: Mastermind Engine (120b) untuk generasi & verifikasi kasus, Peer Agent Tobi (20b) untuk dialog teman sekelas yang bingung logika koding, Safeguard Agent (20b) untuk memoles ucapan ramah anak, dan Llama Guard (86m) untuk keamanan input. Sediakan 240+ Kasus Misteri Koding (40+ per kelas SD 1-6) dan deploy Edge Function langsung dari terminal via Access Token."
+
+PROMPT 3: Otomatisasi Kurikulum SD Sesuai Akun Login Siswa & Pembersihan UI Manual
+"Otomatiskan penentuan jenjang kurikulum koding pada fitur Detektif Kiko agar secara langsung membaca data kelas akun siswa (user?.grade) dari database Supabase tanpa tombol selektor manual SD 1-6 atau tombol Kasus Acak. Buat alur kelanjutan kasus yang mulus (seamless case progression) saat tombol 'Lanjut ke Kasus Berikutnya' diklik."
+
+PROMPT 4: Seeder Terminal Database Rombel Kelas & Service Pengambilan Dinamis
+"Buat script seeder database scripts/seed-rombels.js yang dieksekusi melalui terminal (npm run seed:rombels) untuk mengisi tabel public.classrooms dengan rombel kelas valid ([BLK-1A] s/d [BLK-6A]). Perbarui RLS Policy Supabase serta buat service services/classroom-service.js untuk melayani dropdown '-- Pilih Rombel Kelas --' secara dinamis tanpa hardcode di UI."
+
+PROMPT 5: Pemberlakuan Sistem Penilaian Rapor PDF 3 Pilar Utama (Coding, Logic, Math / Kesiapan COC) Tanpa Inflasi Nilai
+"Rancang ulang modul Rapor PDF Kurikulum Merdeka (KikoRaportPrintModal) agar mengevaluasi 3 aspek utama: Nilai Coding (rasio ketuntasan pulau), Nilai Logic (kemandirian tanpa hint), dan Nilai Math & Kesiapan Lomba/COC (efisiensi algoritma & proyek mandiri). Pastikan kalkulasi nilai murni dan jujur mengacu KKM 75 tanpa inflasi nilai palsu saat siswa baru menuntaskan 1 pulau, serta berikan kotak rekomendasi bakat yang jelas bagi Orang Tua tanpa adanya istilah teknis Supabase."
+
+
+--------------------------------------------------------------------------------
+BAGIAN 2: LOG ARSITEKTUR MENTAH & HISTORI KOMIT LENGKAP REPO MAIN
+--------------------------------------------------------------------------------
+
+[LOG ARSITEKTUR KOMIT 1]
+- Hari, Tanggal, Jam: Senin, 05 Oktober 2026, Pukul 10:05:01 WIB
+- Hash Komit: 92a0f7518382d26a5b025f7348ed6b3a461c9000
+- Deskripsi Mentah: Inisialisasi basis repositori Git awal untuk proyek Blokuma Platform.
+
+[LOG ARSITEKTUR KOMIT 2]
+- Hari, Tanggal, Jam: Senin, 05 Oktober 2026, Pukul 14:02:23 WIB
+- Hash Komit: 1a64888a6083c5873015d9e810b879717814a17d
+- Deskripsi Mentah: Konstruksi arsitektur awal Next.js/React, perancangan skema awal Supabase PostgreSQL DDL (profiles, student_progress, projects, classrooms), AST Engine Parser, dan struktur halaman awal.
+
+[LOG ARSITEKTUR KOMIT 3]
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:23:10 WIB
+- Hash Komit: 54c99cc7085bb281e0254cf8735459b36b99793a
+- Deskripsi Mentah: Migrasi menyeluruh dari TypeScript ke React JSX (.jsx/.js) dengan Vite 6 runner demi kecepatan kompilasi dan pengalaman Vibe Coding yang lebih dinamis.
+
+[LOG ARSITEKTUR KOMIT 4]
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:46:20 WIB
+- Hash Komit: f82fdef7c850404b7f0ebc5fbcae8a6b7300e4d6
+- Deskripsi Mentah: Integrasi kredensial proyek Supabase resmi (URL & Anon Key) pada lib/supabase/client.js serta menyambungkan layanan project-service.
+
+[LOG ARSITEKTUR KOMIT 5]
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:53:49 WIB
+- Hash Komit: c9c11b7831e03cb1c5265a29eda546605dd74809
+- Deskripsi Mentah: Eksekusi otomatis DDL migration database Supabase dan verifikasi tabel publik secara langsung.
+
+[LOG ARSITEKTUR KOMIT 6]
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:56:03 WIB
+- Hash Komit: 26531f90bb7d4d4c25749b50f3e07d5f99d0252a
+- Deskripsi Mentah: Penambahan identitas visual roket favicon.svg pada index.html.
+
+[LOG ARSITEKTUR KOMIT LATEST]
+- Hari, Tanggal, Jam: Kamis, 15 Oktober 2026, Pukul 23:50:00 WIB
+- Hash Komit: Head / Latest Commit
+- Deskripsi Mentah: Peluncuran Detektif Kiko (Autonomous Peer-Learning Agent Tobi, Mastermind 120b Engine, 240+ Kasus Misteri SD 1-6), Edge Function kiko-ai-agent deployment via terminal, dan Terminal Database Rombel Seeder.

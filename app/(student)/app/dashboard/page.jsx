@@ -53,7 +53,7 @@ export default function StudentDashboardPage() {
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
             <div>
               <span className="bg-teal-700/80 text-amber-200 border border-teal-500 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1.5 shadow-sm">
-                <span>🎖️</span> Arsitek Kode Level {progress?.level || 1}
+                <span>🎖️</span> Arsitek Kode {progress?.level ? `Level ${progress.level}` : 'Siswa Baru'}
               </span>
               
               <h1 className="font-heading text-2xl sm:text-4xl font-bold mt-2">
@@ -75,13 +75,36 @@ export default function StudentDashboardPage() {
               💎 XP Terkumpul: <strong className="text-amber-300">{progress?.xp || 0} XP</strong>
             </span>
             <span className="bg-teal-700/50 px-3 py-1.5 rounded-xl border border-teal-500">
-              🏆 Misi Tuntas: <strong className="text-emerald-300">{progress?.level ? progress.level * 2 : 0} Misi</strong>
+              🏆 Misi Tuntas: <strong className="text-emerald-300">{progress?.level || 0} Misi</strong>
             </span>
             <span className="bg-teal-700/50 px-3 py-1.5 rounded-xl border border-teal-500">
               🤖 Pendamping: <strong className="text-white">Robot Kiko</strong>
             </span>
           </div>
         </div>
+
+        {/* Notifikasi Jika Kelas Belum Diset Oleh Guru */}
+        {!user?.grade && (
+          <div className="mb-8 p-5 bg-amber-50 border-2 border-amber-300 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm animate-fadeIn">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🏫🔒</span>
+              <div>
+                <h3 className="font-heading font-bold text-slate-900 text-sm sm:text-base">
+                  Rombel Kelas Belum Ditempatkan oleh Guru
+                </h3>
+                <p className="text-xs text-slate-600 font-medium mt-0.5">
+                  Fitur <strong>Petualangan Kode</strong> dan <strong>Playground</strong> membutuhkan penempatan Rombel Kelas oleh Gurumu di sekolah. Minta Gurumu memasukkan namamu ke Rombel Kelas melalui Dashboard Guru!
+                </p>
+              </div>
+            </div>
+            <Link
+              to="/app/settings"
+              className="px-4 py-2 bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold text-xs rounded-xl border border-amber-400 shrink-0 transition"
+            >
+              Cek Status Rombel ➔
+            </Link>
+          </div>
+        )}
 
         {/* Kotak Misi Petualangan Aktif */}
         <div className="bg-white rounded-2xl p-6 border-2 border-slate-200 card-chunky shadow-sm mb-8">
@@ -91,7 +114,7 @@ export default function StudentDashboardPage() {
               <span>Lanjutkan Petualangan Aktif</span>
             </h2>
             <span className="text-xs font-bold bg-teal-50 text-teal-700 px-3 py-1 rounded-full border border-teal-200">
-              Misi Aktif • Level {progress?.level || 1}
+              {progress?.level ? `Misi Aktif • Level ${progress.level + 1}` : 'Mulai Pulau 1'}
             </span>
           </div>
 
@@ -180,25 +203,25 @@ export default function StudentDashboardPage() {
           </Link>
 
           <Link
-            to="/app/gallery"
+            to="/app/ai-agent"
             className="bg-purple-50/80 border-2 border-purple-300 p-5 rounded-2xl text-slate-900 hover:-translate-y-1 transition duration-200 shadow-sm flex flex-col justify-between group"
           >
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-3xl group-hover:scale-110 transition transform">🖼️</span>
+                <span className="text-3xl group-hover:scale-110 transition transform">🔍</span>
                 <span className="text-[10px] font-bold text-purple-800 bg-purple-200/80 px-2 py-0.5 rounded-full border border-purple-300">
-                  Karya Teman
+                  Detektif Pembelajaran
                 </span>
               </div>
               <h3 className="font-heading text-lg font-bold text-slate-900 mb-1">
-                Galeri Karya Sahabat
+                Detektif Kiko & Misteri Bug 🔍
               </h3>
               <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                Lihat dan mainkan game keren hasil rancangan teman-teman sesama Arsitek Kode!
+                Bantu Tobi memecahkan kasus misteri kode bug, pecahkan teka-teki logika balok, dan dapatkan Lencana Detektif!
               </p>
             </div>
             <span className="text-xs font-bold text-purple-800 mt-4 block group-hover:translate-x-1 transition">
-              Kunjungi Galeri ➔
+              Mulai Misi Detektif ➔
             </span>
           </Link>
 

@@ -14,7 +14,7 @@ export default function ProjectDetailPage() {
               🎮 Karya Game Interaktif
             </span>
             <span className="text-xs font-bold text-slate-500">
-              Dibuat oleh: <strong className="text-teal-700">Kiko</strong> (Kelas 4 SD)
+              Dibuat oleh: <strong className="text-teal-700">Kiko</strong>
             </span>
           </div>
 

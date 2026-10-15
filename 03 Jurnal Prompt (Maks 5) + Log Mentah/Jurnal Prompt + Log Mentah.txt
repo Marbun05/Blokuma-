@@ -1,53 +1,67 @@
-# THE VIBE CODING JOURNAL: ARCHITECTURE LOGS & PROMPTS
-
 ================================================================================
-SECTION 1: HIGH-LEVEL VIBE CODING PROMPTS
+JURNAL PROMPT VIBE CODING & LOG ARSITEKTUR MENTAH BLOKUMA
 ================================================================================
-
-1. Pemberlakuan Sistem Penilaian Rapor PDF 3 Pilar Utama (Coding, Logic, Math / Kesiapan COC) Tanpa Inflasi Nilai:
-   Prompt:
-   "Rancang ulang modul Rapor PDF Kurikulum Merdeka (KikoRaportPrintModal) agar mengevaluasi 3 aspek utama: Nilai Coding (rasio ketuntasan pulau), Nilai Logic (kemandirian tanpa hint), dan Nilai Math & Kesiapan Lomba/COC (efisiensi algoritma & proyek mandiri). Pastikan kalkulasi nilai murni dan jujur mengacu KKM 75 tanpa inflasi nilai palsu saat siswa baru menuntaskan 1 pulau, serta berikan kotak rekomendasi bakat yang jelas bagi Orang Tua tanpa adanya istilah teknis Supabase."
-
-2. Integrasi Validasi Emosional Instan Sub-100ms & Serverless Edge Function (OpenAI GPT-OSS-20B):
-   Prompt:
-   "Implementasikan Supabase Edge Function kiko-praise-generator menggunakan model openai/gpt-oss-20b via Groq/OpenRouter untuk memberikan pujian personal dan validasi emosional instan dalam waktu < 100 ms saat anak berhasil menuntaskan misi. Hubungkan modal keberhasilan misi KikoMissionSuccessModal dengan pembacaan pesan bangga Kiko secara realtime dan terapkan fallback lokal bebas error."
-
-3. In-Memory Caching & SWR Revalidation untuk Skalabilitas Tinggi (Zero Load Delay):
-   Prompt:
-   "Hapus seluruh tampilan loading spinner 'Menyiapkan peta petualangan Kiko...' pada Halaman Petualangan. Terapkan pola In-Memory Cache (progressCache) dan Single Batch Parallel Query (.in('id', studentIds)) pada layanan Supabase agar Peta 6 Pulau langsung tampil seketika (0 ms) dan revalidasi data dilakukan di balik layar tanpa lag meskipun diakses oleh ratusan siswa secara bersamaan."
-
-4. Koreksi Presisi Eksekusi Perulangan & Gerak Maju Maskot Kiko di Playground:
-   Prompt:
-   "Perbaiki bug di mana Kiko terlihat berjalan mundur dan eksekusi perulangan 'Lompat + Ulangi 3 Kali' menghasilkan gerakan yang tidak sesuai. Perbarui buildExecutionQueue agar menghitung perulangan secara tepat (1x aksi + 3x repeat) serta hubungkan koordinat posisi Kiko dengan variabel stageProgress secara fisik agar Kiko melangkah maju ke kanan panggung secara mulus."
-
-5. Panel Admin Edge-to-Edge & Pembuat Soal Teka-Teki Mandiri:
-   Prompt:
-   "Rancang ulang Admin Panel (app/(admin)/admin/page.jsx) menjadi tata letak penuh dari tepi kiri ke kanan (full-width edge-to-edge) dengan 4 fitur moderasi interaktif: Review Laporan Konten Child-Safe, Verifikasi Guru Baru, Pengumuman Massal Broadcast, dan Master Data Playground. Tambahkan pula fitur Pembuat Soal Teka-Teki Mandiri di /app/projects/new agar siswa dan guru dapat merakit tantangan koding buatan sendiri."
-
-================================================================================
-SECTION 2: CORE ARCHITECTURE & COMMIT LOGS
+Hari, Tanggal: Kamis, 15 Oktober 2026
+Waktu Pembaruan: 23:50:00 WIB
+Rentang Histori Komit Repo Main: Senin, 05 Oktober 2026 – Kamis, 15 Oktober 2026
+Status Logs: Production Log Complete (Komit Pertama s/d Komit Terakhir Repo Main)
 ================================================================================
 
-[COMMIT 10] Realtime Database SSOT, Non-Inflated Raport PDF & High-Scalability Optimization (Terbaru)
-- Pure Database SSOT & Non-Inflated Grades: Seluruh kalkulasi Rapor PDF Kurikulum Merdeka di `KikoRaportPrintModal.jsx`, `ParentReportsPage`, dan `TeacherReportsPage` ditarik murni dari database Supabase PostgreSQL. Dihapus nilai palsu/inflasi sehingga murid yang baru menyelesaikan 1 dari 6 pulau mendapatkan nilai riil (17/100) di bawah KKM 75 dengan narasi evaluasi jujur bagi Orang Tua.
-- 3 Core Assessment Pillars: Menyajikan evaluasi terstruktur untuk 3 aspek utama: Nilai Coding (pemrograman), Nilai Logic (kemandirian tanpa hint), dan Nilai Math & Kesiapan Lomba/COC (penalaran spasial & efisiensi algoritma).
-- Instant UI Load & Batch Data Query: Menerapkan Single Batch Parallel Query (`Promise.all` dengan `.in('id', studentIds)`) dan In-Memory Caching (`progressCache` TTL 15s) sehingga Halaman Petualangan dan Rapor memuat seketika (0 ms) tanpa spinner loading.
-- Instant AI Emotional Praise Edge Function: Menambahkan Supabase Edge Function `kiko-praise-generator` (Model `openai/gpt-oss-20b`) yang menghasilkan pujian personal instan (< 100 ms) saat modal keberhasilan misi muncul.
-- Full-Width Admin Panel & Custom Quiz Creator: Memperbarui Dashboard Admin menjadi antarmuka penuh (*full-width edge-to-edge*) dengan 4 fitur moderasi aktif (Review Laporan Child-Safe, Verifikasi Guru, Broadcast Pengumuman Massal, dan Master Data) serta menghadirkan Pembuat Soal Teka-Teki Mandiri di `/app/projects/new`.
+--------------------------------------------------------------------------------
+BAGIAN 1: KUMPULAN PROMPT UTAMA (HIGH-LEVEL VIBE CODING PROMPTS)
+--------------------------------------------------------------------------------
 
-[COMMIT 8 - 9] Socratic AI Guidance, Storyfication & Child-Safe Guardrails
-- Child-Safe Groq Edge Functions: Menghubungkan Deno Edge Functions `kiko-smart-hint` (Model `qwen/qwen3.8-27b`) untuk bimbingan Socrates tanpa membocorkan kunci jawaban, dan `kiko-story-generator` (Model `openai/gpt-oss-120b`) untuk dongeng petualangan Nusantara.
-- Multi-Layer Safety Guardrails: Menerapkan filter keamanan otomatis via `meta-llama/llama-prompt-guard-2-86m` dan `openai/gpt-oss-safeguard-20b` untuk menjamin interaksi anak 100% aman dan terlindungi dari prompt injection.
-- Seamless Playground & Island Navigation: Memperbaiki alur transisi pulau di Playground agar melanjutkannya secara langsung tanpa terlempar keluar ke peta petualangan.
+PROMPT 1: Peluncuran Detektif Kiko (Autonomous Peer-Learning Agent & Kanvas Kasus Misteri Bug SD 1-6)
+"Transformasikan fitur Galeri menjadi Detektif Kiko (/app/ai-agent) menggunakan pendekatan Protégé Effect di mana anak SD (Kelas 1-6) berperan sebagai Senior Detektif yang membimbing Tobi (Si Peer Agent) memecahkan kasus koding rusak (Misteri Bug). Bangun antarmuka Kanvas Kode Rusak dengan kontrol bongkar-pasang balok visual, audio Text-To-Speech Bahasa Indonesia, dan Whisper Voice AI."
 
-[COMMIT 7] Full Pure Supabase SSOT Architecture & Zero-Lag Performance
-- Zero LocalStorage Persistence: Menghapus seluruh dependensi LocalStorage kustom pada `curriculum.js`, `SettingsPage`, `AdventurePage`, `DashboardPage`, `Sidebar`, dan `AchievementsPage`.
-- Pure Supabase Integration: Seluruh profil, kelas, progres pulau, XP, dan status pencapaian ditarik dan diperbarui 100% langsung dari tabel Supabase PostgreSQL (`profiles`, `student_progress`, `student_projects`, `master_achievements`).
-- Optimized Query Execution: Menggunakan `Promise.all` paralel, kueri ter-indeks pada `student_id`, dan in-memory state Zustand untuk menjamin performa tanpa lag bagi ribuan pengguna bersamaan.
-- Game Mission Briefing & Smart Hint Limit: Menyediakan `KikoMissionBriefingModal.jsx` saat masuk pulau dan membatasi `KikoSmartHint` maksimal 3 kali per tantangan.
-- Full Test Suite Passing: Seluruh 19 unit test Vitest lulus 100%.
+PROMPT 2: Arsitektur Multi-Agent Edge Runtime (Mastermind 120b, Peer Tobi 20b, Safeguard 20b, Llama Guard 86m) & Deploy Supabase Terminal
+"Rancang Supabase Edge Function kiko-ai-agent dengan arsitektur Multi-Agent 4 lapisan: Mastermind Engine (120b) untuk generasi & verifikasi kasus, Peer Agent Tobi (20b) untuk dialog teman sekelas yang bingung logika koding, Safeguard Agent (20b) untuk memoles ucapan ramah anak, dan Llama Guard (86m) untuk keamanan input. Sediakan 240+ Kasus Misteri Koding (40+ per kelas SD 1-6) dan deploy Edge Function langsung dari terminal via Access Token."
 
-[COMMIT 5 - 6] Rekapitulasi Fondasi Utama
-- Adaptive Curriculum Engine: Menyinkronkan materi 6 pulau dan kunci jawaban di `curriculumData.js` dengan tingkat kelas siswa (SD 1-2, SD 3-4, SD 5-6).
-- Core Block Engine: Mengkonstruksi AST Parser dan antrean eksekusi sekuensial (`executionQueue.js`) untuk evaluasi balok 'move', 'jump', 'sound', dan loop 'repeat'.
-- Cute Bubble Pop Sound: Merancang ulang synthesizer Web Audio API di `playground/page.jsx` dan `public/page.jsx` dengan instan 800Hz -> 200Hz exponential pitch drop.
+PROMPT 3: Otomatisasi Kurikulum SD Sesuai Akun Login Siswa & Pembersihan UI Manual
+"Otomatiskan penentuan jenjang kurikulum koding pada fitur Detektif Kiko agar secara langsung membaca data kelas akun siswa (user?.grade) dari database Supabase tanpa tombol selektor manual SD 1-6 atau tombol Kasus Acak. Buat alur kelanjutan kasus yang mulus (seamless case progression) saat tombol 'Lanjut ke Kasus Berikutnya' diklik."
+
+PROMPT 4: Seeder Terminal Database Rombel Kelas & Service Pengambilan Dinamis
+"Buat script seeder database scripts/seed-rombels.js yang dieksekusi melalui terminal (npm run seed:rombels) untuk mengisi tabel public.classrooms dengan rombel kelas valid ([BLK-1A] s/d [BLK-6A]). Perbarui RLS Policy Supabase serta buat service services/classroom-service.js untuk melayani dropdown '-- Pilih Rombel Kelas --' secara dinamis tanpa hardcode di UI."
+
+PROMPT 5: Pemberlakuan Sistem Penilaian Rapor PDF 3 Pilar Utama (Coding, Logic, Math / Kesiapan COC) Tanpa Inflasi Nilai
+"Rancang ulang modul Rapor PDF Kurikulum Merdeka (KikoRaportPrintModal) agar mengevaluasi 3 aspek utama: Nilai Coding (rasio ketuntasan pulau), Nilai Logic (kemandirian tanpa hint), dan Nilai Math & Kesiapan Lomba/COC (efisiensi algoritma & proyek mandiri). Pastikan kalkulasi nilai murni dan jujur mengacu KKM 75 tanpa inflasi nilai palsu saat siswa baru menuntaskan 1 pulau, serta berikan kotak rekomendasi bakat yang jelas bagi Orang Tua tanpa adanya istilah teknis Supabase."
+
+
+--------------------------------------------------------------------------------
+BAGIAN 2: LOG ARSITEKTUR MENTAH & HISTORI KOMIT LENGKAP REPO MAIN
+--------------------------------------------------------------------------------
+
+[LOG ARSITEKTUR KOMIT 1]
+- Hari, Tanggal, Jam: Senin, 05 Oktober 2026, Pukul 10:05:01 WIB
+- Hash Komit: 92a0f7518382d26a5b025f7348ed6b3a461c9000
+- Deskripsi Mentah: Inisialisasi basis repositori Git awal untuk proyek Blokuma Platform.
+
+[LOG ARSITEKTUR KOMIT 2]
+- Hari, Tanggal, Jam: Senin, 05 Oktober 2026, Pukul 14:02:23 WIB
+- Hash Komit: 1a64888a6083c5873015d9e810b879717814a17d
+- Deskripsi Mentah: Konstruksi arsitektur awal Next.js/React, perancangan skema awal Supabase PostgreSQL DDL (profiles, student_progress, projects, classrooms), AST Engine Parser, dan struktur halaman awal.
+
+[LOG ARSITEKTUR KOMIT 3]
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:23:10 WIB
+- Hash Komit: 54c99cc7085bb281e0254cf8735459b36b99793a
+- Deskripsi Mentah: Migrasi menyeluruh dari TypeScript ke React JSX (.jsx/.js) dengan Vite 6 runner demi kecepatan kompilasi dan pengalaman Vibe Coding yang lebih dinamis.
+
+[LOG ARSITEKTUR KOMIT 4]
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:46:20 WIB
+- Hash Komit: f82fdef7c850404b7f0ebc5fbcae8a6b7300e4d6
+- Deskripsi Mentah: Integrasi kredensial proyek Supabase resmi (URL & Anon Key) pada lib/supabase/client.js serta menyambungkan layanan project-service.
+
+[LOG ARSITEKTUR KOMIT 5]
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:53:49 WIB
+- Hash Komit: c9c11b7831e03cb1c5265a29eda546605dd74809
+- Deskripsi Mentah: Eksekusi otomatis DDL migration database Supabase dan verifikasi tabel publik secara langsung.
+
+[LOG ARSITEKTUR KOMIT 6]
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:56:03 WIB
+- Hash Komit: 26531f90bb7d4d4c25749b50f3e07d5f99d0252a
+- Deskripsi Mentah: Penambahan identitas visual roket favicon.svg pada index.html.
+
+[LOG ARSITEKTUR KOMIT LATEST]
+- Hari, Tanggal, Jam: Kamis, 15 Oktober 2026, Pukul 23:50:00 WIB
+- Hash Komit: Head / Latest Commit
+- Deskripsi Mentah: Peluncuran Detektif Kiko (Autonomous Peer-Learning Agent Tobi, Mastermind 120b Engine, 240+ Kasus Misteri SD 1-6), Edge Function kiko-ai-agent deployment via terminal, dan Terminal Database Rombel Seeder.

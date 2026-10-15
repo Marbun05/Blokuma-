@@ -6,7 +6,7 @@ import { AnimatedLoginHero } from '../../../components/ui/AnimatedLoginHero.jsx'
 import { supabase } from '../../../lib/supabase/client.js';
 
 const DEMO_ACCOUNTS = [
-  { label: '👦 Siswa (Kiko Pratama - Kelas 4 SD)', email: 'kiko@blokuma.id', password: 'Password123!' },
+  { label: '👦 Siswa (Kiko Pratama)', email: 'kiko@blokuma.id', password: 'Password123!' },
   { label: '👨‍👩‍👧 Orang Tua (Ayah Budi)', email: 'parent@blokuma.id', password: 'Password123!' },
   { label: '👩‍🏫 Guru (Bu Maya Pertiwi)', email: 'guru@blokuma.id', password: 'Password123!' },
   { label: '🛡️ Admin (Admin Blokuma)', email: 'admin@blokuma.id', password: 'Password123!' },

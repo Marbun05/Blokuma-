@@ -30,24 +30,7 @@ export default function TeacherReportsPage() {
 
         let classIds = (classrooms || []).map((c) => c.id);
 
-        let studentIds = [];
-        if (classIds.length > 0) {
-          const { data: classStudents } = await supabase
-            .from('classroom_students')
-            .select('student_id')
-            .in('classroom_id', classIds);
-          studentIds = (classStudents || []).map((cs) => cs.student_id);
-        }
-
-        // Fallback jika belum ada murid di kelas
-        if (studentIds.length === 0) {
-          const { data: allStudents } = await supabase
-            .from('profiles')
-            .select('id')
-            .eq('role', 'student')
-            .limit(5);
-          studentIds = (allStudents || []).map((s) => s.id);
-        }
+        const studentIds = (classStudents || []).map((cs) => cs.student_id);
 
         if (studentIds.length > 0) {
           // BATCH QUERY paralel tunggal (< 50 ms)
@@ -72,8 +55,7 @@ export default function TeacherReportsPage() {
             const level = prog?.level || 1;
             const xp = prog?.xp || 0;
             const studentName = prof?.full_name || prof?.nickname || 'Siswa Blokuma';
-            const gradeNum = prof?.grade || 4;
-            const gradeStr = `Kelas ${gradeNum} SD`;
+            const gradeStr = prof?.grade ? `Kelas ${prof.grade} SD` : 'Belum Memilih Kelas';
 
             return {
               studentId: sid,

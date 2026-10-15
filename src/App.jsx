@@ -18,6 +18,7 @@ import ProjectsPage from '../app/(student)/app/projects/page.jsx';
 import NewProjectPage from '../app/(student)/app/projects/new/page.jsx';
 import ProjectDetailPage from '../app/(student)/app/projects/[id]/page.jsx';
 import GalleryPage from '../app/(student)/app/gallery/page.jsx';
+import KikoAiAgentPage from '../app/(student)/app/ai-agent/page.jsx';
 import GalleryGamePlayPage from '../app/(student)/app/gallery/play/[gameId]/page.jsx';
 import AchievementsPage from '../app/(student)/app/achievements/page.jsx';
 import ProgressPage from '../app/(student)/app/progress/page.jsx';
@@ -68,7 +69,8 @@ export default function App() {
       <Route path="/app/projects" element={<ProjectsPage />} />
       <Route path="/app/projects/new" element={<NewProjectPage />} />
       <Route path="/app/projects/:id" element={<ProjectDetailPage />} />
-      <Route path="/app/gallery" element={<GalleryPage />} />
+      <Route path="/app/ai-agent" element={<KikoAiAgentPage />} />
+      <Route path="/app/gallery" element={<KikoAiAgentPage />} />
       <Route path="/app/gallery/play/:gameId" element={<GalleryGamePlayPage />} />
       <Route path="/app/achievements" element={<AchievementsPage />} />
       <Route path="/app/progress" element={<ProgressPage />} />

@@ -20,7 +20,7 @@ export function Footer() {
           <ul className="space-y-2 text-sm">
             <li><Link to="/app/playground" className="hover:text-teal-400">Playground Visual</Link></li>
             <li><Link to="/app/adventure" className="hover:text-teal-400">Peta Petualangan</Link></li>
-            <li><Link to="/app/gallery" className="hover:text-teal-400">Galeri Karya Anak</Link></li>
+            <li><Link to="/app/ai-agent" className="hover:text-teal-400">Detektif Kiko Koding</Link></li>
           </ul>
         </div>
 

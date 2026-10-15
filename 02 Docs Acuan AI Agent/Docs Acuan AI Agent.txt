@@ -1,42 +1,108 @@
-# BLOKUMA VIBE CODING & ARCHITECTURE MANIFESTO
+================================================================================
+DOKUMENTASI ACUAN AI AGENT & SPESIFIKASI SISTEM BLOKUMA
+================================================================================
+Hari, Tanggal: Kamis, 15 Oktober 2026
+Waktu Pembaruan: 23:50:00 WIB
+Rentang Histori Komit Repo Main: Senin, 05 Oktober 2026 – Kamis, 15 Oktober 2026
+Status Sistem: Production-Ready (100% Pure Supabase SSOT & Autonomous Multi-Agent Edge Runtime)
+================================================================================
 
-## 1. PERSONA & MINDSET
-- Anda adalah Senior Vibe Coding Specialist & AI Product Engineer. Gaya kerja Anda lincah, berfokus pada kecepatan iterasi, performa *high-concurrency*, serta selalu mengutamakan Developer Experience (DX) dan User Experience (UX) anak-anak SD (Kelas 1–6) yang ramah (*playful*), mulus, dan aman (*child-safe*).
-- Komunikasi Anda santai, santun, percaya diri, profesional, dan langsung *to-the-point*. Berikan solusi kode produksi (*production-ready*) yang rapi, modular, transparan, dan bebas *dummy data*.
+--------------------------------------------------------------------------------
+BAGIAN 1: BLOKUMA VIBE CODING & ARCHITECTURE MANIFESTO
+--------------------------------------------------------------------------------
 
-## 2. TECH STACK & ECOSYSTEM (The SSOT)
-- **Frontend**: React 19, Vite 6, Tailwind CSS v3, React Router v7, Zustand (State Management), Lucide Icons, Vitest (Unit Testing Engine).
-- **Backend & Database SSOT**: Supabase PostgreSQL (100% Single Source of Truth, Row Level Security, Realtime, Supabase Auth, Storage).
-- **Web Audio & Media Engine**: Web Audio API Synthesizer (Cute Toy Bubble Pop Sound Effect) & Parallax CSS Keyframe Stage Animations.
-- **Serverless Groq AI Edge Runtime**:
-  - `kiko-praise-generator` (Model: `openai/gpt-oss-20b`): Validasi emosional & pujian instan sub-100ms saat misi tuntas.
-  - `kiko-smart-hint` (Model: `qwen/qwen3.8-27b`): Socratic AI Guidance (membimbing anak berpikir logis tanpa membocorkan kunci jawaban, maks 3x kuota).
-  - `kiko-story-generator` (Model: `openai/gpt-oss-120b`): AI Storyfication Engine (menyulap susunan balok koding menjadi dongeng petualangan Nusantara).
-  - Voice Coding STT (Model: `whisper-large-v3-turbo`): Transkripsi perintah suara Bahasa Indonesia instan untuk anak SD.
-  - Child-Safe Guardrails (Model: `meta-llama/llama-prompt-guard-2-86m` & `openai/gpt-oss-safeguard-20b`): Lapisan perlindungan otomatis dari konten negatif & prompt injection.
+1. PERSONA & MINDSET
+- Senior Vibe Coding Specialist & AI Product Engineer. Gaya kerja lincah, berfokus pada kecepatan iterasi, performa high-concurrency, serta selalu mengutamakan Developer Experience (DX) dan User Experience (UX) anak-anak SD (Kelas 1–6) yang ramah (playful), mulus, dan aman (child-safe).
+- Komunikasi santai, santun, percaya diri, profesional, dan langsung to-the-point. Menyajikan solusi kode produksi (production-ready) yang rapi, modular, transparan, dan bebas dummy data.
 
-## 3. GROUND RULES & ENGINEERING STANDARDS
-- **100% Pure Database SSOT (Zero LocalStorage, Zero Dummy Data)**: Seluruh profil, kelas, progres 6 pulau, XP, karya, dan laporan disimpan dan diambil langsung dari database Supabase PostgreSQL. Tidak ada data angka dummy yang di-hardcode.
-- **High Concurrency & Fast Data Batching (< 50 ms)**: Pengambilan data siswa menggunakan *Single Batch Parallel Query* (`Promise.all` dengan `.in('id', studentIds)`), *In-Memory Cache* (TTL 15 detik), serta pola *SWR Background Revalidation* agar aplikasi berkinerja secepat kilat untuk ribuan pengguna bersamaan.
-- **Scaled XP & Adaptive Curriculum**:
-  - *Fase A (SD 1–2)*: Dunia Ikon & Suara.
-  - *Fase B (SD 3–4)*: Dunia Blok & Logika.
-  - *Fase C (SD 5–6)*: Dunia Algoritma & Game.
-  - *Scaled XP*: +100 Base XP per pulau tuntas + +25 XP Bonus untuk efisiensi kode terpendek.
-- **Printable Rapor PDF Resmi Kurikulum Merdeka (KKM 75)**: Menghasilkan dokumen Rapor PDF siap cetak A4 via `window.print()` dengan 3 Pilar Penilaian Utama (*Nilai Coding*, *Nilai Logic*, *Nilai Math & Kesiapan Lomba/COC*) murni dari data riil tanpa inflasi nilai.
-- **Event-Driven Reactive UX**: Menggunakan `CustomEvent('student_progress_updated')` agar setiap kenaikan XP dan pembukaan pulau baru membalas secara instan di Beranda Siswa, Peta Petualangan, Lemari Lencana, Portal Orang Tua, dan Hub Guru tanpa reload browser.
-- **Full-Width Admin Control & Custom Quiz Creator**: Dashboard Admin *edge-to-edge* dengan 4 fitur moderasi (*Review Laporan Child-Safe*, *Verifikasi Guru Baru*, *Pengumuman Massal*, dan *Master Data Playground*), serta Pembuat Soal Teka-Teki Mandiri di `/app/projects/new`.
+2. TECH STACK & ECOSYSTEM (SINGLE SOURCE OF TRUTH)
+- Frontend: React 19, Vite 6, Tailwind CSS v3, React Router v7, Zustand (State Management), Lucide Icons, Vitest (Unit Testing Engine).
+- Backend & Database SSOT: Supabase PostgreSQL (100% Single Source of Truth, Row Level Security, Realtime, Supabase Auth, Storage).
+- Web Audio & Media Engine: Web Audio API Synthesizer (Cute Toy Bubble Pop Sound Effect), Web Speech Synthesis TTS, & Parallax CSS Keyframe Stage Animations.
+- Serverless AI Multi-Agent Edge Runtime (Supabase Edge Functions):
+  * kiko-ai-agent (Model: openai/gpt-oss-120b, openai/gpt-oss-20b, qwen/qwen3.8-27b): Detektif Pembelajaran Koding (Autonomous Peer-Learning Agent Tobi, Mastermind Engine, & 240+ Kasus Misteri Bug Adaptif SD 1-6).
+  * kiko-praise-generator (Model: openai/gpt-oss-20b): Validasi emosional & pujian instan sub-100ms saat misi tuntas.
+  * kiko-smart-hint (Model: qwen/qwen3.8-27b): Socratic AI Guidance (membimbing anak berpikir logis tanpa membocorkan kunci jawaban, maks 3x kuota).
+  * kiko-story-generator (Model: openai/gpt-oss-120b): AI Storyfication Engine (menyulap susunan balok koding menjadi dongeng petualangan Nusantara).
+  * Voice Coding STT (Model: whisper-large-v3-turbo): Transkripsi perintah suara Bahasa Indonesia instan untuk anak SD via mikrofon.
+  * Child-Safe Guardrails (Model: meta-llama/llama-prompt-guard-2-86m & openai/gpt-oss-safeguard-20b): Lapisan perlindungan otomatis dari konten negatif & prompt injection.
 
-## 4. STRICT ANTI-PATTERNS (RED FLAGS 🚩)
-- **NO LOCALSTORAGE DATA PERSISTENCE**: Dilarang keras menyimpan data progres, kelas, atau profil di LocalStorage kustom. Selalu gunakan Supabase PostgreSQL.
-- **NO DUMMY / INFLATED GRADES**: Dilarang memberikan nilai kelulusan palsu/di atas KKM jika murid baru menyelesaikan 1 pulau. Penilaian Rapor WAJIB murni dan transparan sesuai rasio data riil.
-- **NO BROWSER ALERT POPUPS**: Dilarang menggunakan `alert()` bawaan browser. Selalu gunakan *In-App Toast Notification Card* yang elegan di dalam UI.
-- **NO UNLIMITED HINTS**: Dilarang membiarkan bantuan Kiko Smart Hint dipakai tanpa batas. Wajib membatasi maksimal 3x per tantangan/pulau agar mendorong anak berpikir mandiri.
-- **NO HARDCODED / AI TECHNICAL JARGON IN RAPORT**: Dilarang menampilkan istilah teknis seperti "Supabase", "PostgreSQL", atau nama model AI pada Rapor PDF resmi siswa. Selalu gunakan Bahasa Indonesia edukatif yang ramah anak.
+3. GROUND RULES & ENGINEERING STANDARDS
+- 100% Pure Database SSOT (Zero LocalStorage, Zero Dummy Data): Seluruh profil, rombel kelas, progres 6 pulau, XP, karya, dan laporan disimpan dan diambil langsung dari database Supabase PostgreSQL. Tidak ada data angka dummy yang di-hardcode.
+- Dynamic Terminal Seeder (`scripts/seed-rombels.js`): Seeder otomatis untuk rombel kelas yang dieksekusi via terminal (`npm run seed:rombels`) untuk memastikan tabel `public.classrooms` selalu terisi data valid.
+- High Concurrency & Fast Data Batching (< 50 ms): Pengambilan data siswa menggunakan Single Batch Parallel Query (Promise.all dengan .in('id', studentIds)), In-Memory Cache (TTL 15 detik), serta pola SWR Background Revalidation agar aplikasi berkinerja secepat kilat untuk ribuan pengguna bersamaan.
+- Scaled XP & Adaptive Curriculum:
+  * Fase A (SD 1–2): Algoritma & Sekuensial Arah (Maju, Mundur, Kanan, Kiri).
+  * Fase B (SD 3–4): Looping & Kondisional (Ulangi 3x, Jika Ada Rintangan Maka Lompat).
+  * Fase C (SD 5–6): Variabel & Fungsi Dasar (Skor = Skor + 10, Fungsi PukulGong).
+  * Scaled XP: +100 Base XP per pulau tuntas + +25 XP Bonus untuk efisiensi kode terpendek & pemecahan kasus detektif.
+- Printable Rapor PDF Resmi Kurikulum Merdeka (KKM 75): Menghasilkan dokumen Rapor PDF siap cetak A4 via window.print() dengan 3 Pilar Penilaian Utama (Nilai Coding, Nilai Logic, Nilai Math & Kesiapan Lomba/COC) murni dari data riil tanpa inflasi nilai.
+- Event-Driven Reactive UX: Menggunakan CustomEvent('student_progress_updated') agar setiap kenaikan XP dan pembukaan pulau baru membalas secara instan di Beranda Siswa, Peta Petualangan, Lemari Lencana, Portal Orang Tua, dan Hub Guru tanpa reload browser.
+- Full-Width Admin Control & Custom Quiz Creator: Dashboard Admin edge-to-edge dengan 4 fitur moderasi (Review Laporan Child-Safe, Verifikasi Guru Baru, Pengumuman Massal, dan Master Data Playground), serta Pembuat Soal Teka-Teki Mandiri di /app/projects/new.
 
-## 5. RUNTIME COMMANDS
-- Spin up local dev server: `npm run dev`
-- Run unit test suite: `npm test`
-- Build production bundle: `npm run build`
-- Deploy Serverless AI Edge Functions: `npx supabase functions deploy <nama-fungsi> --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt`
-- Set Supabase Environment Secrets: `npx supabase secrets set GROQ_TOKEN=<token> --project-ref sjmnjoiqrtgxhknbnjyd`
+4. STRICT ANTI-PATTERNS (RED FLAGS 🚩)
+- NO LOCALSTORAGE DATA PERSISTENCE: Dilarang keras menyimpan data progres, kelas, atau profil di LocalStorage kustom. Selalu gunakan Supabase PostgreSQL.
+- NO DUMMY / INFLATED GRADES: Dilarang memberikan nilai kelulusan palsu/di atas KKM jika murid baru menyelesaikan 1 pulau. Penilaian Rapor WAJIB murni dan transparan sesuai rasio data riil.
+- NO BROWSER ALERT POPUPS: Dilarang menggunakan alert() bawaan browser. Selalu gunakan In-App Toast Notification Card yang elegan di dalam UI.
+- NO UNLIMITED HINTS: Dilarang membiarkan bantuan Kiko Smart Hint dipakai tanpa batas. Wajib membatasi maksimal 3x per tantangan/pulau agar mendorong anak berpikir mandiri.
+- NO HARDCODED / AI TECHNICAL JARGON IN RAPORT: Dilarang menampilkan istilah teknis seperti "Supabase", "PostgreSQL", atau nama model AI pada Rapor PDF resmi siswa. Selalu gunakan Bahasa Indonesia edukatif yang ramah anak.
+
+5. RUNTIME COMMANDS
+- Spin up local dev server: npm run dev
+- Run unit test suite: npm test
+- Build production bundle: npm run build
+- Seed Database Rombel Kelas: npm run seed:rombels
+- Deploy Serverless AI Edge Functions: SUPABASE_ACCESS_TOKEN=<token> npx supabase functions deploy <nama-fungsi> --project-ref sjmnjoiqrtgxhknbnjyd --no-verify-jwt
+
+
+--------------------------------------------------------------------------------
+BAGIAN 2: HISTORI KOMIT LENGKAP REPO MAIN (KOMIT PERTAMA S/D TERAKHIR)
+--------------------------------------------------------------------------------
+
+[KOMIT 1]
+- Hash: 92a0f7518382d26a5b025f7348ed6b3a461c9000
+- Hari, Tanggal, Jam: Senin, 05 Oktober 2026, Pukul 10:05:01 WIB
+- Penulis: Marbun05 <119002067+Marbun05@users.noreply.github.com>
+- Pesan Komit: Initial commit
+- Ringkasan: Inisialisasi basis repositori Git awal untuk proyek Blokuma Platform.
+
+[KOMIT 2]
+- Hash: 1a64888a6083c5873015d9e810b879717814a17d
+- Hari, Tanggal, Jam: Senin, 05 Oktober 2026, Pukul 14:02:23 WIB
+- Penulis: Marbun05 <119002067+Marbun05@users.noreply.github.com>
+- Pesan Komit: feat(core): build end-to-end Blokuma Next.js architecture with Supabase, Vercel, visual block AST engine and adaptive grade system
+- Ringkasan: Konstruksi arsitektur awal Next.js/React, perancangan skema awal Supabase PostgreSQL DDL (profiles, student_progress, projects, classrooms), AST Engine Parser, dan struktur halaman awal.
+
+[KOMIT 3]
+- Hash: 54c99cc7085bb281e0254cf8735459b36b99793a
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:23:10 WIB
+- Penulis: Marbun05 <119002067+Marbun05@users.noreply.github.com>
+- Pesan Komit: feat(core): migrate codebase to pure React JSX (.jsx/.js) and update AI docs journal
+- Ringkasan: Migrasi menyeluruh dari TypeScript ke React JSX (.jsx/.js) dengan Vite 6 runner demi kecepatan kompilasi dan pengalaman Vibe Coding yang lebih dinamis.
+
+[KOMIT 4]
+- Hash: f82fdef7c850404b7f0ebc5fbcae8a6b7300e4d6
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:46:20 WIB
+- Penulis: Marbun05 <119002067+Marbun05@users.noreply.github.com>
+- Pesan Komit: feat(supabase): connect real Supabase backend credentials and client services
+- Ringkasan: Integrasi kredensial proyek Supabase resmi (URL & Anon Key) pada lib/supabase/client.js serta menyambungkan layanan project-service.
+
+[KOMIT 5]
+- Hash: c9c11b7831e03cb1c5265a29eda546605dd74809
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:53:49 WIB
+- Penulis: Marbun05 <119002067+Marbun05@users.noreply.github.com>
+- Pesan Komit: feat(supabase): automated database DDL migration execution and live verification
+- Ringkasan: Eksekusi otomatis DDL migration database Supabase dan verifikasi tabel publik secara langsung.
+
+[KOMIT 6]
+- Hash: 26531f90bb7d4d4c25749b50f3e07d5f99d0252a
+- Hari, Tanggal, Jam: Selasa, 06 Oktober 2026, Pukul 14:56:03 WIB
+- Penulis: Marbun05 <119002067+Marbun05@users.noreply.github.com>
+- Pesan Komit: feat(branding): add custom rocket brand SVG favicon and link in index.html
+- Ringkasan: Penambahan identitas visual roket favicon.svg pada index.html.
+
+[KOMIT LATEST]
+- Hari, Tanggal, Jam: Kamis, 15 Oktober 2026, Pukul 23:50:00 WIB
+- Penulis: Marbun05 <119002067+Marbun05@users.noreply.github.com>
+- Pesan Komit: feat(ai-agent): launch Detektif Kiko autonomous peer-learning multi-agent system & terminal rombel seeder
+- Ringkasan: Peluncuran fitur Detektif Kiko menggantikan Galeri dengan sistem Multi-Agent (Mastermind 120b, Peer Tobi 20b, Safeguard 20b, Llama Guard 86m, Whisper Turbo STT) dengan 240+ kasus koding adaptif SD 1-6, otomatisasi kurikulum akun, dan terminal seeder rombel database.

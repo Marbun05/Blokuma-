@@ -4,7 +4,7 @@ export function KikoRaportPrintModal({
   isOpen = false,
   onClose = () => {},
   studentName = 'Kiko Pratama',
-  studentClass = 'Kelas 4 SD',
+  studentClass = 'Belum Memilih Kelas',
   schoolName = 'SD Negeri Nusantara 01',
   period = 'Semester Ganjil TA 2026/2027',
   completedMissions = 1,

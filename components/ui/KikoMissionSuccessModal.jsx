@@ -19,7 +19,7 @@ export function KikoMissionSuccessModal({
 
   const hasBonus = xpEarned > 100;
   const studentName = user?.nickname || user?.fullName || 'Arsitek Kode';
-  const studentGrade = user?.grade || user?.student_class || 4;
+  const studentGrade = user?.grade || 3;
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -35,7 +35,7 @@ export function KikoMissionSuccessModal({
         islandTitle,
         xpEarned,
         hasBonus,
-        gradeLevel: user?.grade ? `Kelas ${user.grade} SD` : 'Kelas 3-4 SD',
+        gradeLevel: user?.grade ? `Kelas ${user.grade} SD` : 'Belum Memilih Kelas',
       });
       setPraise(res.praiseMessage);
       setLoadingPraise(false);

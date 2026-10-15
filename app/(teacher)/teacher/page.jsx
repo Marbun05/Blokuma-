@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth/use-auth-store.js';
 import { supabase } from '../../../lib/supabase/client.js';
+import { fetchClassrooms } from '../../../services/classroom-service.js';
 
 export default function TeacherDashboardPage() {
   const { user, logout } = useAuthStore();
@@ -16,11 +17,8 @@ export default function TeacherDashboardPage() {
     async function fetchTeacherData() {
       if (!user) return;
       try {
-        // Fetch classes taught by this teacher
-        const { data: classesData } = await supabase
-          .from('classrooms')
-          .select('id, name, join_code')
-          .eq('teacher_id', user.id);
+        // Fetch classes taught by this teacher or database seeded rombels
+        const classesData = await fetchClassrooms(user.id);
 
         let totalStudents = 0;
         let classList = [];
@@ -153,7 +151,7 @@ export default function TeacherDashboardPage() {
                       {cls.name}
                     </h4>
                     <p className="text-xs text-slate-600 font-medium mt-0.5">
-                      {cls.studentCount} Siswa • Kode Gabung: <strong className="text-teal-700 font-bold">{cls.join_code}</strong>
+                      {cls.studentCount} Siswa Terdaftar • Manajemen Terpusat
                     </p>
                   </div>
                   <Link

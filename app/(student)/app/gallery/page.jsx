@@ -35,7 +35,7 @@ export default function GalleryPage() {
             id: project.id,
             title: project.title || 'Proyek Koding Kiko',
             category,
-            likes: 12,
+            likes: project.likes_count || project.likes || 0,
             icon: project.icon || '🎮',
             gradient: 'from-emerald-50 to-teal-100',
             border_color: 'border-teal-200',

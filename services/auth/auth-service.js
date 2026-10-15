@@ -34,7 +34,7 @@ export async function registerUser({ email, password, fullName, nickname, role, 
     full_name: fullName,
     nickname: nickname || fullName.split(' ')[0],
     avatar_url: avatarUrl || '🧑‍🚀',
-    grade: role === 'student' ? Number(grade || 4) : null,
+    grade: role === 'student' ? (grade ? Number(grade) : null) : null,
   };
 
   const { data: profile, error: profileError } = await supabaseClient
@@ -47,15 +47,15 @@ export async function registerUser({ email, password, fullName, nickname, role, 
     console.warn('Profile upsert warning:', profileError.message);
   }
 
-  // 3. If student, insert initial progress into public.student_progress
+  // 3. If student, insert initial progress into public.student_progress (Fresh Start)
   if (role === 'student') {
     await supabaseClient.from('student_progress').upsert([
       {
         student_id: user.id,
-        xp: 100,
-        level: 1,
-        streak_days: 1,
-        skills: { algorithm: 10, logic: 10, sequence: 10, problemSolving: 10 },
+        xp: 0,
+        level: 0,
+        streak_days: 0,
+        skills: { algorithm: 0, logic: 0, sequence: 0, problemSolving: 0 },
       },
     ]);
   }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Map, Puzzle, Gamepad2, Trophy, Image as ImageIcon, BarChart3, Settings, LogOut, ChevronUp } from 'lucide-react';
+import { Home, Map, Puzzle, Gamepad2, Trophy, Bot, BarChart3, Settings, LogOut, ChevronUp } from 'lucide-react';
 import { useAuthStore } from '../../store/auth/use-auth-store.js';
 
 const menuItems = [
@@ -9,7 +9,7 @@ const menuItems = [
   { name: 'Playground', href: '/app/playground', icon: <Puzzle className="w-5 h-5" /> },
   { name: 'Projects', href: '/app/projects', icon: <Gamepad2 className="w-5 h-5" /> },
   { name: 'Achievements', href: '/app/achievements', icon: <Trophy className="w-5 h-5" /> },
-  { name: 'Galeri', href: '/app/gallery', icon: <ImageIcon className="w-5 h-5" /> },
+  { name: 'Detektif Kiko', href: '/app/ai-agent', icon: <Bot className="w-5 h-5 text-purple-600" /> },
 ];
 
 export function StudentSidebar() {
@@ -17,15 +17,15 @@ export function StudentSidebar() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
 
-  const [currentGrade, setCurrentGrade] = useState('Kelas 4 SD');
-  const [currentSubtheme, setCurrentSubtheme] = useState('Dunia Blok & Logika');
+  const [currentGrade, setCurrentGrade] = useState('Belum Memilih Kelas');
+  const [currentSubtheme, setCurrentSubtheme] = useState('Belum Memilih Kelas');
   const [studentNickname, setStudentNickname] = useState('Kiko');
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
 
   // Helper untuk menentukan subtema materi
   const getSubthemeByClass = (selectedClass) => {
-    if (!selectedClass) return 'Dunia Blok & Logika';
+    if (!selectedClass || selectedClass === 'Belum Memilih Kelas') return 'Belum Memilih Kelas';
     const str = String(selectedClass);
     if (str.includes('1') || str.includes('2')) {
       return 'Dunia Ikon & Suara';
@@ -34,17 +34,18 @@ export function StudentSidebar() {
     } else if (str.includes('5') || str.includes('6')) {
       return 'Dunia Algoritma & Game';
     }
-    return 'Dunia Blok & Logika';
+    return 'Dunia Koding';
   };
 
   // Fungsi memuat data profil langsung dari Auth Store / DB
   const loadProfileData = () => {
-    const userGrade = user?.grade || user?.student_class || 4;
-    const gradeString = typeof userGrade === 'number' ? `Kelas ${userGrade} SD` : String(userGrade);
+    const userGrade = user?.grade ?? user?.student_class ?? null;
+    const gradeString = userGrade ? (typeof userGrade === 'number' ? `Kelas ${userGrade} SD` : String(userGrade)) : 'Belum Memilih Kelas';
+    const subthemeString = userGrade ? getSubthemeByClass(gradeString) : 'Belum Memilih Kelas';
     const nameString = user?.nickname || user?.fullName || 'Kiko';
 
     setCurrentGrade(gradeString);
-    setCurrentSubtheme(getSubthemeByClass(gradeString));
+    setCurrentSubtheme(subthemeString);
     setStudentNickname(nameString);
   };
 
@@ -109,18 +110,28 @@ export function StudentSidebar() {
           <nav className="space-y-1.5">
             {menuItems.map((item) => {
               const isActive = location.pathname === item.href;
+              const hasClass = Boolean(user?.grade);
+              const isLockedFeature = !hasClass && (item.href === '/app/adventure' || item.href === '/app/playground');
+
               return (
                 <Link
                   key={item.href}
                   to={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold text-sm transition ${
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl font-bold text-sm transition ${
                     isActive
                       ? 'bg-teal-50 text-teal-800 border-2 border-teal-300 shadow-sm'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <span className="text-lg">{item.icon}</span>
-                  <span>{item.name}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">{item.icon}</span>
+                    <span>{item.name}</span>
+                  </div>
+                  {isLockedFeature && (
+                    <span className="text-xs" title="Membutuhkan Penempatan Rombel Kelas oleh Guru">
+                      🔒
+                    </span>
+                  )}
                 </Link>
               );
             })}

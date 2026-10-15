@@ -347,6 +347,66 @@ export default function StudentPlaygroundPage() {
     }
   };
 
+  const hasSelectedGrade = user?.grade !== null && user?.grade !== undefined;
+
+  if (!hasSelectedGrade) {
+    return (
+      <div className="flex min-h-screen bg-[#FBF9F5]">
+        <StudentSidebar />
+
+        <main className="flex-1 p-5 sm:p-8 pb-24 md:pb-8 max-w-4xl w-full mx-auto flex flex-col justify-center items-center text-center animate-fadeIn">
+          <div className="bg-white rounded-3xl p-8 border-4 border-amber-300 card-chunky shadow-lg max-w-xl w-full space-y-5 my-8">
+            <div className="w-20 h-20 bg-amber-100 border-4 border-amber-300 rounded-3xl flex items-center justify-center text-4xl mx-auto shadow-md animate-bounce">
+              🧩🔒
+            </div>
+
+            <div className="space-y-2">
+              <span className="px-3.5 py-1 bg-amber-100 text-amber-900 font-extrabold text-xs rounded-full border border-amber-300 uppercase tracking-wider inline-block">
+                Kanvas Playground Dikunci
+              </span>
+              <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
+                Belum Terhubung ke Rombel Kelas Guru
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-md mx-auto">
+                Hai <strong className="text-teal-700">{user?.nickname || 'Sahabat Kiko'}</strong>! Kanvas koding & balok playground belum dapat digunakan karena kamu belum dimasukkan ke Rombel Kelas oleh Gurumu di sekolah.
+              </p>
+            </div>
+
+            <div className="p-4 bg-purple-50 rounded-2xl border-2 border-purple-200 text-left text-xs text-purple-950 font-medium space-y-2 max-w-md mx-auto shadow-inner">
+              <p className="font-bold flex items-center gap-1.5 text-purple-900">
+                <span>💡</span> Cara Mengaktifkan Playground:
+              </p>
+              <p>
+                1. Hubungi Guru Koding di sekolahmu.
+              </p>
+              <p>
+                2. Minta Gurumu memasukkan namamu ke Rombel Kelas melalui <strong>Dashboard Guru</strong>.
+              </p>
+              <p>
+                3. Setelah Gurumu menempatkan kelasmu, balok koding & kanvas playground akan otomatis aktif! 🚀
+              </p>
+            </div>
+
+            <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                to="/app/dashboard"
+                className="toy-btn-teal px-6 py-3 font-bold text-xs sm:text-sm text-white rounded-xl shadow-toyTeal inline-flex items-center justify-center gap-2"
+              >
+                <span>← Kembali ke Beranda</span>
+              </Link>
+              <Link
+                to="/app/settings"
+                className="toy-btn-white px-6 py-3 font-bold text-xs sm:text-sm text-slate-700 rounded-xl inline-flex items-center justify-center gap-2 border-2 border-slate-200"
+              >
+                <span>⚙️ Cek Status Akun</span>
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   if (isLoadingData) {
     return (
       <div className="flex min-h-screen bg-[#FBF9F5] items-center justify-center">

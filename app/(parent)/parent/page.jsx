@@ -102,7 +102,7 @@ export default function ParentDashboardPage() {
                 </span>
               </div>
               <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 mb-6">
-                Laporan Perkembangan: {child.full_name} (Kelas {child.grade} SD)
+                Laporan Perkembangan: {child.full_name} {child.grade ? `(Kelas ${child.grade} SD)` : '(Belum Memilih Kelas)'}
               </h1>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
